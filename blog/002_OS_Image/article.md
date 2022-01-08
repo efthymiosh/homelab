@@ -48,6 +48,7 @@ PXE-based bare-metal provisioning:
   provide the image. It has a [terraform provider](https://registry.terraform.io/providers/tinkerbell/tinkerbell/latest/docs)!
 * [matchbox](https://matchbox.psdn.io/). It's specialized to Fedora CoreOS and Flatcar Linux as it
   employs [ignition](https://github.com/coreos/ignition). It has a [terraform provider](https://registry.terraform.io/providers/poseidon/matchbox/latest/docs) as well!
+* [pixiecore](https://github.com/danderson/netboot/tree/master/pixiecore)
 * [ipxe](https://ipxe.org/)
 * [puppetlabs razor](https://github.com/puppetlabs-toy-chest/razor-server/wiki)
 * [cobbler](https://cobbler.readthedocs.io/en/latest/quickstart-guide.html)
