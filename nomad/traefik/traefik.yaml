@@ -1,0 +1,25 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+log:
+  level: "ERROR"
+entryPoints:
+  private_web:
+    address: "0.0.0.0:80"
+    transport:
+      lifeCycle:
+        graceTimeout: 60
+  traefik:
+    address: "0.0.0.0:8080"
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+providers:
+  consulCatalog:
+    defaultRule: {{ "Host(`{{ normalize .Name }}.svc.efth.eu`)" }}
+    endpoint:
+      address: "127.0.0.1:8500"
+      scheme: "http"
+    exposedByDefault: true
+    constraints: "Tag(`routed`)"
