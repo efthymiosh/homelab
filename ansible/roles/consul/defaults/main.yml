@@ -1,0 +1,18 @@
+---
+consul_service: consul
+consul_version: 1.11.1
+consul_service_unit: "/etc/systemd/system/{{consul_service}}.service"
+
+consul_template_service_unit: consul.service.j2
+consul_template_config_file: consul_config.json.j2
+
+consul_encryption_key: "invalid"
+
+consul_install_path: "/opt/{{consul_service}}"
+consul_link_path: "/usr/local/bin/{{consul_service}}"
+consul_data_dir: "/var/lib/consul/"
+
+consul_config_dir: "/etc/consul.d/"
+consul_config_file: "{{consul_config_dir}}/config.json"
+consul_temp_dir: "/tmp/"
+consul_temp_download_name: "{{consul_service}}_{{consul_version}}.zip"

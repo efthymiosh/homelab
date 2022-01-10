@@ -1,0 +1,11 @@
+- name: docker enable service
+  service:
+    name: "docker.service"
+    enabled: true
+    daemon_reload: true
+
+- name: docker containerd enable service
+  service:
+    name: "containerd.service"
+    enabled: true
+    daemon_reload: true

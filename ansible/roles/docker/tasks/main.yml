@@ -1,0 +1,46 @@
+- name: install dependencies
+  apt:
+    name:
+    - curl
+    - apt-transport-https
+    - ca-certificates
+    state: "present"
+
+- name: create the docker group
+  group:
+    name: "docker"
+    state: "present"
+
+- name: install docker GPG key
+  copy:
+    src: "docker-archive-keyring.gpg"
+    dest: "{{ docker_keyring_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: add docker repository
+  copy:
+    content: |
+      deb [arch=amd64 signed-by={{ docker_keyring_file_path }}] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    dest: "/etc/apt/sources.list.d/docker.list"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install the docker packages
+  apt:
+    name:
+    - "docker-ce={{ docker_version }}*"
+    - "docker-ce-cli={{ docker_version }}*"
+    - "containerd.io={{ docker_containerd_version }}*"
+    state: present
+    update_cache: true
+  notify:
+  - docker enable service
+  - docker containerd enable service
+
+- name: template docker daemon configuration
+  template:
+    src: "daemon.json.j2"
+    dest: "/etc/docker/daemon.json"

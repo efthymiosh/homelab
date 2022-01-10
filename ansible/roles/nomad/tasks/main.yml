@@ -1,0 +1,69 @@
+- name: install dependencies
+  package:
+    name: "unzip"
+    state: present
+
+- name: retrieve binary
+  get_url:
+    url: "https://releases.hashicorp.com/nomad/{{nomad_version}}/nomad_{{nomad_version}}_linux_amd64.zip"
+    dest: "{{nomad_temp_dir}}/{{nomad_temp_download_name}}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: extract binary
+  unarchive:
+    remote_src: yes
+    src: "{{nomad_temp_dir}}/{{nomad_temp_download_name}}"
+    dest: "{{nomad_temp_dir}}"
+
+- name: copy binary to install path
+  copy:
+    remote_src: True
+    src: "{{nomad_temp_dir}}/{{nomad_service}}"
+    dest: "{{nomad_install_path}}"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create config directory
+  file:
+    path: "{{nomad_config_dir}}"
+    state: directory
+    mode: 0755
+
+- name: link binary to user binary folder
+  file:
+    src: "{{nomad_install_path}}"
+    dest: "{{nomad_link_path}}"
+    owner: root
+    group: root
+    mode: 0755
+    state: link
+
+- name: create data directory
+  file:
+    path: "{{nomad_data_dir}}"
+    state: directory
+    mode: 0755
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_user }}"
+
+- name: produce and deploy service config
+  template:
+    src: "{{ nomad_template_config_file }}"
+    dest: "{{ nomad_config_file }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_user }}"
+    mode: 0644
+
+- name: set service file
+  template:
+    src: "{{ nomad_template_service_unit }}"
+    dest: "/etc/systemd/system/{{ nomad_service }}.service"
+
+- name: enable service to start on boot
+  systemd:
+    name: "{{ nomad_service }}.service"
+    enabled: yes
+    daemon_reload: yes

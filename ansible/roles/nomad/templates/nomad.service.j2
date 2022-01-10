@@ -1,0 +1,15 @@
+[Unit]
+Description=Service Scheduler
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User={{ nomad_user }}
+Group={{ nomad_user }}
+ExecStart={{nomad_install_path}} agent -config={{nomad_config_dir}}
+KillSignal=SIGINT
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

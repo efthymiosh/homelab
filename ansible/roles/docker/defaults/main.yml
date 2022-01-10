@@ -1,0 +1,4 @@
+---
+docker_version: "5:20.10.9"
+docker_containerd_version: "1.4.9"
+docker_keyring_file_path: "/usr/share/keyrings/docker-archive-keyring.gpg"
