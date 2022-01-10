@@ -1,6 +1,4 @@
-# Journey, Part 2: Base Operating System
-
-## Installation and provisioning
+# Journey, Part 2: Operating System Installation
 
 What is a lot more interesting is how the operating system will be delivered to the machine and with
 what information. As I mentioned in the introductory post, I will attempt to push as much of the
@@ -64,7 +62,7 @@ Relevant to bare-metal provisioning:
 * [cloud-init with MAAS](https://discourse.maas.io/t/customizing-maas-deployments-with-cloud-init/165)
 
 
-### Deciding on the provisioning approach
+## Deciding on the provisioning approach
 
 PXE booting with some management software is by far the more exciting option. Probably the most
 overkill as well, but we're not going for simplicity here! We're going for adventure!  ..within
@@ -87,7 +85,7 @@ potentially more complicated to manage but can pretty much do exactly what we wa
 Given my limited time, and although *matchbox* looks like a pleasure to toy with, I'm going to go
 with *tinkerbell*. It's the tool that can definitely work all four steps we described.
 
-### Testing out the provisioning approach
+## Testing out the provisioning approach
 
 Our immediate goal will be getting one of the machines to PXE boot.
 
@@ -241,4 +239,5 @@ Having failed miserably with Tinkerbell, I installed Ubuntu Server with a USB st
 apparently can fetch your ssh keys from your github username, not bad. Set up static IPs manually and
 good to go.
 
-
+There is **a lot** of software to explore in this space. I think I'll work on it again when I don't
+feel pressured to move forward with the more exciting stuff!
