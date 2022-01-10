@@ -31,10 +31,12 @@ job "assets_server" {
         args = [
           "${NOMAD_TASK_DIR}/lastmile.sh",
           "https://github.com/tinkerbell/hook/releases/download/5.10.57/hook_x86_64.tar.gz,https://github.com/tinkerbell/hook/releases/download/5.10.57/hook_aarch64.tar.gz",
+          #"https://tinkerbell-oss.s3.amazonaws.com/osie-uploads/osie-1790-23d78ea47f794d0e5c934b604579c26e5fce97f5.tar.gz",
           "/usr/share/nginx/html/misc/osie/current",
           "/usr/share/nginx/html/misc/osie/current",
           "/usr/share/nginx/html/workflow",
           "true",
+          #"false",
         ]
         mount {
           type = "bind"

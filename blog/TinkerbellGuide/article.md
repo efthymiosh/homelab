@@ -386,10 +386,12 @@ job "assets_server" {
         args = [
           "${NOMAD_TASK_DIR}/lastmile.sh",
           "https://github.com/tinkerbell/hook/releases/download/5.10.57/hook_x86_64.tar.gz,https://github.com/tinkerbell/hook/releases/download/5.10.57/hook_aarch64.tar.gz",
+          #"https://tinkerbell-oss.s3.amazonaws.com/osie-uploads/osie-1790-23d78ea47f794d0e5c934b604579c26e5fce97f5.tar.gz",
           "/usr/share/nginx/html/misc/osie/current",
           "/usr/share/nginx/html/misc/osie/current",
           "/usr/share/nginx/html/workflow",
           "true",
+          #"false",
         ]
         mount {
           type = "bind"
@@ -729,8 +731,12 @@ cat <<EOH > hardware.json
           "arch": "x86_64",
           "ip": {
             "address": "192.168.1.55",
+            "gateway": "192.168.1.1",
             "netmask": "255.255.255.0"
           },
+          "name_servers": [
+              "8.8.8.8"
+          ],
           "mac": "68:xx:xx:xx:xx:xx",
           "uefi": true
         },
@@ -758,9 +764,67 @@ Next, add a template:
 
 ```bash
 # Let's prepare registering our device to tink
-export FACILITY=homelab
-cat <<EOH > template.json
+cat <<EOH > template.yaml
+version: "0.1"
+name: provision
+global_timeout: 1800
+tasks:
+  - name: "os-installation"
+    worker: "{{.device_1}}"
+    volumes:
+      - /dev:/dev
+      - /dev/console:/dev/console
+      - /lib/firmware:/lib/firmware:ro
+    actions:
+      - name: "stream-ubuntu-image"
+        image: tinkerbell-actions/image2disk:v1.0.0
+        timeout: 600
+        environment:
+          DEST_DISK: /dev/sda
+          IMG_URL: "http://192.168.1.19:8080/base.gz"
+          COMPRESSED: true
+      - name: "kexec-ubuntu"
+        image: tinkerbell-actions/kexec:v1.0.0
+        timeout: 90
+        pid: host
+        environment:
+          BLOCK_DEVICE: /dev/sda1
+          FS_TYPE: ext4
 EOH
+
+tink template create --file template.yaml
+Created Template:  3ee2c7a7-70d5-11ec-925b-9cb6d03f9042
+
+tink workflow create -t 3ee2c7a7-70d5-11ec-925b-9cb6d03f9042 -r '{"device_1":  "68:xx:xx:xx:xx:xx"}'
+Created Workflow:  701aedc8-70d5-11ec-925b-9cb6d03f9042
 ```
 
-And, that's it! On next boot the test pc should provision with the template!
+Notice the `IMG_URL` in the template is a prepared image with `packer` . To get things started
+without any dependencies, you could use the [hello word](https://docs.tinkerbell.org/workflows/hello-world-workflow/) template.
+
+For me, this still doesn't work. I suspect issues with bringing up the main network interface after
+boot, but I cannot verify as the keyboard on either `hook` or `osie` doesn't work on my machines.
+I'll wait for non-experimental status by the maintainers before retrying.
+
+## Closing
+
+We have installed a rudimentary tinkerbell stack using nomad, as an alternative to docker-compose,
+to discover and understand how its components work. We have set up an initial workflow, but we did
+not manage to provision a test-pc with it.
+
+Tinkerbell is enjoyable. It's a project that is ambitious. It's not at a state where it's
+usable. From a systems architecture perspective it hasn't found its footing. The
+dependencies could be half of what they are:
+
+1. `tink` the server should be implementing raft for HA. It should default to an internal mechanism
+   for state. The trivial complexity of information does not warrant a postgresql
+2. `boots` feels like it should be part of `tink`. I don't have a deep understanding of how they
+   could scale but it feels like they are split for the sake of being split. What scale of
+   infrastructure is it even gonna take to require any kind of separate scaling of tink
+3. `hegel` should just be a `tink` server endpoint. Same sentiment as above
+4. The docker registry thing is aggravating. I should not have to setup a docker registry for
+   a sandbox. I **should** be able to configure `quai.io` without any deluded configuration linter
+   breaking execution because I don't have a username and password
+
+A cli and a go binary should cover the use-case, along with the assets server. That said, tinkerbell
+with its compositioned steps to provision bare-metal is a project to follow.

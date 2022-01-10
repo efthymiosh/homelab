@@ -235,7 +235,10 @@ into a guide. This will be a good opportunity to convert the `docker-compose.yml
 nomad services, taking a step ahead towards the bootstrapped state.
 As this series is pretty much incoherent ramblings, the guide will be in a separate series. **Update:** You can find it [here](../TinkerbellGuide/article.md)
 
-## The image
+## Next steps
 
-We'll be going with [packer](https://packer.io). There's no other real way. Packer has been such a
-positive experience for me in the past!
+Having failed miserably with Tinkerbell, I installed Ubuntu Server with a USB stick. The installer
+apparently can fetch your ssh keys from your github username, not bad. Set up static IPs manually and
+good to go.
+
+
