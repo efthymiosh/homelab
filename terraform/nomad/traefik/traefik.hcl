@@ -1,3 +1,7 @@
+variable "traefik_conf" {
+  description = "The traefik configuration"
+}
+
 job "traefik" {
   datacenters = ["homelab"]
   type = "system"
@@ -44,7 +48,7 @@ job "traefik" {
         }
       }
       template {
-        data = file("traefik.yaml")
+        data = var.traefik_conf
         destination = "${NOMAD_TASK_DIR}/traefik.yaml"
       }
     }

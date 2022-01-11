@@ -14,8 +14,12 @@ terraform {
 
   required_providers {
     cloudflare = {
-      source = "cloudflare/cloudflare"
+      source  = "cloudflare/cloudflare"
       version = "~> 3.0"
+    }
+    nomad = {
+      source  = "hashicorp/nomad"
+      version = "~> 1.4"
     }
   }
 }
@@ -23,4 +27,9 @@ terraform {
 provider "cloudflare" {
   email   = var.cloudflare_email
   api_key = var.cloudflare_api_key
+}
+
+provider "nomad" {
+  address = "http://nomad.efthymios.net"
+  region  = "efth"
 }
