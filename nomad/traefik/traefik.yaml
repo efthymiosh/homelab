@@ -17,7 +17,7 @@ api:
   debug: true
 providers:
   consulCatalog:
-    defaultRule: {{ "Host(`{{ normalize .Name }}.svc.efth.eu`)" }}
+    defaultRule: {{ "Host(`{{ normalize .Name }}.efthymios.net`)" }}
     endpoint:
       address: "127.0.0.1:8500"
       scheme: "http"

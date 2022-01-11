@@ -25,14 +25,14 @@
         tags:
         - "http"
         - "routed"
-        - "traefik.http.routers.cnsl.rule=Host(`consul.svc.efth.eu`)"
+        - "traefik.http.routers.cnsl.rule=Host(`consul.efthymios.net`)"
       - id: "nomadui"
         name: "nmd"
         port: 4646
         tags: 
         - "http"
         - "routed"
-        - "traefik.http.routers.nmd.rule=Host(`nomad.svc.efth.eu`)"
+        - "traefik.http.routers.nmd.rule=Host(`nomad.efthymios.net`)"
     consul_config:
       encrypt: "{{ consul_encrypt }}"
       datacenter: "homelab"
