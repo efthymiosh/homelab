@@ -8,7 +8,7 @@ variable "cloudflare_api_key" {
 
 terraform {
   backend "consul" {
-    address = "consul.efthymios.net"
+    address = "consul.efthymios.net:8500"
     path    = "terraform/homelab/state"
   }
 
@@ -30,6 +30,6 @@ provider "cloudflare" {
 }
 
 provider "nomad" {
-  address = "http://nomad.efthymios.net"
+  address = "http://nomad.efthymios.net:4646"
   region  = "efth"
 }
