@@ -7,7 +7,10 @@ variable "cloudflare_api_key" {
 }
 
 terraform {
-  backend "local" {}
+  backend "consul" {
+    address = "consul.efthymios.net"
+    path    = "terraform/homelab/state"
+  }
 
   required_providers {
     cloudflare = {
