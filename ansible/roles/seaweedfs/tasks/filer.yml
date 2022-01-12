@@ -1,0 +1,29 @@
+- name: create filer dir
+  file:
+    path: "{{ seaweedfs_data_dir }}/filer"
+    state: "directory"
+    mode: 0755
+    owner: "{{ seaweedfs_user }}"
+    group: "{{ seaweedfs_user }}"
+
+- name: template filer configuration
+  template:
+    src: "filer.toml.j2"
+    dest: "{{ seaweedfs_data_dir }}/filer/filer.toml"
+    mode: 0755
+    owner: "{{ seaweedfs_user }}"
+    group: "{{ seaweedfs_user }}"
+
+- name: template the filer service unit
+  template:
+    src: "{{ seaweedfs_service_unit_filer }}.j2"
+    dest: "{{ seaweedfs_service_unit_path }}/{{ seaweedfs_service_unit_filer }}"
+    mode: 0644
+    owner: "root"
+    group: "root"
+
+- name: enable the filer service
+  systemd:
+    name: "{{ seaweedfs_service_unit_filer }}"
+    enabled: true
+    daemon_reload: true

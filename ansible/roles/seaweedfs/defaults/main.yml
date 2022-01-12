@@ -12,10 +12,16 @@ seaweedfs_temp_dir: "/tmp/"
 seaweedfs_temp_download_name: "{{seaweedfs_service}}_{{seaweedfs_version}}.tar.gz"
 seaweedfs_service_unit_master: "seaweedfs_master.service"
 seaweedfs_service_unit_volume: "seaweedfs_volume.service"
+seaweedfs_service_unit_filer: "seaweedfs_filer.service"
 
 seaweedfs_master_node: false
 seaweedfs_volume_node: false
+seaweedfs_filer_node: false
 
 seaweedfs_volume_port: "8083"
 seaweedfs_volume_metrics_port: "9334"
 seaweedfs_volume_size_limit_mb: "8192"
+
+seaweedfs_filer_port: "8888"
+seaweedfs_filer_metrics_port: "9335"
+

@@ -39,3 +39,6 @@
 
 - include: volume.yml
   when: seaweedfs_volume_node
+
+- include: filer.yml
+  when: seaweedfs_filer_node

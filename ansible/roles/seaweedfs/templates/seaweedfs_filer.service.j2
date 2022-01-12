@@ -1,0 +1,21 @@
+[Unit]
+Description=Seaweed Distributed FileSystem Filer
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User={{ seaweedfs_user }}
+Group={{ seaweedfs_user }}
+WorkingDirectory={{ seaweedfs_data_dir }}/filer/
+ExecStart={{seaweedfs_install_path}} \
+    filer \
+    -ip="{{ inventory_hostname }}" \
+    -port={{ seaweedfs_filer_port }} \
+    -master="{{ seaweedfs_masters | product([':9333']) | map('join') | join(',') }}" \
+    -metricsPort="{{ seaweedfs_filer_metrics_port }}"
+KillSignal=SIGINT
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
