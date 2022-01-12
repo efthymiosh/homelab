@@ -1,0 +1,21 @@
+- name: create master dir
+  file:
+    path: "{{ seaweedfs_data_dir }}/master"
+    state: "directory"
+    mode: 0755
+    owner: "{{ seaweedfs_user }}"
+    group: "{{ seaweedfs_user }}"
+
+- name: template the master service unit
+  template:
+    src: "{{ seaweedfs_service_unit_master }}.j2"
+    dest: "{{ seaweedfs_service_unit_path }}/{{ seaweedfs_service_unit_master }}"
+    mode: 0644
+    owner: "root"
+    group: "root"
+
+- name: enable the master service
+  systemd:
+    name: "{{ seaweedfs_service_unit_master }}"
+    enabled: true
+    daemon_reload: true

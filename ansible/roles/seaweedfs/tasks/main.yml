@@ -1,0 +1,41 @@
+- name: fetch seaweedfs binary
+  get_url:
+    url: "https://github.com/chrislusf/seaweedfs/releases/download/{{ seaweedfs_version }}/linux_amd64.tar.gz"
+    dest: "{{ seaweedfs_temp_dir }}/{{ seaweedfs_temp_download_name }}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: config user
+  user:
+    name: "{{ seaweedfs_user }}"
+    system: yes
+
+- name: extract binary
+  unarchive:
+    remote_src: yes
+    src: "{{ seaweedfs_temp_dir }}/{{ seaweedfs_temp_download_name }}"
+    dest: "{{ seaweedfs_temp_dir }}"
+
+- name: copy binary to install path
+  copy:
+    remote_src: True
+    src: "{{ seaweedfs_temp_dir }}/weed"
+    dest: "{{ seaweedfs_install_path }}"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create data dir
+  file:
+    path: "{{ seaweedfs_data_dir }}"
+    state: "directory"
+    mode: 0755
+    owner: "{{ seaweedfs_user }}"
+    group: "{{ seaweedfs_user }}"
+
+- include: master.yml
+  when: seaweedfs_master_node
+
+- include: volume.yml
+  when: seaweedfs_volume_node

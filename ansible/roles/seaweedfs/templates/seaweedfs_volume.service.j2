@@ -1,0 +1,22 @@
+[Unit]
+Description=Seaweed Distributed FileSystem Volume
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User={{ seaweedfs_user }}
+Group={{ seaweedfs_user }}
+ExecStart={{seaweedfs_install_path}} \
+    volume \
+    -dir="{{ seaweedfs_data_dir }}/volume/" \
+    -mserver="{{ seaweedfs_masters | product([':9333']) | map('join') | join(',') }}" \
+    -port={{ seaweedfs_volume_port }} \
+    -metricsPort={{ seaweedfs_volume_metrics_port }} \
+    -disk=ssd \
+    -max="100"
+KillSignal=SIGINT
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

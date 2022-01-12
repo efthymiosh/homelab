@@ -1,0 +1,21 @@
+[Unit]
+Description=Seaweed Distributed FileSystem Master
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User={{ seaweedfs_user }}
+Group={{ seaweedfs_user }}
+ExecStart={{seaweedfs_install_path}} \
+    master \
+    -mdir="{{ seaweedfs_data_dir }}/master/" \
+    -ip="{{ inventory_hostname }}" \
+    -peers="{{ seaweedfs_masters | product([':9333']) | map('join') | join(',') }}" \
+    -volumeSizeLimitMB={{ seaweedfs_volume_size_limit_mb }} \
+    -defaultReplication="001"
+KillSignal=SIGINT
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

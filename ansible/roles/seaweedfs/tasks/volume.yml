@@ -1,0 +1,21 @@
+- name: create volume dir
+  file:
+    path: "{{ seaweedfs_data_dir }}/volume"
+    state: "directory"
+    mode: 0755
+    owner: "{{ seaweedfs_user }}"
+    group: "{{ seaweedfs_user }}"
+
+- name: template the volume service unit
+  template:
+    src: "{{ seaweedfs_service_unit_volume }}.j2"
+    dest: "{{ seaweedfs_service_unit_path }}/{{ seaweedfs_service_unit_volume }}"
+    mode: 0644
+    owner: "root"
+    group: "root"
+
+- name: enable the volume service
+  systemd:
+    name: "{{ seaweedfs_service_unit_volume }}"
+    enabled: true
+    daemon_reload: true
