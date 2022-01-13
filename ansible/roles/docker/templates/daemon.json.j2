@@ -1,10 +1,11 @@
 {
   "default-address-pools": [
     {
-      "base": "172.31.0.0/16",
+      "base": "{{ docker_address_space_base }}",
       "size": 24
     }
   ],
+  "dns": [ "{{ docker_systemd_resolved_address }}" ],
   "storage-driver": "overlay2",
   "log-driver": "json-file",
   "log-opts": {
