@@ -77,6 +77,10 @@
         network_interface: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "name" }}'
       consul:
         address: "localhost:8500"
+      plugin:
+        docker:
+          config:
+            allow_privileged: true
       telemetry:
         collection_interval: "1s"
         disable_hostname: true

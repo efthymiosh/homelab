@@ -25,3 +25,20 @@ resource "nomad_job" "etcd" {
     enabled = true
   }
 }
+
+resource "nomad_job" "seaweedfs" {
+  jobspec = file("nomad/seaweedfs/filer.hcl")
+  hcl2 {
+    enabled = true
+    vars    = {
+      filer_conf = file("nomad/seaweedfs/filer.toml")
+    }
+  }
+}
+
+resource "nomad_job" "seaweedfs-csi" {
+  jobspec = file("nomad/seaweedfs/csi.hcl")
+  hcl2 {
+    enabled = true
+  }
+}

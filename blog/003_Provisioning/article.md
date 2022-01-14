@@ -58,3 +58,60 @@ We will also point a set of wildcard records to the IPs of each of the machines.
 with some routing fun with traefik later on.
 
 ## The base for the workloads
+
+We will ship the following components on the machines:
+
+* Nomad, to provide us with workload orchestration
+* Consul, to provide us with service-discovery exposed via API and DNS and a KV store
+* Traefik, to glue an endpoint with each consul service using its native consulCatalog integration
+* SeaweedFS with its CSI plugin, to provide persistent container storage.
+* Prometheus, to monitor the above components and anything else
+* Loki, to ingest all logs and make them easily accessible
+* Grafana, to visualize monitoring and logging
+
+Other than the deployment of nomad, consul and seaweedfs, which is going to be defined in ansible,
+everything else will be shipped on nomad as a workload. To express this is a more declarative manner
+the nomad workloads will be defined using the nomad operator for terraform. The operator is,
+thankfully, little more than a wrapper on top of the nomad job definition files.
+
+The ansible folder for nomad, consul and seaweedfs can be found
+[here](https://github.com/efthymiosh/homelab/tree/main/ansible) on my homelab repository. The ansible
+roles do not contain [handlers](https://docs.ansible.com/ansible/latest/user_guide/playbooks_handlers.html).
+This is by design, as at some point in the future I'll be moving to images. I do not plan to be
+tampering too much with the roles on live machines. If I find that I do, I'll implement conditional
+handlers.
+
+With consul being a distributed and highly available KV store, we have a resilient backend to use
+for terraform. It's independent of anything that terraform will manage and provides resiliency and
+flexibility compared to my laptop's disk. Easy to backup with `consul export`, too.
+
+Fun fact, I initially provided the nomad provider URL for terraform and the consul state backend URL
+for terraform via port 80. Which is perfectly fine since traefik is configured to forward to them.
+Except traefik is managed via terraform and any changes to traefik break connectivity to both the
+target (nomad) and the state backend. That was a not-so-fun moment when I realised the hard way :)
+
+On seaweedfs, what a charm! Super straightforward to understand the docs and deploy. Boy does it look
+opinionated! What's up with the `scaffold` subcommand, just give us configuration samples in the
+docs. And first piece of software I see that requires a prometheus gateway while running as a
+service! I suppose the maintainer had very good reasons to abuse prometheus like that,
+as it's just the master service that may be configured like that.
+
+So on seaweed, apparently the `master` manages the `volume`, which is responsible for writing and
+reading data. The `filer` provides the filesystem, and s3 functionality. It's the service the CSI
+plugin will integrate with. The filer needs state to keep the file metadata. The ansible example
+wasn't really great (read: not overkill enough) since it just deployd it on one specific host with a
+leveldb backend.
+
+So, I went on to deploy a etcd cluster to replace the leveldb, so I could have multiple
+filers with the same state. That was fun! I'll write it up into a guide. And another one for the CSI plugin.
+
+Comparing to the Kubernetes templates required to spawn the CSI plugin it's so much simpler in
+nomad.
+
+A job definition with the plugin, and a special configuration to mount a socket in the plugin's
+container. That's it. On the Kubernetes side, there's even `CustomResourceDefinitions` in there. I
+get that some things are barebones so that they can be expanded on, but isn't CSI supposed to be
+the interface?
+
+
+Other than its little quirks, seaweedfs ..

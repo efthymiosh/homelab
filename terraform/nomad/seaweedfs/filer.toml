@@ -1,0 +1,6 @@
+recursive_delete = false
+
+[etcd]
+enabled = true
+servers = "{{range $index, $service := service "etcd" }}{{if ne $index 0}},{{end}}{{$service.Address}}:{{$service.Port}}{{end}}"
+timeout = "3s"
