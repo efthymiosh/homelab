@@ -2,8 +2,13 @@ job "seaweedfs-plugin" {
   datacenters = ["homelab"]
   type = "system"
 
-  group "csi" {
-    task "csi" {
+  constraint {
+    operator = "distinct_hosts"
+    value = true
+  }
+
+  group "node" {
+    task "driver" {
       driver = "docker"
 
       config {
@@ -13,8 +18,6 @@ job "seaweedfs-plugin" {
           "--endpoint=unix:///csi/csi.sock",
           "--filer=${attr.unique.network.ip-address}:8888",
           "--nodeid=${node.unique.name}",
-          "--cacheCapacityMB=1000",
-          "--cacheDir=/tmp",
         ]
       }
 
