@@ -13,7 +13,6 @@ ExecStart={{seaweedfs_install_path}} \
     -mserver="{{ seaweedfs_masters | product([':9333']) | map('join') | join(',') }}" \
     -port={{ seaweedfs_volume_port }} \
     -metricsPort={{ seaweedfs_volume_metrics_port }} \
-    -disk=ssd \
     -max="100"
 KillSignal=SIGINT
 Restart=always
