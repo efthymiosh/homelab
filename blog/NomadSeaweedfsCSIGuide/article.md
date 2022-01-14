@@ -107,7 +107,6 @@ ExecStart=/usr/local/bin/weed \
     -dir="/var/lib/seaweedfs/data/" \
     -mserver="192.0.2.1:9333,192.0.2.2:9333,192.0.2.3:9333" \
     -port=8083 \
-    -disk=ssd \
     -max="100"
 KillSignal=SIGINT
 Restart=always
@@ -116,8 +115,12 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-Simplicity we'll just install the filer on one node. The filer requires a database backend,
-and we're going to use a default file-based backend. See the [wiki](https://github.com/chrislusf/seaweedfs/wiki/Directories-and-Files) for more information. Service file:
+The filer requires a database backend, and we're going to use a default file-based backend
+leveraging leveldb. See the [wiki](https://github.com/chrislusf/seaweedfs/wiki/Directories-and-Files)
+for more information.  Even though it's going to be using local storage, the metadata will be
+replicated between the filer instances, see
+[here](https://github.com/chrislusf/seaweedfs/wiki/Filer-Store-Replication) for an interesting read!
+The service file:
 
 ```ini
 # seaweedfs_filer.service
@@ -187,29 +190,31 @@ systemctl start seaweedfs_filer.service
 
 Great! We've now got `weed` up and running!
 
-### CSI Plugin
+## CSI Plugin
 
 We'll deploy the CSI plugin via Nomad:
 
 ```hcl
 job "seaweedfs-plugin" {
-  datacenters = ["dc1"]
-  type = "system" # one on each node.
+  datacenters = ["dc1"] # do not omit to substitute this for your nomad's dc
+  type = "system"
+
+  constraint {
+    operator = "distinct_hosts"
+    value = true
+  }
 
   group "csi" {
     task "csi" {
       driver = "docker"
 
       config {
-        # We're stabilizing on a Digest as the maintainer only releases `latest` and `dev` tags
         image = "chrislusf/seaweedfs-csi-driver@sha256:fc6a55cd609687ccc3df5765fbddb8742089e68546fa9ceed246bc4821b1955e"
         privileged = true
         args = [
           "--endpoint=unix:///csi/csi.sock",
-          "--filer=192.0.2.1:8888",
+          "--filer=${attr.unique.network.ip-address}:8888",
           "--nodeid=${node.unique.name}",
-          "--cacheCapacityMB=1000",
-          "--cacheDir=/tmp",
         ]
       }
 
@@ -223,15 +228,153 @@ job "seaweedfs-plugin" {
 }
 ```
 
-Notice the `privileged = true` in the docker config: This needs to be configured at the node client
-level, make sure the [docker driver
-configuration](https://www.nomadproject.io/docs/drivers/docker#privileged) has it enabled.
+And another for the `controller`
+```
+job "seaweedfs-plugin-controller" {
+  datacenters = ["dc1"]
+  type = "service"
 
-That's it! Your CSI plugin should be showing in the `Storage > Plugins` section of nomad, as a healthy set of containers!
+  update {
+    # use forced updates instead of deployments, we never want more than 1 running
+    max_parallel = 0
+  }
 
-Let's verify that all is in working order with a sample job:
+  group "node" {
+    count = 1
 
-```hcl
+    task "driver" {
+      driver = "docker"
+
+      config {
+        image = "chrislusf/seaweedfs-csi-driver@sha256:fc6a55cd609687ccc3df5765fbddb8742089e68546fa9ceed246bc4821b1955e"
+        privileged = true
+        args = [
+          "--endpoint=unix:///csi/csi.sock",
+          "--filer=${attr.unique.network.ip-address}:8888",
+          "--nodeid=controller",
+        ]
+      }
+
+      csi_plugin {
+        id        = "seaweedfs-csi"
+        type      = "controller"
+        mount_dir = "/csi"
+      }
+    }
+  }
+}
 ```
 
-Executing `nomad stop sample-persistent` and re-running the job should give us ..
+* Notice the `privileged = true` in the docker config: This needs to be configured at the node client
+level, make sure the [docker driver
+configuration](https://www.nomadproject.io/docs/drivers/docker#privileged) has it enabled.
+* The image we are using is hard-coded to a specific Digest instead of a more dynamic tag. This is
+  because the maintainer only utilizes `:latest` and `:dev` tags. I don't feel comfortable enough
+having this updating dynamically, even if it is for my homelab.
+* The image and argument for the `node` plugin and the `controller` plugin are pretty much
+  identical. This is how the plugin is spawned using Helm and Kubernetes templates. [*Note:* I'm not
+sure if we could get away with listing the `node` plugin deployment as a `monolith`, this depends on
+its implementation, and there is no indicator that this could work.] 
+
+Let's verify that all is in working order:
+
+```bash
+nomad plugin status
+Container Storage Interface
+ID        Provider              Controllers Healthy/Expected  Nodes Healthy/Expected
+seaweedf  seaweedfs-csi-driver  1/1                           3/3
+```
+
+That's it! Your CSI plugin should also be showing in the `Storage > Plugins` section of nomad, as a
+healthy set of containers!
+
+
+## Using SeaweedFS volumes
+
+First, let's register a volume to nomad:
+
+```hcl
+# my_volume.hcl
+type = "csi"
+
+plugin_id = "seaweedfs-csi"
+id        = "my_volume_id"
+name      = "my_volume_name"
+
+capability {
+  access_mode     = "single-node-writer"
+  attachment_mode = "file-system"
+}
+
+capacity_min = "1MiB"
+capacity_max = "8GiB"
+```
+
+Issue `nomad create volume my_volume.hcl` to get the volume up and running.
+
+Note that the CSI plugin registers a very uncommon but welcome access mode, multi-node-multi-writer:
+
+```
+$ nomad logs -stderr -job seaweedfs-plugin | grep 'access mode'
+I0114 19:06:21     1 driver.go:96] Enabling volume access mode: SINGLE_NODE_WRITER
+I0114 19:06:21     1 driver.go:96] Enabling volume access mode: MULTI_NODE_MULTI_WRITER
+```
+
+Time to deploy a sample job:
+```hcl
+job "ubuntu" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "ubuntu" {
+    count = 1
+
+    volume "my_volume" {
+      type = "csi"
+      source = "my_volume_name"
+      attachment_mode = "file-system"
+      access_mode = "single-node-writer"
+    }
+    task "ubuntu" {
+      driver = "docker"
+      config {
+        image = "ubuntu:latest"
+        args = ["sleep", "24h"]
+      }
+      resources {
+        cpu = 500
+        memory = 512
+      }
+      volume_mount {
+        volume = "my_volume"
+        destination = "/opt/data"
+      }
+    }
+  }
+}
+```
+
+```bash
+# Follow through with these commands
+$ nomad exec -job ubuntu bash
+# echo 'test' > /opt/data/test.txt
+```
+
+If we open one of the filer endpoints in the browser, we can navigate to the file. For our example the url
+would be :
+
+```
+http://192.0.2.1:8888/buckets/my_volume_name/
+```
+
+Executing `nomad stop ubuntu` and re-running the job should have the file readily available!
+
+## Debugging
+
+All seaweedfs services have logs, but we can also use the weed executable with its
+`shell` subcommand.
+
+What I found interesting was that if seaweedfs can't allocate a volume the error won't be exposed in
+a way that you might be used to from actual filesystems. Filesystem structure will be fine, since
+it's just `filer` metadata. You'll be able to create directories and touch files, but you won't be
+able to add any content to the files.
