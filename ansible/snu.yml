@@ -33,6 +33,12 @@
         - "http"
         - "routed"
         - "traefik.http.routers.nmd.rule=Host(`nomad.efthymios.net`)"
+      - id: "seaweedvol"
+        name: "seaweedfs-volume"
+        port: 9334
+        tags:
+        - "http"
+        - "monitored"
     consul_config:
       encrypt: "{{ consul_encrypt }}"
       datacenter: "homelab"
