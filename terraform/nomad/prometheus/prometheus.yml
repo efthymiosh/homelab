@@ -4,13 +4,37 @@ global:
   scrape_timeout: 10s
 rule_files: []
 scrape_configs:
+- job_name: consul_servers
+  metrics_path: '/v1/agent/metrics'
+  params:
+    format: ['prometheus']
+  static_configs:
+  - labels:
+      service: 'consul'
+    targets:
+    - 'snu1.int.efth.eu:8500'
+    - 'snu2.int.efth.eu:8500'
+    - 'snu3.int.efth.eu:8500'
+
+- job_name: nomad_servers
+  metrics_path: '/v1/metrics'
+  params:
+    format: ['prometheus']
+  static_configs:
+  - labels:
+      service: 'nomad'
+    targets:
+    - 'snu1.int.efth.eu:4646'
+    - 'snu2.int.efth.eu:4646'
+    - 'snu3.int.efth.eu:4646'
+
 
 - job_name: consul
   consul_sd_configs:
   - server: '{{ with $list := service "cnsl~_agent" }}{{ with index $list 0 }}{{ .Address }}:{{ .Port }}{{ end }}{{ end }}'
   relabel_configs:
   - source_labels: ['__meta_consul_tags']
-    regex: ".*,monitored,.*"
+    regex: '.*,monitored,.*'
     action: keep
   - source_labels: ['__meta_consul_service']
     target_label: job
