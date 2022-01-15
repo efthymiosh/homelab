@@ -1,5 +1,13 @@
-variable "volume" {
-  description = "The data volume for grafana"
+variable "grafana_db" {
+  description = "Grafana DB name"
+  default = "grafana"
+}
+variable "grafana_user" {
+  description = "Grafana DB username"
+  default = "grafana"
+}
+variable "grafana_password" {
+  description = "Grafana DB password"
 }
 
 job "grafana" {
@@ -12,13 +20,9 @@ job "grafana" {
       port "http"  {
         to = 3000
       }
-    }
-
-    volume "grafana_data" {
-      type = "csi"
-      source = var.volume
-      attachment_mode = "file-system"
-      access_mode = "single-node-writer"
+      port "db" {
+        to = 3306
+      }
     }
 
     task "grafana" {
@@ -36,13 +40,18 @@ job "grafana" {
         GF_ANALYTICS_REPORTING_ENABLED = "false"
         GF_SERVER_ROUTER_LOGGING = "false"
         GF_SERVER_ENABLE_GZIP = "true"
-        GF_SERVER_ENFORCE_DOMAIN = "true"
         GF_SERVER_ROOT_URL = "http://grafana.efthymios.net"
         GF_SNAPSHOTS_EXTERNAL_ENABLED = "false"
         GF_DASHBOARDS_MIN_REFRESH_INTERVAL = "15s"
         GF_USERS_ALLOW_SIGN_UP = "false"
         GF_ALERTING_ENABLED = "false"
         GF_LOG_LEVEL = "warn"
+
+        GF_DATABASE_TYPE = "postgres"
+        GF_DATABASE_HOST = "postgresql-server.service.consul:5432"
+        GF_DATABASE_NAME = var.grafana_db
+        GF_DATABASE_USER = var.grafana_user
+        GF_DATABASE_PASSWORD = var.grafana_password
       }
       service {
         name = "grafana"
@@ -55,13 +64,9 @@ job "grafana" {
         check {
           name = "alive"
           type = "tcp"
-          interval = "30s"
+          interval = "15s"
           timeout  = "2s"
         }
-      }
-      volume_mount {
-        volume = "grafana_data"
-        destination = "/var/lib/grafana"
       }
     }
   }

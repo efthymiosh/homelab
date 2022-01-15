@@ -26,7 +26,7 @@ resource "nomad_external_volume" "grafana" {
     attachment_mode = "file-system"
   }
 
-  capacity_min = "1MiB"
+  capacity_min = "1GiB"
   capacity_max = "1GiB"
 }
 
@@ -53,7 +53,22 @@ resource "nomad_job" "grafana" {
   hcl2 {
     enabled = true
     vars = {
+      grafana_user     = "grafana"
+      grafana_db       = "grafana"
+      grafana_password = var.grafana_password
+    }
+  }
+}
+
+resource "nomad_job" "grafana_postgres" {
+  jobspec = file("nomad/grafana/postgres.hcl")
+  hcl2 {
+    enabled = true
+    vars = {
       volume = nomad_external_volume.grafana.volume_id
+      grafana_user     = "grafana"
+      grafana_db       = "grafana"
+      grafana_password = var.grafana_password
     }
   }
 }
