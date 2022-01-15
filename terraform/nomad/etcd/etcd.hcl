@@ -2,6 +2,12 @@ job "etcd" {
   datacenters = ["homelab"]
   type = "service"
 
+  update {
+    max_parallel = 1
+    min_healthy_time = "30s"
+    healthy_deadline = "9m"
+  }
+
   group "etcd" {
     count = 3
 
@@ -51,6 +57,7 @@ job "etcd" {
         name = "etcd"
         tags = [
           "http",
+          "monitored",
         ]
         port = "client"
         check {

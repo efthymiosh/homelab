@@ -46,6 +46,10 @@ scrape_configs:
     regex: '.*,prometheus\.path=([^,]*),.*'
     replacement: '${1}'
     target_label: __metrics_path__
+  - source_labels: ['__meta_consul_tags']
+    regex: '.*,prometheus\.label\.([^=]*)=([^,]*),.*'
+    replacement: '${2}'
+    target_label: '${1}'
   - source_labels: ['__meta_consul_node']
     target_label: instance
 

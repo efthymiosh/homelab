@@ -11,10 +11,18 @@ entryPoints:
         graceTimeout: 60
   traefik:
     address: "0.0.0.0:8080"
+  metrics:
+    address: "0.0.0.0:8081"
 api:
   insecure: true
   dashboard: true
   debug: true
+metrics:
+  prometheus:
+    entrypoint: metrics
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    addRoutersLabels: true
 providers:
   consulCatalog:
     defaultRule: {{ "Host(`{{ normalize .Name }}.efthymios.net`)" }}

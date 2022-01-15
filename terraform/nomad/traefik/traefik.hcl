@@ -15,6 +15,9 @@ job "traefik" {
       port "https"  {
         static = 443
       }
+      port "metrics" {
+        static = 8081
+      }
       port "admin" {
         static = 8080
       }
@@ -46,6 +49,15 @@ job "traefik" {
           interval = "30s"
           timeout  = "2s"
         }
+      }
+      service {
+        name = "traefik-metrics"
+        tags = [
+          "http",
+          "prometheus.label.service=traefik",
+          "monitored",
+        ]
+        port = "metrics"
       }
       template {
         data = var.traefik_conf
