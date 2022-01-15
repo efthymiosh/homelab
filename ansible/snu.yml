@@ -50,8 +50,8 @@
       enable_debug: false
       retry_join: "{{ groups['snus'] | list }}"
       rejoin_after_leave: true
-      leave_on_terminate: true
-      skip_leave_on_interrupt: false
+      leave_on_terminate: false
+      skip_leave_on_interrupt: true
       dns_config:
         enable_truncate: true
         use_cache: true
@@ -62,8 +62,9 @@
       region: "efth"
       datacenter: "homelab"
       data_dir: "{{ nomad_data_dir }}"
-      leave_on_interrupt: true
-      leave_on_terminate: true
+      leave_on_interrupt: false
+      leave_on_terminate: false
+      log_level: "WARN"
       bind_addr: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "address" }}'
       server:
         enabled: true
