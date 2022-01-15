@@ -23,6 +23,7 @@ job "ghost" {
 
     task "website" {
       driver = "docker"
+      kill_timeout = "30s"
 
       config {
         image = "ghost:4.32"

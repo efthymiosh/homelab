@@ -17,6 +17,7 @@ job "seaweedfs-plugin-controller" {
 
     task "driver" {
       driver = "docker"
+      kill_timeout = "30s"
 
       config {
         image = "chrislusf/seaweedfs-csi-driver@sha256:fc6a55cd609687ccc3df5765fbddb8742089e68546fa9ceed246bc4821b1955e"

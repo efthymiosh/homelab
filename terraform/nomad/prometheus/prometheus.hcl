@@ -27,6 +27,7 @@ job "prometheus" {
 
     task "prometheus" {
       driver = "docker"
+      kill_timeout = "30s"
       config {
         image = "prom/prometheus:v2.32.1"
         args = [

@@ -7,8 +7,14 @@ job "seaweedfs" {
   type = "system"
 
   group "seaweedfs" {
+    network {
+      port "metrics"  {
+        static = 9335
+      }
+    }
     task "filer" {
       driver = "docker"
+      kill_timeout = "30s"
       config {
         image = "chrislusf/seaweedfs:2.85"
         args = [
@@ -28,6 +34,14 @@ job "seaweedfs" {
       template {
         data = var.filer_conf
         destination = "${NOMAD_TASK_DIR}/filer.toml"
+      }
+      service {
+        name = "seaweedfs-filer"
+        tags = [
+          "http",
+          "monitored",
+        ]
+        port = "metrics"
       }
     }
   }

@@ -34,6 +34,7 @@ job "etcd" {
 
     task "etcd" {
       driver = "docker"
+      kill_timeout = "30s"
       config {
         image = "gcr.io/etcd-development/etcd:v3.5.1-amd64"
         args = [
