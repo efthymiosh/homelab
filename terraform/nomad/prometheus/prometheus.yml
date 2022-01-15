@@ -1,0 +1,38 @@
+global:
+  evaluation_interval: 30s
+  scrape_interval: 30s
+  scrape_timeout: 10s
+rule_files: []
+scrape_configs:
+
+- job_name: consul
+  consul_sd_configs:
+  - server: '{{ with $list := service "cnsl~_agent" }}{{ with index $list 0 }}{{ .Address }}:{{ .Port }}{{ end }}{{ end }}'
+  relabel_configs:
+  - source_labels: ['__meta_consul_tags']
+    regex: ".*,monitored,.*"
+    action: keep
+  - source_labels: ['__meta_consul_service']
+    target_label: job
+  - source_labels: ['__meta_consul_service']
+    target_label: service
+  - source_labels: ['__meta_consul_dc']
+    target_label: dc
+  - source_labels: ['__meta_consul_tags']
+    regex: '.*,prometheus\.path=([^,]*),.*'
+    replacement: '${1}'
+    target_label: __metrics_path__
+  - source_labels: ['__meta_consul_node']
+    target_label: instance
+
+- job_name: consul_pushgateways
+  honor_labels: true
+  consul_sd_configs:
+  - server: '{{ with $list := service "cnsl~_agent" }}{{ with index $list 0 }}{{ .Address }}:{{ .Port }}{{ end }}{{ end }}'
+  relabel_configs:
+  - source_labels: ['__meta_consul_tags']
+    regex: '.*,prometheus\.pushgateway,.*'
+    action: keep
+
+alerting:
+  alertmanagers: []
