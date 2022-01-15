@@ -26,6 +26,7 @@ job "ghost" {
 
       config {
         image = "ghost:4.32"
+        ports = ["http"]
       }
 
       service {
@@ -46,7 +47,7 @@ job "ghost" {
       }
 
       env {
-        #  url = "http://ghost.efthymios.net"
+        url = "http://ghost.efthymios.net"
       }
 
       volume_mount {
