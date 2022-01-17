@@ -31,10 +31,6 @@ job "seaweedfs" {
         cpu = 200
         memory = 128
       }
-      template {
-        data = var.filer_conf
-        destination = "${NOMAD_TASK_DIR}/filer.toml"
-      }
       service {
         name = "seaweedfs-filer"
         tags = [

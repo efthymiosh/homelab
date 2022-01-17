@@ -1,5 +1,5 @@
 resource "nomad_scheduler_config" "config" {
-  memory_oversubscription_enabled = false
+  memory_oversubscription_enabled = true
   scheduler_algorithm             = "spread"
   preemption_config               = {
     batch_scheduler_enabled    = false
@@ -15,23 +15,6 @@ resource "nomad_job" "traefik" {
     enabled = true
     vars    = {
       traefik_conf = file("nomad/traefik/traefik.yaml")
-    }
-  }
-}
-
-resource "nomad_job" "etcd" {
-  jobspec = file("nomad/etcd/etcd.hcl")
-  hcl2 {
-    enabled = true
-  }
-}
-
-resource "nomad_job" "seaweedfs" {
-  jobspec = file("nomad/seaweedfs/filer.hcl")
-  hcl2 {
-    enabled = true
-    vars    = {
-      filer_conf = file("nomad/seaweedfs/filer.toml")
     }
   }
 }

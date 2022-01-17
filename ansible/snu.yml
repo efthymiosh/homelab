@@ -108,6 +108,7 @@
         prometheus_metrics: true
     seaweedfs_master_node: true
     seaweedfs_volume_node: true
+    seaweedfs_filer_node: true
     seaweedfs_masters: "{{ groups['snus'] }}"
   roles:
   - role: docker
