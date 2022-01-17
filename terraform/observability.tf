@@ -89,6 +89,16 @@ resource "nomad_job" "grafana" {
   }
 }
 
+resource "nomad_job" "vector" {
+  jobspec = file("nomad/loki/vector.hcl")
+  hcl2 {
+    enabled = true
+    vars = {
+      conf   = file("nomad/loki/vector.toml")
+    }
+  }
+}
+
 resource "nomad_job" "loki" {
   jobspec = file("nomad/loki/loki.hcl")
   hcl2 {

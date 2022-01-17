@@ -1,0 +1,20 @@
+data_dir = "alloc/data/vector/"
+
+[api]
+  enabled = true
+  address = "0.0.0.0:8686"
+[sources.logs]
+  type = "docker_logs"
+[sinks.loki]
+  type = "loki"
+  inputs = ["logs"]
+  endpoint = "http://loki.service.consul:3100"
+  encoding.codec = "text"
+  healthcheck.enabled = true
+  labels.job = "{{ label.com\\.hashicorp\\.nomad\\.job_name }}"
+  labels.task = "{{ label.com\\.hashicorp\\.nomad\\.task_name }}"
+  labels.group = "{{ label.com\\.hashicorp\\.nomad\\.task_group_name }}"
+  labels.namespace = "{{ label.com\\.hashicorp\\.nomad\\.namespace }}"
+  labels.node = "{{ label.com\\.hashicorp\\.nomad\\.node_name }}"
+  # remove fields that have been converted to labels to avoid having them twice
+  remove_label_fields = true

@@ -79,6 +79,10 @@
       client:
         enabled: true
         node_class: "snunmu"
+        host_volume:
+          docker-sock-ro:
+            path: "/var/run/docker.sock"
+            read_only: true
         options:
           docker.volumes.enabled: "true"
         network_interface: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "name" }}'
@@ -88,6 +92,14 @@
         docker:
           config:
             allow_privileged: true
+            extra_labels:
+            - "job_name"
+            - "task_group_name"
+            - "task_name"
+            - "node_name"
+        raw_exec:
+          config:
+            enabled: true
       telemetry:
         collection_interval: "1s"
         disable_hostname: true
