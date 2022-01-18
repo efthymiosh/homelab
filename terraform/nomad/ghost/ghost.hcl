@@ -48,7 +48,8 @@ job "ghost" {
       }
 
       env {
-        url = "http://ghost.efthymios.net"
+        url = "http://blog.efhd.me"
+        admin = "http://ghost.efthymios.net"
       }
 
       volume_mount {
