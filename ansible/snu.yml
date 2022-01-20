@@ -106,16 +106,12 @@
         publish_allocation_metrics: true
         publish_node_metrics: true
         prometheus_metrics: true
-    seaweedfs_master_node: true
-    seaweedfs_volume_node: true
-    seaweedfs_filer_node: true
-    seaweedfs_masters: "{{ groups['snus'] }}"
   roles:
   - role: docker
     tags: docker
   - role: consul
     tags: consul
-  - role: seaweedfs
-    tags: seaweedfs
+  - role: minio
+    tags: minio
   - role: nomad
     tags: nomad

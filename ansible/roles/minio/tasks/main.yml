@@ -1,0 +1,39 @@
+- name: config user
+  when: minio_user != "root"
+  user:
+    name: "{{ minio_user }}"
+    system: true
+
+- name: fetch binary
+  get_url:
+    url: "https://dl.min.io/server/minio/release/linux-amd64/minio"
+    dest: "{{ minio_install_path }}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: ensure minio data dir exists
+  file:
+    path: "{{ minio_data_path }}/{{ item }}"
+    state: "directory"
+    mode: 0700
+    owner: "{{ minio_user }}"
+    group: "{{ minio_user }}"
+  loop:
+  - "dir1"
+  - "dir2"
+  - "dir3"
+
+- name: install minio service service
+  template:
+    src: "{{ minio_service_unit }}.j2"
+    dest: "/etc/systemd/system/{{ minio_service_unit }}"
+    mode: 0600
+    owner: root
+    group: root
+
+- name: enable service to start on boot
+  systemd:
+    name: "{{ minio_service_unit }}"
+    enabled: true
+    daemon_reload: true

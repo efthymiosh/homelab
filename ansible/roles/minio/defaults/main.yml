@@ -1,0 +1,9 @@
+minio_user: "root"
+minio_install_path: "/opt/minio"
+minio_service_unit: "minio.service"
+minio_data_path: "/data"
+minio_domain: "minio.efthymios.net"
+
+minio_root_user: "minioadmin"
+minio_root_password: "minioadmin"
+minio_console_address: "0.0.0.0:9001"
