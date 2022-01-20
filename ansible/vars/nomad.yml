@@ -1,0 +1,50 @@
+nomad_encrypt: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      62646635653265613934363632323662336631343764343035303065653639646266333964303165
+      3432346464356463316466343461626536613031336665630a353865326335623031383731626265
+      30623430383434633731646133653363303535343765626365646466356230306637633362616563
+      6334663936316238650a353232643336623365326562356132376639666562653637316334396531
+      30646366656564646561613932333661306363333031363763636661306332383636353461636439
+      3834323933653035656162313565383063623163636537363738
+nomad_config:
+  region: "efth"
+  datacenter: "homelab"
+  data_dir: "{{ nomad_data_dir }}"
+  leave_on_interrupt: false
+  leave_on_terminate: false
+  log_level: "WARN"
+  bind_addr: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "address" }}'
+  server:
+    enabled: true
+    bootstrap_expect: 3
+    encrypt: "{{ nomad_encrypt }}"
+  client:
+    enabled: true
+    node_class: "snunmu"
+    host_volume:
+      docker-sock-ro:
+        path: "/var/run/docker.sock"
+        read_only: true
+    options:
+      docker.volumes.enabled: "true"
+    network_interface: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "name" }}'
+  consul:
+    address: "localhost:8500"
+  plugin:
+    docker:
+      config:
+        allow_privileged: true
+        extra_labels:
+        - "job_name"
+        - "task_group_name"
+        - "task_name"
+        - "node_name"
+    raw_exec:
+      config:
+        enabled: true
+  telemetry:
+    collection_interval: "1s"
+    disable_hostname: true
+    publish_allocation_metrics: true
+    publish_node_metrics: true
+    prometheus_metrics: true
