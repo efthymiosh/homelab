@@ -1,0 +1,31 @@
+- name: install packages
+  package:
+    name:
+    - "nfs-common"
+    - "open-iscsi"
+    - "lsscsi"
+    - "sg3-utils"
+    - "multipath-tools"
+    - "scsitools"
+    state: "present"
+
+- name: configure multipathing
+  copy:
+    dest: "/etc/multipath.conf"
+    content: |
+      defaults {
+          user_friendly_names yes
+          find_multipaths yes
+      }
+
+- name: enable multipathing
+  service:
+    name: "multipath-tools"
+    state: started
+    enabled: true
+
+- name: enable open-iscsi
+  service:
+    name: "open-iscsi"
+    state: started
+    enabled: true
