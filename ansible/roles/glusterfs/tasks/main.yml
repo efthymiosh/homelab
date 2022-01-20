@@ -1,0 +1,46 @@
+- name: Install glusterFS package
+  package:
+    name: "glusterfs-server"
+    state: "present"
+
+- name: Ensure the glusterfs data dirs exist
+  file:
+    path: "{{ item }}"
+    state: "directory"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+  - "/glusterfs/gv0"
+
+- name: Ensure glusterfs is enabled and started
+  service:
+    name: "{{ item }}"
+    state: "started"
+    enabled: true
+  loop:
+  - glusterd
+  - glustereventsd
+
+- name: Get the peer status
+  shell: gluster peer status
+  register: gluster_status
+
+- name: Start up the cluster
+  when: '"Number of Peers: 0" in gluster_status.stdout_lines'
+  block:
+  - name: Add peers
+    run_once: true
+    shell: gluster peer probe {{ item }}
+    loop: "{{ groups['snus'] | difference(inventory_hostname) }}"
+
+  - name: Create volumes
+    run_once: true
+    shell: >
+      gluster volume create gv0 replica 3
+      {{ groups['snus'] | product([':/glusterfs/gv0']) | map('join') | list | join(' ') }}
+      force
+
+  - name: Start volumes
+    run_once: true
+    shell: gluster volume start gv0
