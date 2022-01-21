@@ -7,6 +7,7 @@
   - "vars/consul_services.yml"
   - "vars/nomad.yml"
   - "vars/minio.yml"
+  - "vars/moosefs.yml"
   roles:
   - role: docker
     tags: docker
@@ -14,5 +15,7 @@
     tags: consul
   - role: minio
     tags: minio
+  - role: moosefs
+    tags: moosefs
   - role: nomad
     tags: nomad

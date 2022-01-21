@@ -1,0 +1,75 @@
+- name: Install moosefs packages
+  package:
+    name:
+    - "moosefs-cli"
+    - "moosefs-metalogger"
+    - "moosefs-chunkserver"
+    - "moosefs-master"
+    state: "present"
+
+- name: template mfs configuration
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/mfs/{{ item }}"
+    owner: mfs
+    group: mfs
+    mode: 0644
+  loop:
+  - mfsmaster.cfg
+  - mfsexports.cfg
+  - mfsmetalogger.cfg
+  - mfschunkserver.cfg
+  - mfshdd.cfg
+
+- name: ensure the metadata empty file is removed
+  file:
+    path: "/var/lib/mfs/metadata.mfs.empty"
+    state: absent
+  register: metadata
+
+- name: ensure the metadata file is there
+  when: metadata.changed
+  copy:
+    src: metadata.mfs
+    dest: "/var/lib/mfs/metadata.mfs"
+    owner: mfs
+    group: mfs
+    mode: 0600
+
+- name: ensure the moosefs data dir exists
+  file:
+    path: "/mfsdata"
+    state: "directory"
+    owner: mfs
+    group: mfs
+    mode: 0700
+
+- name: ensure master is in proper state
+  block:
+  - lineinfile:
+      path: "/etc/default/moosefs-master"
+      regexp: "MFSMASTER_ENABLE"
+      line: "MFSMASTER_ENABLE = {{ moosefs_is_master }}"
+  - service:
+      name: "moosefs-master"
+      enabled: "{{ moosefs_is_master }}"
+
+- name: ensure metalogger is in proper state
+  block:
+# - lineinfile:
+#     path: "/etc/default/moosefs-metalogger"
+#     regexp: "MFSMETALOGGER_ENABLE"
+#     line: "MFSMETALOGGER_ENABLE = {{ not moosefs_is_master }}"
+  - service:
+      name: "moosefs-metalogger"
+      enabled: "{{ not moosefs_is_master }}"
+
+- name: ensure chunkserver is in proper state
+  block:
+# - lineinfile:
+#     path: "/etc/default/moosefs-chunkserver"
+#     regexp: "MFSCHUNKSERVER_ENABLE"
+#     line: "MFSCHUNKSERVER_ENABLE = true"
+  - service:
+      name: "moosefs-chunkserver"
+      enabled: "true"
