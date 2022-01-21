@@ -1,7 +1,7 @@
 resource "nomad_external_volume" "ghost" {
   type = "csi"
 
-  plugin_id = "seaweedfs-csi"
+  plugin_id = "moosefs-csi"
   volume_id = "ghost_content"
   name      = "ghost_content"
 
@@ -10,8 +10,8 @@ resource "nomad_external_volume" "ghost" {
     attachment_mode = "file-system"
   }
 
-  capacity_min = "4GiB"
-  capacity_max = "8GiB"
+  capacity_min = "1GiB"
+  capacity_max = "1GiB"
 }
 
 resource "nomad_job" "ghost" {

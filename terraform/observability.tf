@@ -1,7 +1,7 @@
 resource "nomad_external_volume" "prometheus" {
   type = "csi"
 
-  plugin_id = "seaweedfs-csi"
+  plugin_id = "moosefs-csi"
   volume_id = "tsdb"
   name      = "tsdb"
 
@@ -17,7 +17,7 @@ resource "nomad_external_volume" "prometheus" {
 resource "nomad_external_volume" "grafana" {
   type = "csi"
 
-  plugin_id = "seaweedfs-csi"
+  plugin_id = "moosefs-csi"
   volume_id = "grafana"
   name      = "grafana"
 
@@ -33,7 +33,7 @@ resource "nomad_external_volume" "grafana" {
 resource "nomad_external_volume" "loki" {
   type = "csi"
 
-  plugin_id = "seaweedfs-csi"
+  plugin_id = "moosefs-csi"
   volume_id = "loki"
   name      = "loki"
 

@@ -19,15 +19,15 @@ resource "nomad_job" "traefik" {
   }
 }
 
-resource "nomad_job" "seaweedfs-csi-node" {
-  jobspec = file("nomad/seaweedfs/csi_node.hcl")
+resource "nomad_job" "moosefs-csi-node" {
+  jobspec = file("nomad/moosefs-csi/csi_node.hcl")
   hcl2 {
     enabled = true
   }
 }
 
-resource "nomad_job" "seaweedfs-csi-controller" {
-  jobspec = file("nomad/seaweedfs/csi_controller.hcl")
+resource "nomad_job" "moosefs-csi-controller" {
+  jobspec = file("nomad/moosefs-csi/csi_controller.hcl")
   hcl2 {
     enabled = true
   }
