@@ -14,9 +14,9 @@ consul_register:
     - "http"
     - "routed"
     - "traefik.http.routers.nmd.rule=Host(`nomad.efthymios.net`)"
-  - id: "seaweedvol"
-    name: "seaweedfs-volume"
-    port: 9334
+  - id: "minio"
+    name: "minio"
+    port: 9001
     tags:
     - "http"
-    - "monitored"
+    - "routed"
