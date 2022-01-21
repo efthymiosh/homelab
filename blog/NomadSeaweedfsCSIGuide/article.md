@@ -10,6 +10,16 @@ commonly, but not limited to, containers.
 In this guide we will explore providing the ability for container workloads to support flexible
 state, regardless of the node they are scheduled in. We will delve into the (currently beta) feature of Nomad, CSI Plugins.
 
+## A word of warning
+
+As of the date of writing this guide, seaweedFS does not work well with most demanding workloads,
+at least with the configuration used in the guide. I have tried 4 different workloads:
+
+1. sqlite3 database: works well
+2. mysql database: ultraminor load, state corruption prevented database to boot
+3. prometheus tsdb: state corruption while trying to compact, blocks had erroneous data
+4. loki, mostly appending files: no errors discovered
+
 ## Requirements
 
 If the below requirements are not met, you won't be able to follow the guide successully.
