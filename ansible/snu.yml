@@ -19,3 +19,5 @@
     tags: moosefs
   - role: nomad
     tags: nomad
+  - role: tailscale
+    tags: tailscale

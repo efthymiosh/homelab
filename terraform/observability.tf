@@ -13,6 +13,21 @@ resource "nomad_external_volume" "prometheus" {
   capacity_min = "40GiB"
   capacity_max = "40GiB"
 }
+resource "nomad_external_volume" "prometheus-tsdb" {
+  type = "csi"
+
+  plugin_id = "moosefs-csi"
+  volume_id = "prometheus-tsdb"
+  name      = "prometheus-tsdb"
+
+  capability {
+    access_mode     = "single-node-writer"
+    attachment_mode = "file-system"
+  }
+
+  capacity_min = "40GiB"
+  capacity_max = "40GiB"
+}
 
 resource "nomad_external_volume" "grafana" {
   type = "csi"
@@ -51,7 +66,7 @@ resource "nomad_job" "prometheus" {
   hcl2 {
     enabled = true
     vars = {
-      volume = nomad_external_volume.prometheus.volume_id
+      volume = nomad_external_volume.prometheus-tsdb.volume_id
       conf   = file("nomad/prometheus/prometheus.yml")
     }
   }

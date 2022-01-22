@@ -1,0 +1,23 @@
+- name: add tailscale apt key
+  apt_key:
+    data: "{{ lookup('file', 'impish.gpg') }}"
+    state: present
+
+- name: add tailscale repository
+  apt_repository:
+    repo: "deb https://pkgs.tailscale.com/stable/ubuntu impish main"
+    state: present
+    filename: "tailscale"
+
+      # - name: install the tailscale package
+      #   package:
+      #     name: "tailscale"
+      #     state: present
+
+- name: enable IP forwarding
+  sysctl:
+    name: "{{ item }}"
+    value: "1"
+  loop:
+  - "net.ipv4.ip_forward"
+  - "net.ipv6.conf.all.forwarding"
