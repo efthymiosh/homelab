@@ -23,31 +23,6 @@ resource "nomad_external_volume" "prometheus" {
   capacity_max = "40GiB"
 }
 
-resource "nomad_external_volume" "loki" {
-  type = "csi"
-
-  plugin_id = "s3-csi"
-  volume_id = "loki"
-  name      = "loki"
-
-  capability {
-    access_mode     = "single-node-writer"
-    attachment_mode = "file-system"
-  }
-  parameters = {
-    mounter = "rclone"
-  }
-  secrets = {
-    accessKeyID     = var.minio_access_key_id
-    secretAccessKey = var.minio_secret_access_key
-    endpoint        = "http://localhost:9000"
-    region          = ""
-  }
-
-  capacity_min = "16GiB"
-  capacity_max = "16GiB"
-}
-
 resource "nomad_job" "prometheus" {
   jobspec = file("nomad/prometheus/prometheus.hcl")
   hcl2 {
@@ -105,7 +80,6 @@ resource "nomad_job" "loki" {
   hcl2 {
     enabled = true
     vars = {
-      volume = nomad_external_volume.loki.volume_id
       conf   = file("nomad/loki/config.yaml")
     }
   }

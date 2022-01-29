@@ -1,13 +1,6 @@
 variable "conf" {
   description = "The loki configuration data"
 }
-variable "data_dir" {
-  description = "Path to the loki data dir"
-  default = "/var/lib/loki"
-}
-variable "volume" {
-  description = "The name of the volume to bind to loki"
-}
 
 job "loki" {
   datacenters = ["homelab"]
@@ -37,30 +30,18 @@ job "loki" {
       }
     }
 
-    volume "loki" {
-      type = "csi"
-      source = var.volume
-      attachment_mode = "file-system"
-      access_mode = "single-node-writer"
-    }
-
     task "loki" {
       driver = "docker"
       user = "root"
       config {
         image = "grafana/loki:2.4.2"
-        args = [ "-config.file", "${NOMAD_TASK_DIR}/config.yaml" ]
+        args = [ "-config.file", "${NOMAD_SECRETS_DIR}/config.yaml" ]
         ports = ["http"]
-      }
-
-      volume_mount {
-        volume = "loki"
-        destination = var.data_dir
       }
 
       template {
         data = var.conf
-        destination = "${NOMAD_TASK_DIR}/config.yaml"
+        destination = "${NOMAD_SECRETS_DIR}/config.yaml"
       }
       resources {
         cpu = 512
