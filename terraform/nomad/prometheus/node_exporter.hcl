@@ -1,3 +1,7 @@
+variable "version" {
+  default = "1.3.1"
+}
+
 job "node_exporter" {
   datacenters = ["homelab"]
   type = "system"
@@ -6,19 +10,18 @@ job "node_exporter" {
 
     network {
       port "http"  {
-        to = 9100
+        static = 9100
       }
     }
 
     task "exporter" {
-      driver = "docker"
+      driver = "raw_exec"
       config {
-        image = "prom/node-exporter:v1.3.1"
-        ports = ["http"]
+        command = "/opt/node_exporter-${var.version}.linux-amd64/node_exporter"
       }
-      resources {
-        cpu = 400
-        memory = 256
+      artifact {
+        source = "https://github.com/prometheus/node_exporter/releases/download/v${var.version}/node_exporter-${var.version}.linux-amd64.tar.gz"
+        destination = "/opt/"
       }
       service {
         name = "node-exporter"
