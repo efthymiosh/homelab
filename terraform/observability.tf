@@ -1,7 +1,7 @@
 resource "nomad_external_volume" "prometheus" {
   type = "csi"
 
-  plugin_id = "moosefs-csi"
+  plugin_id = "s3-csi"
   volume_id = "tsdb"
   name      = "tsdb"
 
@@ -9,36 +9,39 @@ resource "nomad_external_volume" "prometheus" {
     access_mode     = "single-node-writer"
     attachment_mode = "file-system"
   }
-
-  capacity_min = "40GiB"
-  capacity_max = "40GiB"
-}
-resource "nomad_external_volume" "prometheus-tsdb" {
-  type = "csi"
-
-  plugin_id = "moosefs-csi"
-  volume_id = "prometheus-tsdb"
-  name      = "prometheus-tsdb"
-
-  capability {
-    access_mode     = "single-node-writer"
-    attachment_mode = "file-system"
+  parameters = {
+    mounter = "rclone"
+  }
+  secrets = {
+    accessKeyID     = var.minio_access_key_id
+    secretAccessKey = var.minio_secret_access_key
+    endpoint        = "http://localhost:9000"
+    region          = ""
   }
 
   capacity_min = "40GiB"
   capacity_max = "40GiB"
 }
 
-resource "nomad_external_volume" "grafana" {
+resource "nomad_external_volume" "grafana-pg" {
   type = "csi"
 
-  plugin_id = "moosefs-csi"
-  volume_id = "grafana"
-  name      = "grafana"
+  plugin_id = "s3-csi"
+  volume_id = "grafana-pg"
+  name      = "grafana-pg"
 
   capability {
     access_mode     = "single-node-writer"
     attachment_mode = "file-system"
+  }
+  parameters = {
+    mounter = "rclone"
+  }
+  secrets = {
+    accessKeyID     = var.minio_access_key_id
+    secretAccessKey = var.minio_secret_access_key
+    endpoint        = "http://localhost:9000"
+    region          = ""
   }
 
   capacity_min = "1GiB"
@@ -48,13 +51,22 @@ resource "nomad_external_volume" "grafana" {
 resource "nomad_external_volume" "loki" {
   type = "csi"
 
-  plugin_id = "moosefs-csi"
+  plugin_id = "s3-csi"
   volume_id = "loki"
   name      = "loki"
 
   capability {
     access_mode     = "single-node-writer"
     attachment_mode = "file-system"
+  }
+  parameters = {
+    mounter = "rclone"
+  }
+  secrets = {
+    accessKeyID     = var.minio_access_key_id
+    secretAccessKey = var.minio_secret_access_key
+    endpoint        = "http://localhost:9000"
+    region          = ""
   }
 
   capacity_min = "16GiB"
@@ -66,7 +78,7 @@ resource "nomad_job" "prometheus" {
   hcl2 {
     enabled = true
     vars = {
-      volume = nomad_external_volume.prometheus-tsdb.volume_id
+      volume = nomad_external_volume.prometheus.volume_id
       conf   = file("nomad/prometheus/prometheus.yml")
     }
   }
@@ -84,7 +96,7 @@ resource "nomad_job" "grafana_postgres" {
   hcl2 {
     enabled = true
     vars = {
-      volume = nomad_external_volume.grafana.volume_id
+      volume = nomad_external_volume.grafana-pg.volume_id
       grafana_user     = "grafana"
       grafana_db       = "grafana"
       grafana_password = var.grafana_password
