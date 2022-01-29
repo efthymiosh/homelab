@@ -69,7 +69,7 @@ job "vector" {
       }
       service {
         name = "vector"
-        tags = ["http", "monitored"]
+        tags = ["http"]
         port = "http"
         check {
           type = "http"
