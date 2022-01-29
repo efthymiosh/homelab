@@ -1,8 +1,3 @@
-variable "volume" {
-  description = "The name of the volume to mount to ghost"
-  type = string
-}
-
 job "ghost" {
   datacenters = ["homelab"]
   type = "service"
@@ -14,11 +9,10 @@ job "ghost" {
       }
     }
 
-    volume "ghost_content" {
-      type = "csi"
-      source = var.volume
-      attachment_mode = "file-system"
-      access_mode = "single-node-writer"
+    ephemeral_disk {
+      sticky  = true
+      migrate = true
+      size    = 1000
     }
 
     task "website" {
@@ -28,6 +22,13 @@ job "ghost" {
       config {
         image = "ghost:4.32"
         ports = ["http"]
+
+        mount {
+          type = "bind"
+          source = "..${NOMAD_ALLOC_DIR}/data/"
+          target = "/var/lib/ghost/content/"
+          readonly = false
+        }
       }
 
       service {
@@ -50,11 +51,10 @@ job "ghost" {
       env {
         url = "http://blog.efhd.me"
         admin = "http://ghost.efthymios.net"
-      }
-
-      volume_mount {
-        volume = "ghost_content"
-        destination = "/var/lib/ghost/content"
+        database__connection__filename = "${NOMAD_ALLOC_DIR}/data/ghost.db"
+        logging__level = "info"
+        logging__transports = "[\"stdout\"]"
+        privacy__useTinfoil = "true"
       }
     }
   }
