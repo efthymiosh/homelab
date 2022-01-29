@@ -1,6 +1,3 @@
-variable "volume" {
-  description = "The data volume for grafana"
-}
 variable "grafana_db" {
   description = "Grafana DB name"
   default = "grafana"
@@ -29,35 +26,12 @@ job "grafana_postgres" {
       }
     }
 
-    volume "grafana_data" {
-      type = "csi"
-      source = var.volume
-      attachment_mode = "file-system"
-      access_mode = "single-node-writer"
+    ephemeral_disk {
+      sticky  = true
+      migrate = true
+      size    = 200
     }
 
-    task "chown" {
-      lifecycle {
-        hook = "prestart"
-      }
-      driver = "docker"
-
-      user = "root"
-
-      config {
-        image = "library/postgres:14.1"
-        command = "bash"
-        args = [
-          "-c",
-          "mkdir -p ${var.postgres_pgdata_dir}/pgdata && chown -v postgres:postgres ${var.postgres_pgdata_dir}/pgdata"
-        ]
-      }
-
-      volume_mount {
-        volume = "grafana_data"
-        destination = var.postgres_pgdata_dir
-      }
-    }
     task "postgresql" {
       driver = "docker"
 
@@ -67,16 +41,11 @@ job "grafana_postgres" {
         ports = ["db"]
       }
 
-      volume_mount {
-        volume = "grafana_data"
-        destination = var.postgres_pgdata_dir
-      }
-
       env = {
         "POSTGRES_DB" = var.grafana_db
         "POSTGRES_USER" = var.grafana_user
         "POSTGRES_PASSWORD" = var.grafana_password
-        "PGDATA" = "${var.postgres_pgdata_dir}/pgdata"
+        "PGDATA" = "${NOMAD_ALLOC_DIR}/data"
       }
 
       resources {
