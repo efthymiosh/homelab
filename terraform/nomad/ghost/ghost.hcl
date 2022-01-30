@@ -49,7 +49,8 @@ job "ghost" {
       }
 
       env {
-        url = "http://blog.efhd.me"
+        #url = "http://blog.efhd.me"
+        url = "http://ghost.efthymios.net"
         admin = "http://ghost.efthymios.net"
         database__connection__filename = "${NOMAD_ALLOC_DIR}/data/ghost.db"
         logging__level = "info"

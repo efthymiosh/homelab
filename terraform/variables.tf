@@ -9,3 +9,11 @@ variable "minio_access_key_id" {
 variable "minio_secret_access_key" {
   sensitive = true
 }
+
+variable "backblaze_key_id" {
+  sensitive = true
+}
+
+variable "backblaze_app_key" {
+  sensitive = true
+}

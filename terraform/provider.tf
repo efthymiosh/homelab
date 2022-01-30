@@ -21,6 +21,10 @@ terraform {
       source  = "hashicorp/nomad"
       version = "~> 1.4"
     }
+    b2 = {
+      source  = "Backblaze/b2"
+      version = "~> 0.7"
+    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.1"
@@ -36,4 +40,9 @@ provider "cloudflare" {
 provider "nomad" {
   address = "http://nomad.efthymios.net:4646"
   region  = "efth"
+}
+
+provider "b2" {
+  application_key_id = var.backblaze_key_id
+  application_key    = var.backblaze_app_key
 }
