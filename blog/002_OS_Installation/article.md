@@ -1,37 +1,19 @@
 # Journey, Part 2: Operating System Installation
 
-What is a lot more interesting is how the operating system will be delivered to the machine and with
-what information. As I mentioned in the introductory post, I will attempt to push as much of the
-provisioning to the image itself, so that at best none or at worst minimal work will be needed after
-operating system installation.
+What is a lot more interesting is how the operating system will be delivered to the machine and with what information. As I mentioned in the introductory post, I will attempt to push as much of the provisioning to the image itself, so that at best none or at worst minimal work will be needed after operating system installation.
 
-So what is *the machine*? The machine is a NUC, a stock personal computer. It will come preinstalled
-with a m.2 or SATA SSD. It will without doubt attempt to boot from that device when powered on. This
-opens up the possibility of extracting the SSD and using a control machine to preinstall an
-operating system. Now does that, literally, involve toil each time we need to install something.
+So what is *the machine*? The machine is a NUC, a stock personal computer. It will come preinstalled with a m.2 or SATA SSD. It will without doubt attempt to boot from that device when powered on. This opens up the possibility of extracting the SSD and using a control machine to preinstall an operating system. Now does that, literally, involve toil each time we need to install something.
 
-I could just install the operating system like on any consumer PC using a USB flash drive with an
-install image. I could then prepare cloud-init configuration to pick things up after the first boot,
-or I could do nothing and provision using Configuration Managmement tooling. The more provisioning
-is done at the image preparation stage, though, the better. Another thing I really want to be
-possible is a USB flash drive which when booted runs `dd` on the internal drive with a prepared image.
-Realistically, a portable linux distribution on a USB drive with a raw image copied along.
+I could just install the operating system like on any consumer PC using a USB flash drive with an install image. I could then prepare cloud-init configuration to pick things up after the first boot, or I could do nothing and provision using Configuration Managmement tooling. The more provisioning is done at the image preparation stage, though, the better. Another thing I really want to be possible is a USB flash drive which when booted runs `dd` on the internal drive with a prepared image.  Realistically, a portable linux distribution on a USB drive with a raw image copied along.
 
-An alternative to the flash drive would be [PXE booting](https://en.wikipedia.org/wiki/Preboot_Execution_Environment).
-This approach will take some prep. Whatever tooling we use the functionality we want is the
-following:
+An alternative to the flash drive would be [PXE booting](https://en.wikipedia.org/wiki/Preboot_Execution_Environment).  This approach will take some prep. Whatever tooling we use the functionality we want is the following:
 
 * We have boot images capable, ideally in an automated fashion, of installing an OS.
 * There is a server serving the boot images over the network.
 * There is a DHCP server capable of advertising above server.
 * There is PXE boot support on the client. All the NUCs I purchased do, or at least say they do.
 
-I am confident that the server parts can be initially ran from a control machine and eventually
-bootstrapped into the cluster like any other workload. This means the control machine could only be
-needed for the initial installations. This would introduce an *interesting* cycle: The provisioning
-of the core workload orchestration system will depend on the workload orchestration system itself.
-We'll have to see about what the state of the PXE management system we choose looks like, but one
-thing is for sure: we'll be taking backups.
+I am confident that the server parts can be initially ran from a control machine and eventually bootstrapped into the cluster like any other workload. This means the control machine could only be needed for the initial installations. This would introduce an *interesting* cycle: The provisioning of the core workload orchestration system will depend on the workload orchestration system itself.  We'll have to see about what the state of the PXE management system we choose looks like, but one thing is for sure: we'll be taking backups.
 
 Here is some interesting links that look relevant to my use-case:
 
@@ -64,26 +46,15 @@ Relevant to bare-metal provisioning:
 
 ## Deciding on the provisioning approach
 
-PXE booting with some management software is by far the more exciting option. Probably the most
-overkill as well, but we're not going for simplicity here! We're going for adventure!  ..within
-reason, ofcourse!
+PXE booting with some management software is by far the more exciting option. Probably the most overkill as well, but we're not going for simplicity here! We're going for adventure!  ..within reason, ofcourse!
 
-Before writing this article the extent of my knowledge was that I knew that network booting was a
-thing. I think (hope) I now have some idea of how the ecosystem looks like.
+Before writing this article the extent of my knowledge was that I knew that network booting was a thing. I think (hope) I now have some idea of how the ecosystem looks like.
 
-The hardware arrives tomorrow, so I have to sieve the tooling quickly. I'm probably doing a
-disservice to everything else, but I'm going to limit to the tooling that both has easily
-digestible documentation and has terraform providers available. I want to have as much of the
-configuration defined as code as possible. Not for the sake of it, but for the reproducibility it
-can offer.
+The hardware arrives tomorrow, so I have to sieve the tooling quickly. I'm probably doing a disservice to everything else, but I'm going to limit to the tooling that both has easily digestible documentation and has terraform providers available. I want to have as much of the configuration defined as code as possible. Not for the sake of it, but for the reproducibility it can offer.
 
-Out of *matchbox* and *tinkerbell*, the first is quite constrained in what it can do but feels like
-it's going to be easier to wrangle, whereas the second takes the microservice approach making it
-potentially more complicated to manage but can pretty much do exactly what we want with the
-`image2disk` plugin.
+Out of *matchbox* and *tinkerbell*, the first is quite constrained in what it can do but feels like it's going to be easier to wrangle, whereas the second takes the microservice approach making it potentially more complicated to manage but can pretty much do exactly what we want with the `image2disk` plugin.
 
-Given my limited time, and although *matchbox* looks like a pleasure to toy with, I'm going to go
-with *tinkerbell*. It's the tool that can definitely work all four steps we described.
+Given my limited time, and although *matchbox* looks like a pleasure to toy with, I'm going to go with *tinkerbell*. It's the tool that can definitely work all four steps we described.
 
 ## Testing out the provisioning approach
 
@@ -93,9 +64,7 @@ Our network looks like this:
 
 ![starting network](assets/net1.png)
 
-We'll be following the [on bare-metal with docker](https://docs.tinkerbell.org/setup/on-bare-metal-with-docker/)
-tinkerbell guide. No, that's irrelevant to the state of the repo. Cloning the repo and following the
-markdown guide for docker-compose.
+We'll be following the [on bare-metal with docker](https://docs.tinkerbell.org/setup/on-bare-metal-with-docker/) tinkerbell guide. No, that's irrelevant to the state of the repo. Cloning the repo and following the markdown guide for docker-compose.
 
 Tinkerbell wants a static IP. Tinkerbell will not have a static IP for now.
 
@@ -116,18 +85,13 @@ an invalid type, it should be a service_started, or a service_healthy
 
 ..Isn't that a great start?
 
-One part of the problem in our case is the fact that the stack wants the docker registry and the
-tink server to use tls.  and the keys are generated using clouflare's excellent cfssl tool,
-in another container.
-The engineer's intention was that the certs get generated, the container exits, and the services
-start with the keys ready at their disposal.  The error is probably that my docker version is too 
-old or too new, I can't find the keyword in the [3.x](https://docs.docker.com/compose/compose-file/compose-file-v3/)
-or [2.x](https://docs.docker.com/compose/compose-file/compose-file-v2/) compose-file documentation.
+One part of the problem in our case is the fact that the stack wants the docker registry and the tink server to use tls.  and the keys are generated using clouflare's excellent cfssl tool, in another container.
+
+The engineer's intention was that the certs get generated, the container exits, and the services start with the keys ready at their disposal.  The error is probably that my docker version is too old or too new, I can't find the keyword in the [3.x](https://docs.docker.com/compose/compose-file/compose-file-v3/) or [2.x](https://docs.docker.com/compose/compose-file/compose-file-v2/) compose-file documentation.
 
 Looks like the stack will have to be crashing for a while cfssl does its thing.
 
-The other part is that the nginx wants a couple of containers, namely `osie-work` and
-`ubuntu-image-setup` to complete before booting. We'll find out if this is an issue.
+The other part is that the nginx wants a couple of containers, namely `osie-work` and `ubuntu-image-setup` to complete before booting. We'll find out if this is an issue.
 
 The set of changes comparing to the main branch is the following:
 
@@ -170,26 +134,19 @@ index f99fdc5..dafeca2 100644
      image: ${HEGEL_SERVER_IMAGE}
 ```
 
-And, just to be safe, I checked out to the `v0.6.0` tag and verified that the
-`service_completed_successfully` stuff is present.
+And, just to be safe, I checked out to the `v0.6.0` tag and verified that the `service_completed_successfully` stuff is present.
 
-Bunch of race errors, also stuff still breaking as the environment variables in the guide were
-replaced with a hidden `.env` file colocated with `docker-compose.yml`.
-Let's edit the variables there and go.
+Bunch of race errors, also stuff still breaking as the environment variables in the guide were replaced with a hidden `.env` file colocated with `docker-compose.yml`.  Let's edit the variables there and go.
 
 All fine second time, issuing `docker-compose logs -f`.
 
-Looks like any request to `boots` has a certificate error since the cert was issued for the previous
-IP. The script refuses to re-run, so we'll have to remove the certs manually. Since the volumes are
-compose volumes, we can locate them in `/var/lib/docker/compose_NAME/_data/`.
+Looks like any request to `boots` has a certificate error since the cert was issued for the previous IP. The script refuses to re-run, so we'll have to remove the certs manually. Since the volumes are compose volumes, we can locate them in `/var/lib/docker/compose_NAME/_data/`.
 
 ```bash
 root@tile:/var/lib/docker/volumes/compose_certs/_data# rm *.pem
 ```
 
-Good riddance. One `docker-compose up tls-gen` later, the new certs are in.
-But there are still lingering erroneous certs with the default IP being passed around, grpc this
-time.
+Good riddance. One `docker-compose up tls-gen` later, the new certs are in.  But there are still lingering erroneous certs with the default IP being passed around, grpc this time.
 
 ```bash
 discover from dhcp message: get hardware by mac from tink: rpc error: code = Unavailable desc =
@@ -197,12 +154,9 @@ connection error: desc = \"transport: authentication handshake failed: x509: cer
 for 192.168.56.4, 127.0.0.1, not 192.168.1.55\""
 ```
 
-Let's go with `docker-compose down -v` removing all state.
-Then back up to spawn the initial scripts, one more down and up to properly bring the services and
-it's running.
+Let's go with `docker-compose down -v` removing all state.  Then back up to spawn the initial scripts, one more down and up to properly bring the services and it's running.
 
-Rebooting the mini-pc into PXE launches it proper. It then loads `linuxkit` and hangs. The registry
-has some interesting logs:
+Rebooting the mini-pc into PXE launches it proper. It then loads `linuxkit` and hangs. The registry has some interesting logs:
 
 ```bash
 registry_1                  | time="2022-01-05T22:27:20.556518731Z" level=error msg="response
@@ -228,16 +182,12 @@ CREATED AT           | UPDATED AT           |
 +--------------------------------------+--------------------------------------+---------------+----------------------+----------------------+
 ```
 
-Looks like we're going to have to give tinkerbell some more love. Let's try and walk it step-by-step
-into a guide. This will be a good opportunity to convert the `docker-compose.yml` file into a set of
-nomad services, taking a step ahead towards the bootstrapped state.
-As this series is pretty much incoherent ramblings, the guide will be in a separate series. **Update:** You can find it [here](../TinkerbellGuide/article.md)
+It seems like the tinkerbell worker images (both `hook` and `OSIE`) are not working right with my hardware. I can't even get my keyboard to use the console directly.
 
 ## Next steps
 
-Having failed miserably with Tinkerbell, I installed Ubuntu Server with a USB stick. The installer
-apparently can fetch your ssh keys from your github username, not bad. Set up static IPs manually and
-good to go.
+All this time would be better spent with a custom solution PXE-booting into an installer with whatever stock configuration the installer provides to get something working, and then using cloud-init to start things up. But this is what I realize after the fact, ofcourse.
 
-There is **a lot** of software to explore in this space. I think I'll work on it again when I don't
-feel pressured to move forward with the more exciting stuff!
+Having failed miserably with Tinkerbell, I installed Ubuntu Server with a USB stick. The installer apparently can fetch your ssh keys from your github username, not bad. Set up static IPs manually and good to go.
+
+There is **a lot** of software to explore in this space. I think I'll work on it again when I don't feel pressured to move forward with the more exciting stuff!

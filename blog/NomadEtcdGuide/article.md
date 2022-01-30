@@ -1,7 +1,6 @@
 # Running etcd in docker on Nomad OR How to run SRV discovery services with Consul DNS
 
-This guide aims to provide a bare-bones insecure `etcd` deployment. This is a simple job definition
-but has a couple of "gotchas" that warrant this post.
+This guide aims to provide a bare-bones insecure `etcd` deployment. This is a simple job definition but has a couple of "gotchas" that warrant this post.
 
 The deployment will have the following characteristics:
 
@@ -17,21 +16,13 @@ If the below requirements are not met, you won't be able to follow the guide suc
 
 ## More prerequisites
 
-Follow the guide [here](https://learn.hashicorp.com/tutorials/consul/dns-forwarding) to enable
-consul DNS forwarding. After having finished with the guide you should be able to query DNS for
-`consul.service.consul`
+Follow the guide [here](https://learn.hashicorp.com/tutorials/consul/dns-forwarding) to enable consul DNS forwarding. After having finished with the guide you should be able to query DNS for `consul.service.consul`
 
 ### Gotcha #1: Getting docker to configure its containers with the proper DNS server
 
-By default, docker configures DNS by copying the `/etc/resolv.conf` file to the container, if the
-network mode is `bridge`, according to [the official
-documentation](https://docs.docker.com/config/containers/container-networking/).
-The gotcha here is the following: the containers cannot possibly  communicate with the loopback
-interface of the host, so docker does not simply "copy" the file -- it removes any entries that
-match the loopback.
+By default, docker configures DNS by copying the `/etc/resolv.conf` file to the container, if the network mode is `bridge`, according to [the official documentation](https://docs.docker.com/config/containers/container-networking/).  The gotcha here is the following: the containers cannot possibly  communicate with the loopback interface of the host, so docker does not simply "copy" the file -- it removes any entries that match the loopback.
 
-If you've followed the `systemd-resolved` part of the Forwarding Consul DNS guide you will have a
-`/etc/resolv.conf` file that looks like this:
+If you've followed the `systemd-resolved` part of the Forwarding Consul DNS guide you will have a `/etc/resolv.conf` file that looks like this:
 
 ```bash
 cat /etc/resolv.conf | grep -v '^#'
@@ -41,13 +32,11 @@ options edns0 trust-ad
 search .
 ```
 
-You will be able to resolve from the host, but docker will have to resort to fallbacks, and none of them
-will involve passing the systemd-resolved stub resolver in, somehow.
+You will be able to resolve from the host, but docker will have to resort to fallbacks, and none of them will involve passing the systemd-resolved stub resolver in, somehow.
 
 #### Make sure your DNS server exposes on an interface other than loopback
 
-For our `systemd-resolved` example above, we could expose the Stub DNS resolver on the `docker0`
-interface. The default is `172.17.0.1` :
+For our `systemd-resolved` example above, we could expose the Stub DNS resolver on the `docker0` interface. The default is `172.17.0.1` :
 
 ```bash
 cat /etc/systemd/resolved.conf | grep -v '^#'
@@ -56,21 +45,18 @@ cat /etc/systemd/resolved.conf | grep -v '^#'
 DNSStubListenerExtra=172.17.0.1
 ```
 
-After that, we should run `sudo systemctl restart systemd-resolved` so the changes take effect.
-We can check the logs and make sure that the unit is not failed with: `journalctl -u systemd-resolved`.
+After that, we should run `sudo systemctl restart systemd-resolved` so the changes take effect.  We can check the logs and make sure that the unit is not failed with: `journalctl -u systemd-resolved`.
 
 #### Make sure your docker containers get spawned with the DNS server configured
 
-For that we can override each container spawn setting the DNS server, but that's too tedious. We can
-instead configure the docker daemon for this by adding the map entry:
+For that we can override each container spawn setting the DNS server, but that's too tedious. We can instead configure the docker daemon for this by adding the map entry:
 
 ```
 cat /etc/docker/daemon.json | grep dns
   "dns": [ "172.17.0.1" ]
 ```
 
-To the daemon configuration file. If there isn't any other configuration, the file should look like
-this:
+To the daemon configuration file. If there isn't any other configuration, the file should look like this:
 
 ```json
 {
@@ -78,8 +64,7 @@ this:
 }
 ```
 
-After the above is saved in `/etc/docker/daemon.json` and the docker daemon restarted, any
-containers spawned will default to this DNS server. You can test this by running:
+After the above is saved in `/etc/docker/daemon.json` and the docker daemon restarted, any containers spawned will default to this DNS server. You can test this by running:
 
 ```bash
 docker run ubuntu:latest cat /etc/resolv.conf
@@ -89,9 +74,7 @@ You should see `nameserver 172.17.0.1` in the contents
 
 ### The etcd configuration (tested with: v3.5.1)
 
-Etcd requires knowledge of all peers on bootstrap. This is not easy to implement in an environment
-where the IPs and ports are dynamic by default, without jumping through several hoops. Thankfully
-`etcd` also provides the capability for service discovery via `SRV` records.
+Etcd requires knowledge of all peers on bootstrap. This is not easy to implement in an environment where the IPs and ports are dynamic by default, without jumping through several hoops. Thankfully `etcd` also provides the capability for service discovery via `SRV` records.
 
 This is how our `config` section will look like for the task:
 
@@ -113,9 +96,7 @@ This is how our `config` section will look like for the task:
     }
 ```
 
-The `--discovery-srv` flag is the key. It requires the domain in which to perform discovery, but
-etcd is too opinionated: it wants *specific* records, it won't just let you add a SRV record for it
-to query. The record that etcd queries is:
+The `--discovery-srv` flag is the key. It requires the domain in which to perform discovery, but etcd is too opinionated: it wants *specific* records, it won't just let you add a SRV record for it to query. The record that etcd queries is:
 
 ```bash
 _etcd-server._tcp.${DISCOVERY_SRV_FLAG_DOMAIN}
@@ -127,8 +108,7 @@ If we were to use SSL, the domain would be:
 _etcd-server-ssl._tcp.${DISCOVERY_SRV_FLAG_DOMAIN}
 ```
 
-I'm not too fond of this, but I'm sure the maintainers had a very good rationale for
-implementing SRV service-discovery this way.
+I'm not too fond of this, but I'm sure the maintainers had a very good rationale for implementing SRV service-discovery this way.
 
 ### Gotcha #2: Configuring service discovery
 
@@ -151,8 +131,7 @@ A normal `service` stanza for nomad would be in the `task` stanza and look like 
     }
 ```
 
-This means that after the task allocation is up, the service is going to be registered to consul
-along with a health check for consul to query every `interval`.
+This means that after the task allocation is up, the service is going to be registered to consul along with a health check for consul to query every `interval`.
 
 This will **not** work for us:
 
@@ -173,8 +152,7 @@ The solution to our gotcha is *moving* the `service` stanza to the `group` level
   }
 ```
 
-This will have the endpoints register before the container is up and running, there will be a record
-for each etcd to read on spawn.
+This will have the endpoints register before the container is up and running, there will be a record for each etcd to read on spawn.
 
 Here is my full `etcd.hcl` nomad file:
 
