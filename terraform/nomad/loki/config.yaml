@@ -30,7 +30,7 @@ storage_config:
     cache_ttl: 24h
     shared_store: s3
   aws:
-    s3: 'http://{{ key "loki/minio/access_key_id" }}:{{ key "loki/minio/secret_access_key" }}@minio.efthymios.net:9000/loki'
+    s3: 'http://{{ key "loki/minio/access_key_id" }}:{{ key "loki/minio/secret_access_key" }}@minio.service.consul:9000/loki'
     region: ""
     s3forcepathstyle: true
 compactor:
