@@ -1,7 +1,8 @@
 - hosts: snus
   become: true
   vars:
-    nomad_version: "1.2.4"
+    nomad_version: "1.2.5"
+    consul_version: "1.11.2"
   vars_files:
   - "vars/consul.yml"
   - "vars/consul_services.yml"
@@ -15,8 +16,6 @@
     tags: consul
   - role: minio
     tags: minio
-  - role: moosefs
-    tags: moosefs
   - role: nomad
     tags: nomad
   - role: tailscale
