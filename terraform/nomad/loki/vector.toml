@@ -1,10 +1,12 @@
-data_dir = "alloc/data/vector/"
+data_dir = "[[ env "NOMAD_ALLOC_DIR" ]]/data/"
 
 [api]
   enabled = true
   address = "0.0.0.0:8686"
 [sources.logs]
   type = "docker_logs"
+[sources.journal]
+  type = "journald"
 [sinks.loki]
   type = "loki"
   inputs = ["logs"]
@@ -18,3 +20,12 @@ data_dir = "alloc/data/vector/"
   labels.node = "{{ label.com\\.hashicorp\\.nomad\\.node_name }}"
   # remove fields that have been converted to labels to avoid having them twice
   remove_label_fields = true
+[sinks.loki_journal]
+  type = "loki"
+  inputs = ["journal"]
+  endpoint = "http://loki.service.consul:3100"
+  encoding.codec = "text"
+  healthcheck.enabled = true
+  labels.host = "{{ host }}"
+  labels.severity = "{{ PRIORITY }}"
+  labels.unit = "{{ _SYSTEMD_UNIT }}"

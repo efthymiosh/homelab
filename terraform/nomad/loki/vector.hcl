@@ -1,6 +1,9 @@
 variable "conf" {
   description = "The vector configuration data"
 }
+variable "version" {
+  default = "0.19.1"
+}
 
 job "vector" {
   datacenters = ["homelab"]
@@ -22,7 +25,7 @@ job "vector" {
 
     network {
       port "http" {
-        to = 8686
+        static = 8686
       }
     }
 
@@ -31,24 +34,15 @@ job "vector" {
       sticky = true
     }
 
-    volume "vector" {
-      type = "host"
-      source = "docker-sock-ro"
-      read_only = true
-    }
-
     task "vector" {
-      driver = "docker"
+      driver = "raw_exec"
       kill_timeout = "30s"
       config {
-        image = "timberio/vector:0.19.X-alpine"
-        ports = ["http"]
+        command = "/opt/vector-x86_64-unknown-linux-gnu/bin/vector"
       }
-
-      volume_mount {
-        volume = "vector"
-        destination = "/var/run/docker.sock"
-        read_only = true
+      artifact {
+        source = "https://github.com/vectordotdev/vector/releases/download/v0.19.1/vector-${var.version}-x86_64-unknown-linux-gnu.tar.gz"
+        destination = "/opt/"
       }
 
       env {
