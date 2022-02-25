@@ -17,9 +17,18 @@ variable "plan" {
 variable "records" {
   description = "A set of records the zone contains"
   type = set(object({
-    name  = string
-    type  = string
-    value = string
-    ttl   = number
+    name      = string
+    type      = string
+    value     = optional(string)
+    ttl       = number
+    priority  = optional(number)
+    data = optional(object({
+      service  = string
+      proto    = string
+      name     = string
+      priority = number
+      weight   = number
+      port     = number
+    }))
   }))
 }
