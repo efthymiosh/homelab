@@ -1,8 +1,10 @@
 - hosts: snus
   become: true
   vars:
-    nomad_version: "1.2.5"
-    consul_version: "1.11.2"
+    nomad_version: "1.2.6"
+    consul_version: "1.11.4"
+    docker_version: "5:20.10.14"
+    docker_containerd_version: "1.5.11"
   vars_files:
   - "vars/consul.yml"
   - "vars/consul_services.yml"
