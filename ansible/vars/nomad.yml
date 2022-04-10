@@ -18,6 +18,7 @@ nomad_config:
     enabled: true
     bootstrap_expect: 3
     encrypt: "{{ nomad_encrypt }}"
+    raft_multiplier: 5
   client:
     enabled: true
     node_class: "snunmu"

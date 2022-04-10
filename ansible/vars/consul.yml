@@ -14,7 +14,7 @@ consul_config:
   ui_config:
     enabled: true
   performance:
-    raft_multiplier: 1
+    raft_multiplier: 5
   client_addr: "0.0.0.0"
   bind_addr: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "address" }}'
   data_dir: "/var/lib/consul"
