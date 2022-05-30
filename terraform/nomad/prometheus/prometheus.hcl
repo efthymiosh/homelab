@@ -2,10 +2,6 @@ variable "conf" {
   description = "The prometheus configuration"
 }
 
-variable "volume" {
-  description = "The data volume for prometheus"
-}
-
 job "prometheus" {
   datacenters = ["homelab"]
   type = "service"
@@ -18,11 +14,10 @@ job "prometheus" {
       }
     }
 
-    volume "tsdb" {
-      type = "csi"
-      source = var.volume
-      attachment_mode = "file-system"
-      access_mode = "single-node-writer"
+    ephemeral_disk {
+      migrate = true
+      size    = 5000
+      sticky  = true
     }
 
     task "prometheus" {
@@ -33,7 +28,7 @@ job "prometheus" {
         args = [
           "--storage.tsdb.retention.time=7d",
           "--config.file=/${NOMAD_TASK_DIR}/prometheus.yml",
-          "--storage.tsdb.path=/var/lib/prometheus/",
+          "--storage.tsdb.path=${NOMAD_ALLOC_DIR}/prometheus/",
         ]
         ports = ["http"]
       }
@@ -59,10 +54,6 @@ job "prometheus" {
       template {
         data = var.conf
         destination = "${NOMAD_TASK_DIR}/prometheus.yml"
-      }
-      volume_mount {
-        volume = "tsdb"
-        destination = "/var/lib/prometheus"
       }
     }
   }
