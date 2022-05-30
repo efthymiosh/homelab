@@ -9,10 +9,10 @@
     state: present
     filename: "tailscale"
 
-      # - name: install the tailscale package
-      #   package:
-      #     name: "tailscale"
-      #     state: present
+- name: install the tailscale package
+  package:
+    name: "tailscale"
+    state: present
 
 - name: enable IP forwarding
   sysctl:
