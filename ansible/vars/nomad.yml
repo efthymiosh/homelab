@@ -26,14 +26,14 @@ nomad_config:
       docker-sock-ro:
         path: "/var/run/docker.sock"
         read_only: true
-    options:
-      docker.volumes.enabled: "true"
     network_interface: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "name" }}'
   consul:
     address: "localhost:8500"
   plugin:
     docker:
       config:
+        volumes:
+          enabled: true
         allow_privileged: true
         extra_labels:
         - "job_name"
