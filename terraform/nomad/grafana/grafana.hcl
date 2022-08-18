@@ -16,6 +16,12 @@ job "grafana" {
 
   group "grafana" {
 
+    restart {
+      mode     = "delay"
+      interval = "1m"
+      delay    = "15s"
+    }
+
     network {
       port "http"  {
         to = 3000

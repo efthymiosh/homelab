@@ -18,18 +18,17 @@ job "grafana_postgres" {
   datacenters = ["homelab"]
   type = "service"
 
+  constraint {
+    attribute = "${attr.unique.hostname}"
+    value     = "snu1"
+  }
+
   group "server" {
 
     network {
       port "db" {
         static = 5432
       }
-    }
-
-    ephemeral_disk {
-      sticky  = true
-      migrate = true
-      size    = 200
     }
 
     task "postgresql" {
@@ -39,18 +38,23 @@ job "grafana_postgres" {
       config {
         image = "library/postgres:14.1"
         ports = ["db"]
+        mount {
+          type = "volume"
+          target = "/usr/local/psql/data"
+          source = "postgresql_data"
+        }
       }
 
       env = {
         "POSTGRES_DB" = var.grafana_db
         "POSTGRES_USER" = var.grafana_user
         "POSTGRES_PASSWORD" = var.grafana_password
-        "PGDATA" = "${NOMAD_ALLOC_DIR}/data"
+        "PGDATA" = "/usr/local/psql/data"
       }
 
       resources {
         cpu    = 500
-        memory = 256
+        memory = 512
       }
 
       service {
