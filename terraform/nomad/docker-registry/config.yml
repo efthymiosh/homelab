@@ -1,0 +1,41 @@
+version: 0.1
+log:
+  fields:
+    service: "registry"
+http:
+  addr: ":5000"
+  headers:
+    X-Content-Type-Options: ["nosniff"]
+  debug:
+    addr: ":5001"
+    prometheus:
+      enabled: true
+      path: "/metrics"
+auth:
+  htpasswd:
+    realm: "basic-realm"
+    path: "/etc/registry"
+health:
+  storagedriver:
+    enabled: true
+    interval: "10s"
+    threshold: 3
+storage:
+  cache:
+    blobdescriptor: "inmemory"
+  s3:
+    s3forcepathstyle: true
+    accesskey: '{{ key "loki/minio/access_key_id" }}'
+    secretkey: '{{ key "loki/minio/secret_access_key" }}'
+    region: "us-east-1"
+    regionendpoint: "http://minio.service.consul:9000"
+    bucket: "docker-registry"
+    encrypt: true
+    keyid: mykeyid
+    secure: true
+    v4auth: true
+    chunksize: 5242880
+    multipartcopychunksize: 33554432
+    multipartcopymaxconcurrency: 100
+    multipartcopythresholdsize: 33554432
+    rootdirectory: "/registry"
