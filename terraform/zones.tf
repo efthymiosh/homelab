@@ -38,6 +38,9 @@ module "efhd_dev" {
   zone   = "efhd.dev"
 
   records = [
+    { name = "*.efhd.dev", type = "A", value = "192.168.1.240", ttl = 86400 },
+    { name = "*.efhd.dev", type = "A", value = "192.168.1.241", ttl = 86400 },
+    { name = "*.efhd.dev", type = "A", value = "192.168.1.242", ttl = 86400 },
     # migadu.com verification, e-mail servers
     { name = "efhd.dev", type = "TXT", value = "hosted-email-verify=fumx1lv8", ttl = 86400 },
     { name = "efhd.dev", type = "MX",  value = "aspmx1.migadu.com",            ttl = 3600, priority = 10 },
