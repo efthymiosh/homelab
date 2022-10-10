@@ -5,19 +5,26 @@ data_dir = "[[ env "NOMAD_ALLOC_DIR" ]]/data/"
   address = "0.0.0.0:8686"
 [sources.logs]
   type = "docker_logs"
+  include_labels = [ "com.hashicorp.nomad.job_name" ]
+[transforms.remove_parameterized_nomad_jobs_suffix]
+  type = "remap"
+  inputs = ["logs"]
+  source = """
+  .label.\"com.hashicorp.nomad.job_name\", err = replace(.label.\"com.hashicorp.nomad.job_name\", r'/.*$', "")
+  """
 [sources.journal]
   type = "journald"
 [sinks.loki]
   type = "loki"
-  inputs = ["logs"]
+  inputs = ["remove_parameterized_nomad_jobs_suffix"]
   endpoint = "http://loki.service.consul:3100"
   encoding.codec = "text"
   healthcheck.enabled = true
-  labels.job = "{{ label.com\\.hashicorp\\.nomad\\.job_name }}"
-  labels.task = "{{ label.com\\.hashicorp\\.nomad\\.task_name }}"
-  labels.group = "{{ label.com\\.hashicorp\\.nomad\\.task_group_name }}"
-  labels.namespace = "{{ label.com\\.hashicorp\\.nomad\\.namespace }}"
-  labels.node = "{{ label.com\\.hashicorp\\.nomad\\.node_name }}"
+  labels.job = "{{ label.\"com.hashicorp.nomad.job_name\" }}"
+  labels.task = "{{ label.\"com.hashicorp.nomad.task_name\" }}"
+  labels.group = "{{ label.\"com.hashicorp.nomad.task_group_name\" }}"
+  labels.namespace = "{{ label.\"com.hashicorp.nomad.namespace\" }}"
+  labels.node = "{{ label.\"com.hashicorp.nomad.node_name\" }}"
   # remove fields that have been converted to labels to avoid having them twice
   remove_label_fields = true
 [sinks.loki_journal]

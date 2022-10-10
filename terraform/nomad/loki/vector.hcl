@@ -2,7 +2,7 @@ variable "conf" {
   description = "The vector configuration data"
 }
 variable "version" {
-  default = "0.19.1"
+  default = "0.24.1"
 }
 
 job "vector" {
@@ -41,7 +41,7 @@ job "vector" {
         command = "/opt/vector-x86_64-unknown-linux-gnu/bin/vector"
       }
       artifact {
-        source = "https://github.com/vectordotdev/vector/releases/download/v0.19.1/vector-${var.version}-x86_64-unknown-linux-gnu.tar.gz"
+        source = "https://github.com/vectordotdev/vector/releases/download/v${var.version}/vector-${var.version}-x86_64-unknown-linux-gnu.tar.gz"
         destination = "/opt/"
       }
 
