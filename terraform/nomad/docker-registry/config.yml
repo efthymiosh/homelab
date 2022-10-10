@@ -1,5 +1,8 @@
 version: 0.1
 log:
+  level: info
+  accesslog:
+    disabled: true
   fields:
     service: "registry"
 http:
@@ -11,10 +14,6 @@ http:
     prometheus:
       enabled: true
       path: "/metrics"
-auth:
-  htpasswd:
-    realm: "basic-realm"
-    path: "/etc/registry"
 health:
   storagedriver:
     enabled: true
@@ -28,10 +27,9 @@ storage:
     accesskey: '{{ key "loki/minio/access_key_id" }}'
     secretkey: '{{ key "loki/minio/secret_access_key" }}'
     region: "us-east-1"
-    regionendpoint: "http://minio.service.consul:9000"
+    regionendpoint: "http://minio.efthymios.net:9000" # needs to be accessible client-side
     bucket: "docker-registry"
-    encrypt: true
-    keyid: mykeyid
+    encrypt: false
     secure: true
     v4auth: true
     chunksize: 5242880
@@ -39,3 +37,5 @@ storage:
     multipartcopymaxconcurrency: 100
     multipartcopythresholdsize: 33554432
     rootdirectory: "/registry"
+validation:
+  disabled: true
