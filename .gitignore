@@ -1,3 +1,5 @@
 *.img
 .ansible_vault_pass
 base/**
+
+**/cue.mod/
