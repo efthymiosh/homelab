@@ -26,7 +26,7 @@ job "traefik" {
     task "traefik" {
       driver = "docker"
       config {
-        image = "library/traefik:v2.5"
+        image = "library/traefik:v2.9"
         args = ["--configFile=${NOMAD_TASK_DIR}/traefik.yaml"]
         cap_add = ["net_bind_service"]
         network_mode = "host"
