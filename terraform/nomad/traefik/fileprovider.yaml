@@ -1,0 +1,10 @@
+tls:
+  certificates:
+  - certFile: "{{ env `NOMAD_SECRETS_DIR` }}/efthymios_net.cert"
+    keyFile: "{{ env `NOMAD_SECRETS_DIR` }}/efthymios_net.key"
+  stores:
+    default:
+      defaultCertificate:
+        certFile: "{{ env `NOMAD_SECRETS_DIR` }}/efthymios_net.cert"
+        keyFile: "{{ env `NOMAD_SECRETS_DIR` }}/efthymios_net.key"
+

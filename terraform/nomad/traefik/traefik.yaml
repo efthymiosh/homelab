@@ -43,3 +43,5 @@ providers:
       scheme: "http"
     exposedByDefault: true
     constraints: "Tag(`routed`)"
+  file:
+    filename: "{{ env `NOMAD_TASK_DIR` }}/fileprovider.yaml"

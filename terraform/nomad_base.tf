@@ -14,7 +14,8 @@ resource "nomad_job" "traefik" {
   hcl2 {
     enabled = true
     vars    = {
-      traefik_conf = file("nomad/traefik/traefik.yaml")
+      traefik_conf         = file("nomad/traefik/traefik.yaml")
+      traefik_fileprovider = file("nomad/traefik/fileprovider.yaml")
     }
   }
 }

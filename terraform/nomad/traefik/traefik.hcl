@@ -1,6 +1,9 @@
 variable "traefik_conf" {
   description = "The traefik configuration"
 }
+variable "traefik_fileprovider" {
+  description = "The traefik fileprovider dynamic configuration"
+}
 
 job "traefik" {
   datacenters = ["homelab"]
@@ -62,6 +65,18 @@ job "traefik" {
       template {
         data = var.traefik_conf
         destination = "${NOMAD_TASK_DIR}/traefik.yaml"
+      }
+      template {
+        data = var.traefik_fileprovider
+        destination = "${NOMAD_TASK_DIR}/fileprovider.yaml"
+      }
+      template {
+        data = "{{ key `ssl/efthymios.net/fullchain` }}"
+        destination = "${NOMAD_SECRETS_DIR}/efthymios_net.cert"
+      }
+      template {
+        data = "{{ key `ssl/efthymios.net/privkey` }}"
+        destination = "${NOMAD_SECRETS_DIR}/efthymios_net.key"
       }
     }
   }
