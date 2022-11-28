@@ -18,6 +18,7 @@ module "efth_eu" {
     { name = "snu2.int.efth.eu", type = "A", value = "192.168.1.241", ttl = 86400 },
     { name = "snu3.int.efth.eu", type = "A", value = "192.168.1.242", ttl = 86400 },
     { name = "qnap.int.efth.eu", type = "A", value = "192.168.1.82",  ttl = 300   },
+    { name = "mule.int.efth.eu", type = "A", value = "192.168.1.82",  ttl = 300   },
   ]
 }
 
