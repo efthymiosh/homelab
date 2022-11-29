@@ -1,21 +1,15 @@
-- hosts: snus
+- hosts: lifters
   become: true
   vars:
     nomad_version: "1.4.2"
     consul_version: "1.13.3"
   vars_files:
-  - "vars/consul_aio.yml"
-  - "vars/consul_services.yml"
-  - "vars/nomad_aio.yml"
-  - "vars/minio.yml"
+  - "vars/consul_client.yml"
+  - "vars/nomad_client.yml"
   roles:
   - role: docker
     tags: docker
   - role: consul
     tags: consul
-  - role: minio
-    tags: minio
   - role: nomad
     tags: nomad
-  - role: tailscale
-    tags: tailscale

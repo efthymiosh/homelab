@@ -1,6 +1,4 @@
 ---
-docker_version: "5:20.10.9"
-docker_containerd_version: "1.4.9"
 docker_keyring_file_path: "/usr/share/keyrings/docker-archive-keyring.gpg"
 
 docker_address_space_base: "172.31.0.0/16"

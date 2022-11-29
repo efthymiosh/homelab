@@ -31,9 +31,9 @@
 - name: install the docker packages
   apt:
     name:
-    - "docker-ce={{ docker_version }}*"
-    - "docker-ce-cli={{ docker_version }}*"
-    - "containerd.io={{ docker_containerd_version }}*"
+    - "docker-ce"
+    - "docker-ce-cli"
+    - "containerd.io"
     state: present
     update_cache: true
   notify:
