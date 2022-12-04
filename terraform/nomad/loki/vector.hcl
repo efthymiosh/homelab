@@ -59,7 +59,7 @@ job "vector" {
       }
       resources {
         cpu = 400
-        memory = 256
+        memory = 200
       }
       service {
         name = "vector"

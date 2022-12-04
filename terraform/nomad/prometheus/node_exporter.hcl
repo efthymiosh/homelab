@@ -23,6 +23,10 @@ job "node_exporter" {
         source = "https://github.com/prometheus/node_exporter/releases/download/v${var.version}/node_exporter-${var.version}.linux-amd64.tar.gz"
         destination = "/opt/"
       }
+      resources {
+        cpu = 50
+        memory = 75
+      }
       service {
         name = "node-exporter"
         tags = [

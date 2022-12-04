@@ -23,12 +23,6 @@ job "plex" {
       }
     }
 
-    ephemeral_disk {
-      migrate = true
-      sticky  = true
-      size    = 2000
-    }
-
     task "plex" {
       driver = "docker"
       kill_timeout = "30s"
@@ -54,7 +48,7 @@ job "plex" {
         }]
       }
       resources {
-        cpu = 500
+        cpu = 1500
         memory = 2048
       }
       env {

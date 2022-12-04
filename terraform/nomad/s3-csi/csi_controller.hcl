@@ -30,6 +30,11 @@ job "s3-plugin-controller" {
         ]
       }
 
+      resources {
+        cpu = 100
+        memory = 40
+      }
+
       csi_plugin {
         id        = "s3-csi"
         type      = "controller"

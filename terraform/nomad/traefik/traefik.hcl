@@ -9,6 +9,12 @@ job "traefik" {
   datacenters = ["homelab"]
   type = "system"
 
+  constraint {
+    attribute = "${node.class}"
+    operator  = "="
+    value     = "snunmu"
+  }
+
   group "traefik" {
 
     network {
