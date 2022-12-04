@@ -4,3 +4,10 @@ resource "nomad_job" "plex" {
     enabled = true
   }
 }
+
+resource "nomad_job" "transmission" {
+  jobspec = file("nomad/transmission/transmission.hcl")
+  hcl2 {
+    enabled = true
+  }
+}
