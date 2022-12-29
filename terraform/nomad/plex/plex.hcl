@@ -49,7 +49,7 @@ job "plex" {
       }
       resources {
         cpu = 1500
-        memory = 2048
+        memory = 3072
       }
       env {
         PUID = "0"

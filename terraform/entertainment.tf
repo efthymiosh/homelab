@@ -5,6 +5,20 @@ resource "nomad_job" "plex" {
   }
 }
 
+resource "nomad_job" "sonarr" {
+  jobspec = file("nomad/plex/sonarr.hcl")
+  hcl2 {
+    enabled = true
+  }
+}
+
+resource "nomad_job" "radarr" {
+  jobspec = file("nomad/plex/radarr.hcl")
+  hcl2 {
+    enabled = true
+  }
+}
+
 resource "nomad_job" "transmission" {
   jobspec = file("nomad/transmission/transmission.hcl")
   hcl2 {

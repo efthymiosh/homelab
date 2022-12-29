@@ -58,7 +58,7 @@ job "vector" {
         right_delimiter = "]]"
       }
       resources {
-        cpu = 400
+        cpu = 200
         memory = 200
       }
       service {

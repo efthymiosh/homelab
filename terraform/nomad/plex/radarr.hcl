@@ -1,4 +1,4 @@
-job "transmission" {
+job "radarr" {
   datacenters = ["homelab"]
   type = "service"
 
@@ -14,53 +14,45 @@ job "transmission" {
     value     = "mule"
   }
 
-  group "transmission" {
+  group "radarr" {
     count = 1
 
     network {
       port "http"  {
-        static = 9091
+        to = 7878
       }
     }
 
-    task "transmission" {
+    task "radarr" {
       driver = "docker"
       kill_timeout = "30s"
       config {
-        image = "lscr.io/linuxserver/transmission:latest"
-        network_mode = "host"
+        image = "lscr.io/linuxserver/radarr:latest"
+        ports = ["http"]
         mount {
           type = "bind"
-          source = "/mnt/data/transmission"
+          source = "/mnt/data/radarr"
           target = "/config"
           readonly = false
         }
         mount {
           type = "bind"
-          source = "/mnt/data/Public"
-          target = "/downloads"
+          source = "/mnt/data/hoard"
+          target = "/library"
           readonly = false
         }
       }
       resources {
         cpu = 500
-        memory = 3072
+        memory = 1024
       }
       env {
         PUID = "0"
         PGID = "0"
-        TZ = "Europe/Athens"
-      }
-      template {
-        env = true
-        data = <<EOF
-        USER={{ key `/transmission/user` }}
-        PASS={{ key `/transmission/pass` }}
-        EOF
-        destination = "${NOMAD_SECRETS_DIR}/.env"
+        TZ = "Europe/Nicosia"
       }
       service {
-        name = "transmission"
+        name = "radarr"
         tags = [
           "http",
           "routed",
