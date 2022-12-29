@@ -7,3 +7,23 @@ resource "nomad_job" "docker-registry" {
     }
   }
 }
+
+locals {
+  dns_domains = toset([
+    "efthymios.net",
+    "efthymios.me",
+    "efhd.dev",
+    "efhd.eu",
+  ])
+}
+
+resource "nomad_job" "certbot" {
+  for_each = local.dns_domains
+
+  jobspec = templatefile("nomad/certbot/certbot.tmpl.hcl", {
+    domain = each.key
+  })
+  hcl2 {
+    enabled = true
+  }
+}
