@@ -1,27 +1,3 @@
-module "efthymios_me" {
-  source = "./modules/cloudflare/zone_with_records"
-  zone   = "efthymios.me"
-  records = []
-}
-
-module "efhd_me" {
-  source = "./modules/cloudflare/zone_with_records"
-  zone   = "efhd.me"
-  records = []
-}
-
-module "efth_eu" {
-  source = "./modules/cloudflare/zone_with_records"
-  zone   = "efth.eu"
-  records = [
-    { name = "snu1.int.efth.eu", type = "A", value = "192.168.1.240", ttl = 86400 },
-    { name = "snu2.int.efth.eu", type = "A", value = "192.168.1.241", ttl = 86400 },
-    { name = "snu3.int.efth.eu", type = "A", value = "192.168.1.242", ttl = 86400 },
-    { name = "qnap.int.efth.eu", type = "A", value = "192.168.1.82",  ttl = 300   },
-    { name = "mule.int.efth.eu", type = "A", value = "192.168.1.82",  ttl = 300   },
-  ]
-}
-
 module "efthymios_net" {
   source = "./modules/cloudflare/zone_with_records"
   zone   = "efthymios.net"
@@ -33,6 +9,18 @@ module "efthymios_net" {
   ]
 }
 
+module "efthymios_me" {
+  source = "./modules/cloudflare/zone_with_records"
+  zone   = "efthymios.me"
+  records = []
+}
+
+module "efhd_eu" {
+  source = "./modules/cloudflare/zone_with_records"
+  zone   = "efhd.eu"
+  records = []
+}
+
 module "efhd_dev" {
   source = "./modules/cloudflare/zone_with_records"
   zone   = "efhd.dev"
@@ -41,6 +29,13 @@ module "efhd_dev" {
     { name = "*.efhd.dev", type = "A", value = "192.168.1.240", ttl = 86400 },
     { name = "*.efhd.dev", type = "A", value = "192.168.1.241", ttl = 86400 },
     { name = "*.efhd.dev", type = "A", value = "192.168.1.242", ttl = 86400 },
+
+    { name = "snu1.int.efhd.dev", type = "A", value = "192.168.1.240", ttl = 86400 },
+    { name = "snu2.int.efhd.dev", type = "A", value = "192.168.1.241", ttl = 86400 },
+    { name = "snu3.int.efhd.dev", type = "A", value = "192.168.1.242", ttl = 86400 },
+    { name = "mule.int.efhd.dev", type = "A", value = "192.168.1.82",  ttl = 300   },
+
+
     # migadu.com verification, e-mail servers
     { name = "efhd.dev", type = "TXT", value = "hosted-email-verify=fumx1lv8", ttl = 86400 },
     { name = "efhd.dev", type = "MX",  value = "aspmx1.migadu.com",            ttl = 3600, priority = 10 },
