@@ -37,8 +37,8 @@ job "sonarr" {
         }
         mount {
           type = "bind"
-          source = "/mnt/data/hoard"
-          target = "/library"
+          source = "/mnt/data"
+          target = "/data"
           readonly = false
         }
       }
