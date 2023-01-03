@@ -41,8 +41,8 @@ job "jackett" {
         memory = 1024
       }
       env {
-        PUID = "1000"
-        PGID = "1000"
+        PUID = "0"
+        PGID = "0"
         TZ = "Europe/Nicosia"
         AUTO_UPDATE = "false"
       }

@@ -15,6 +15,13 @@ resource "nomad_job" "node_exporter" {
   }
 }
 
+resource "nomad_job" "container_exporter" {
+  jobspec = file("nomad/prometheus/container_exporter.hcl")
+  hcl2 {
+    enabled = true
+  }
+}
+
 resource "nomad_job" "grafana_postgres" {
   jobspec = file("nomad/grafana/postgres.hcl")
   hcl2 {
