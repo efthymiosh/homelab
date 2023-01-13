@@ -2,7 +2,7 @@ variable "conf" {
   description = "The vector configuration data"
 }
 variable "version" {
-  default = "0.24.1"
+  default = "0.26.0"
 }
 
 job "vector" {
