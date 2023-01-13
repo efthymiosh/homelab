@@ -1,4 +1,4 @@
-job "sonarr" {
+job "bazarr" {
   datacenters = ["homelab"]
   type = "service"
 
@@ -14,25 +14,25 @@ job "sonarr" {
     value     = "mule"
   }
 
-  group "sonarr" {
+  group "bazarr" {
     count = 1
 
     network {
       port "http"  {
-        to = 8989
+        to = 6767
       }
     }
 
-    task "sonarr" {
+    task "bazarr" {
       driver = "docker"
       kill_timeout = "30s"
       config {
-        image = "lscr.io/linuxserver/sonarr:latest"
+        image = "lscr.io/linuxserver/bazarr:latest"
         force_pull = true
         ports = ["http"]
         mount {
           type = "bind"
-          source = "/mnt/data/sonarr"
+          source = "/mnt/data/bazarr"
           target = "/config"
           readonly = false
         }
@@ -53,7 +53,7 @@ job "sonarr" {
         TZ = "Europe/Nicosia"
       }
       service {
-        name = "sonarr"
+        name = "bazarr"
         tags = [
           "http",
           "routed",

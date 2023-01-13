@@ -28,6 +28,7 @@ job "plex" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/plex:latest"
+        force_pull = true
         ports = ["http"]
         network_mode = "host"
         mount {

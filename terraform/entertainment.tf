@@ -26,6 +26,13 @@ resource "nomad_job" "jackett" {
   }
 }
 
+resource "nomad_job" "bazarr" {
+  jobspec = file("nomad/plex/bazarr.hcl")
+  hcl2 {
+    enabled = true
+  }
+}
+
 resource "nomad_job" "transmission" {
   jobspec = file("nomad/transmission/transmission.hcl")
   hcl2 {

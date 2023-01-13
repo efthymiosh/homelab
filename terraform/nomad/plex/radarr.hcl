@@ -28,6 +28,7 @@ job "radarr" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/radarr:latest"
+        force_pull = true
         ports = ["http"]
         mount {
           type = "bind"
