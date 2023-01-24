@@ -16,7 +16,7 @@ resource "nomad_job" "node_exporter" {
 }
 
 resource "nomad_job" "container_exporter" {
-  jobspec = file("nomad/prometheus/container_exporter.hcl")
+  jobspec = file("nomad/prometheus/cadvisor.hcl")
   hcl2 {
     enabled = true
   }
