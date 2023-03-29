@@ -39,3 +39,10 @@ resource "nomad_job" "transmission" {
     enabled = true
   }
 }
+
+resource "nomad_job" "sabnzbd" {
+  jobspec = file("nomad/sabnzbd/sabnzbd.hcl")
+  hcl2 {
+    enabled = true
+  }
+}
