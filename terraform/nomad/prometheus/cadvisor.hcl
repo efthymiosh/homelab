@@ -20,7 +20,10 @@ job "cadvisor" {
           "--docker_only",
           "--disable_root_cgroup_stats",
           "--storage_duration=1m0s",
-          "--enable_metrics=accelerator,cpu,cpuLoad,disk,diskIO,memory,network,oom_event,percpu"
+          "--enable_metrics=accelerator,cpu,cpuLoad,disk,diskIO,memory,network,oom_event,percpu",
+          "--global_housekeeping_interval=2m0s",
+          "--housekeeping_interval=5s",
+          "--max_housekeeping_interval=2m0s",
         ]
         ports = ["http"]
         mount {
