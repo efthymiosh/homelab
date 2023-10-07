@@ -44,7 +44,7 @@ job "transmission" {
       }
       resources {
         cpu = 500
-        memory = 3072
+        memory = 768
       }
       env {
         PUID = "0"

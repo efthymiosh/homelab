@@ -56,8 +56,8 @@ job "immich" {
         MACHINE_LEARNING_WORKER_TIMEOUT = "120"
       }
       resources {
-        cpu = 400
-        memory = 2048
+        cpu = 4000
+        memory = 4096
       }
       service {
         name = "immich"
