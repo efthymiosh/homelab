@@ -45,7 +45,7 @@ job "bazarr" {
       }
       resources {
         cpu = 500
-        memory = 1024
+        memory = 384
       }
       env {
         PUID = "0"

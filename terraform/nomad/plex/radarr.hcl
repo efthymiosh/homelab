@@ -45,7 +45,7 @@ job "radarr" {
       }
       resources {
         cpu = 500
-        memory = 1024
+        memory = 512
       }
       env {
         PUID = "0"
