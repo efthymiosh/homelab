@@ -1,8 +1,8 @@
 - hosts: lifters
   become: true
   vars:
-    nomad_version: "1.4.2"
-    consul_version: "1.13.3"
+    nomad_version: "1.6.2"
+    consul_version: "1.16.2"
   vars_files:
   - "vars/consul_client.yml"
   - "vars/nomad_client.yml"

@@ -1,8 +1,8 @@
 - hosts: snus
   become: true
   vars:
-    nomad_version: "1.4.3"
-    consul_version: "1.14.3"
+    nomad_version: "1.6.2"
+    consul_version: "1.16.2"
   vars_files:
   - "vars/consul_aio.yml"
   - "vars/consul_services.yml"
