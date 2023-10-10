@@ -12,6 +12,9 @@ Environment=MINIO_SERVER_URL='http://{{ minio_domain }}:9000'
 Environment=MINIO_ROOT_USER='{{ minio_root_user }}'
 Environment=MINIO_ROOT_PASSWORD='{{ minio_root_password }}'
 Environment=MINIO_STORAGE_CLASS_STANDARD='EC:2'
+# adhere for these overopinionated morons with this definite future booby trap.
+# Fixes "Error: Drive `/data/dir1` is part of root drive, will not be used (*errors.errorString)"
+Environment=CI=true
 ExecStart={{minio_install_path}} \
     server 'http://snu{1...3}.int.efhd.dev/{{ minio_data_path }}/dir{1...3}' \
     --console-address={{ minio_console_address }}
