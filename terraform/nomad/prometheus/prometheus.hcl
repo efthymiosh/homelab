@@ -26,7 +26,7 @@ job "prometheus" {
       config {
         image = "prom/prometheus:v2.32.1"
         args = [
-          "--storage.tsdb.retention.time=7d",
+          "--storage.tsdb.retention.time=90d",
           "--config.file=/${NOMAD_TASK_DIR}/prometheus.yml",
           "--storage.tsdb.path=${NOMAD_ALLOC_DIR}/prometheus/",
         ]
