@@ -12,7 +12,6 @@ resource "nomad_scheduler_config" "config" {
 resource "nomad_job" "traefik" {
   jobspec = file("nomad/traefik/traefik.hcl")
   hcl2 {
-    enabled = true
     vars = {
       traefik_conf         = file("nomad/traefik/traefik.yaml")
       traefik_fileprovider = file("nomad/traefik/fileprovider.yaml")
@@ -22,14 +21,8 @@ resource "nomad_job" "traefik" {
 
 resource "nomad_job" "s3-csi-node" {
   jobspec = file("nomad/s3-csi/csi_node.hcl")
-  hcl2 {
-    enabled = true
-  }
 }
 
 resource "nomad_job" "s3-csi-controller" {
   jobspec = file("nomad/s3-csi/csi_controller.hcl")
-  hcl2 {
-    enabled = true
-  }
 }
