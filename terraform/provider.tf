@@ -21,10 +21,18 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.1"
     }
+    consul = {
+      source = "hashicorp/consul"
+      version = "~> 2.20"
+    }
   }
 }
 
 provider "nomad" {
-  address = "http://nomad.efthymios.net:4646"
+  address = "http://nomad.efhd.dev:4646"
   region  = "efth"
+}
+
+provider "consul" {
+  address = "http://consul.efhd.dev:8500"
 }
