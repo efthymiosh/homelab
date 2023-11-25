@@ -84,6 +84,14 @@ job "traefik" {
         data = "{{ key `ssl/efthymios.net/privkey` }}"
         destination = "${NOMAD_SECRETS_DIR}/efthymios_net.key"
       }
+      template {
+        data = "{{ key `ssl/efhd.dev/fullchain` }}"
+        destination = "${NOMAD_SECRETS_DIR}/efhd_dev.cert"
+      }
+      template {
+        data = "{{ key `ssl/efhd.dev/privkey` }}"
+        destination = "${NOMAD_SECRETS_DIR}/efhd_dev.key"
+      }
     }
   }
 }

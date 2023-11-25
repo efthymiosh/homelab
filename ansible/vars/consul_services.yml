@@ -6,14 +6,14 @@ consul_register:
     tags:
     - "http"
     - "routed"
-    - "traefik.http.routers.cnsl.rule=Host(`consul.efthymios.net`)"
+    - "traefik.http.routers.cnsl.rule=Host(`consul.efthymios.net`) || Host(`consul.efhd.dev`)"
   - id: "nomadui"
     name: "nmd"
     port: 4646
     tags: 
     - "http"
     - "routed"
-    - "traefik.http.routers.nmd.rule=Host(`nomad.efthymios.net`)"
+    - "traefik.http.routers.nmd.rule=Host(`nomad.efthymios.net`) || Host(`nomad.efhd.dev`)"
   - id: "minio"
     name: "minio"
     port: 9001
