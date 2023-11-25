@@ -43,8 +43,12 @@ job "woodpecker" {
         env = true
         data = <<EOF
         WOODPECKER_OPEN=true
-        WOODPECKER_HOST=woodpecker.efhd.dev
+        WOODPECKER_HOST=https://woodpecker.efhd.dev
         WOODPECKER_AGENT_SECRET={{ key `/woodpecker/agent_secret` }}
+        WOODPECKER_GITHUB=true
+        WOODPECKER_GITHUB_CLIENT={{ key `/woodpecker/githubapp/client_id` }}
+        WOODPECKER_GITHUB_SECRET={{ key `/woodpecker/githubapp/client_secret` }}
+        WOODPECKER_REPO_OWNERS=efthymiosh
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
       }
