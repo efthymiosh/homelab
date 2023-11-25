@@ -49,6 +49,7 @@ job "woodpecker" {
         WOODPECKER_GITHUB_CLIENT={{ key `/woodpecker/githubapp/client_id` }}
         WOODPECKER_GITHUB_SECRET={{ key `/woodpecker/githubapp/client_secret` }}
         WOODPECKER_REPO_OWNERS=efthymiosh
+        WOODPECKER_ADMIN=efthymiosh
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
       }
