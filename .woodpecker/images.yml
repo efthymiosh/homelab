@@ -1,0 +1,11 @@
+matrix:
+  IMAGE:
+  - backups
+  - certbot-dns-cf-consul
+steps:
+  build:
+    image: docker:latest
+    commands:
+    - cd docker_images/$IMAGE
+    - docker build -t docker-registry.efthymios.net/$IMAGE:latest .
+    - docker push docker-registry.efthymios.net/$IMAGE:latest
