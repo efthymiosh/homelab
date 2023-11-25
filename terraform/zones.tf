@@ -1,5 +1,12 @@
 data "cloudflare_accounts" "mine" {
   name = "efhd"
+
+  lifecycle {
+    postcondition {
+      condition     = length(self.accounts) == 1
+      error_message = "More than my own account returned"
+    }
+  }
 }
 
 module "efthymios_net" {
