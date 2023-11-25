@@ -1,7 +1,7 @@
 resource "nomad_scheduler_config" "config" {
   memory_oversubscription_enabled = true
   scheduler_algorithm             = "spread"
-  preemption_config               = {
+  preemption_config = {
     batch_scheduler_enabled    = false
     service_scheduler_enabled  = false
     sysbatch_scheduler_enabled = false
@@ -13,7 +13,7 @@ resource "nomad_job" "traefik" {
   jobspec = file("nomad/traefik/traefik.hcl")
   hcl2 {
     enabled = true
-    vars    = {
+    vars = {
       traefik_conf         = file("nomad/traefik/traefik.yaml")
       traefik_fileprovider = file("nomad/traefik/fileprovider.yaml")
     }

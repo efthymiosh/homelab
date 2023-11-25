@@ -15,7 +15,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
     nomad = {
       source  = "hashicorp/nomad"
@@ -23,7 +23,7 @@ terraform {
     }
     b2 = {
       source  = "Backblaze/b2"
-      version = "~> 0.7"
+      version = "~> 0.8"
     }
     random = {
       source  = "hashicorp/random"
@@ -32,17 +32,7 @@ terraform {
   }
 }
 
-provider "cloudflare" {
-  email   = var.cloudflare_email
-  api_key = var.cloudflare_api_key
-}
-
 provider "nomad" {
   address = "http://nomad.efthymios.net:4646"
   region  = "efth"
-}
-
-provider "b2" {
-  application_key_id = var.backblaze_key_id
-  application_key    = var.backblaze_app_key
 }

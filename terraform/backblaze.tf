@@ -9,8 +9,8 @@ resource "b2_bucket" "backups" {
 }
 
 resource "b2_application_key" "backups" {
-  key_name     = "backups"
-  bucket_id    = b2_bucket.backups.bucket_id
+  key_name  = "backups"
+  bucket_id = b2_bucket.backups.bucket_id
   capabilities = [
     "listBuckets",
     "readBuckets",

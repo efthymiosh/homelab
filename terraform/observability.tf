@@ -3,7 +3,7 @@ resource "nomad_job" "prometheus" {
   hcl2 {
     enabled = true
     vars = {
-      conf   = file("nomad/prometheus/prometheus.yml")
+      conf = file("nomad/prometheus/prometheus.yml")
     }
   }
 }
@@ -51,7 +51,7 @@ resource "nomad_job" "vector" {
   hcl2 {
     enabled = true
     vars = {
-      conf   = file("nomad/loki/vector.toml")
+      conf = file("nomad/loki/vector.toml")
     }
   }
 }
@@ -61,7 +61,7 @@ resource "nomad_job" "loki" {
   hcl2 {
     enabled = true
     vars = {
-      conf   = file("nomad/loki/config.yaml")
+      conf = file("nomad/loki/config.yaml")
     }
   }
 }
