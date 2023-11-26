@@ -1,0 +1,17 @@
+{
+  "CN": "EFHD Root CA",
+  "key": {
+    "algo": "ecdsa",
+    "size": 256
+  },
+  "names": [
+    {
+      "C": "CY",
+      "L": "Larnaca",
+      "O": "EFHD Ltd"
+    }
+  ],
+  "ca": {
+    "expiry": "438000h"
+  }
+}
