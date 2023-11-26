@@ -15,6 +15,7 @@ resource "nomad_job" "traefik" {
     vars = {
       traefik_conf         = file("nomad/traefik/traefik.yaml")
       traefik_fileprovider = file("nomad/traefik/fileprovider.yaml")
+      root_ca_cert_pem     = file("resources/root-ca.pem")
     }
   }
 }

@@ -4,6 +4,9 @@ variable "traefik_conf" {
 variable "traefik_fileprovider" {
   description = "The traefik fileprovider dynamic configuration"
 }
+variable "root_ca_cert_pem" {
+  description = "The Root CA cert in pem format for authenticating with backend servers"
+}
 
 job "traefik" {
   datacenters = ["homelab"]
@@ -35,7 +38,7 @@ job "traefik" {
     task "traefik" {
       driver = "docker"
       config {
-        image = "library/traefik:v2.9"
+        image = "library/traefik:v2.10"
         args = ["--configFile=${NOMAD_TASK_DIR}/traefik.yaml"]
         cap_add = ["net_bind_service"]
         network_mode = "host"
@@ -91,6 +94,10 @@ job "traefik" {
       template {
         data = "{{ key `ssl/efhd.dev/privkey` }}"
         destination = "${NOMAD_SECRETS_DIR}/efhd_dev.key"
+      }
+      template {
+        data = var.root_ca_cert_pem
+        destination = "${NOMAD_TASK_DIR}/root-ca.pem"
       }
     }
   }
