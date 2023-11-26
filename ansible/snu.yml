@@ -8,6 +8,7 @@
   - "vars/consul_services.yml"
   - "vars/nomad_aio.yml"
   - "vars/minio.yml"
+  - "vars/vault.yml"
   roles:
   - role: docker
     tags: docker
@@ -19,3 +20,5 @@
     tags: nomad
   - role: tailscale
     tags: tailscale
+  - role: vault
+    tags: vault

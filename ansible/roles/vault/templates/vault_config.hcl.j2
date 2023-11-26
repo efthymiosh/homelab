@@ -1,0 +1,36 @@
+cluster_addr = "https://{{ inventory_hostname }}:8201"
+api_addr     = "https://{{ inventory_hostname }}:8200"
+log_level    = "Info"
+ui           = true
+
+tls_min_version = "tls13"
+listener "tcp" {
+    address = "0.0.0.0:8200"
+    cluster_address = "0.0.0.0:8201"
+    tls_cert_file = "{{ vault_certs_dir }}/vault.pem"
+    tls_key_file  = "{{ vault_certs_dir }}/vault-key.pem"
+    tls_client_ca_file = "{{ vault_certs_dir }}/ca-cert.pem"
+    telemetry {
+        unauthenticated_metrics_access = true
+    }
+}
+
+disable_mlock = true
+storage "raft" {
+    path    = "{{ vault_storage_data_dir }}"
+    node_id = "{{ inventory_hostname }}"
+
+{% for node in vault_nodes %}
+    retry_join {
+        leader_api_addr = "https://{{ node }}:8200"
+        leader_ca_cert_file = "{{ vault_certs_dir }}/ca-cert.pem"
+        leader_client_cert_file = "{{ vault_certs_dir }}/vault.pem"
+        leader_client_key_file = "{{ vault_certs_dir }}/vault-key.pem"
+    }
+{% endfor %}
+}
+
+telemetry {
+    prometheus_retention_time = "30s"
+    disable_hostname          = true
+}

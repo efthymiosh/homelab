@@ -1,0 +1,5 @@
+- name: restart vault
+  systemd:
+    name: "{{vault_service}}.service"
+    state: restarted
+    daemon_reload: yes

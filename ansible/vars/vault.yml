@@ -1,0 +1,4 @@
+vault_root_ca_pem: "{{ lookup('file', 'files/certs/root-ca.pem') }}"
+vault_key_pem: "{{ lookup('file', 'files/certs/vault-key.pem') }}"
+vault_pem: "{{ lookup('file', 'files/certs/vault-fullchain.pem') }}"
+vault_nodes: "{{ groups['snus'] | list }}"

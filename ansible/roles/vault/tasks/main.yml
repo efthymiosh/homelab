@@ -1,0 +1,97 @@
+- name: install dependencies
+  package:
+    name: "unzip"
+    state: present
+
+- name: config user
+  user:
+    name: "{{vault_service}}"
+    system: yes
+
+- name: retrieve binary
+  get_url:
+    url: "https://releases.hashicorp.com/vault/{{vault_version}}/vault_{{vault_version}}_linux_amd64.zip"
+    dest: "{{vault_temp_dir}}/{{vault_temp_download_name}}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: extract binary
+  unarchive:
+    remote_src: yes
+    src: "{{vault_temp_dir}}/{{vault_temp_download_name}}"
+    dest: "{{vault_temp_dir}}"
+
+- name: copy binary to install path
+  copy:
+    remote_src: True
+    src: "{{vault_temp_dir}}/{{vault_service}}"
+    dest: "{{vault_install_path}}"
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart vault
+
+- name: link binary to user binary folder
+  file:
+    src: "{{vault_install_path}}"
+    dest: "{{vault_link_path}}"
+    owner: root
+    group: root
+    mode: 0755
+    state: link
+
+- name: create required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+    owner: "{{vault_service}}"
+    group: "{{vault_service}}"
+  loop:
+  - "{{ vault_config_dir }}"
+  - "{{ vault_certs_dir }}"
+  - "{{ vault_data_dir }}"
+  - "{{ vault_storage_data_dir }}"
+
+- name: copy tls
+  copy:
+    dest: "{{ item.path }}"
+    content: "{{ item.content }}"
+    mode: 0600
+    owner: "{{vault_service}}"
+    group: "{{vault_service}}"
+  loop:
+  - path: "{{ vault_certs_dir }}/root-ca.pem"
+    content: "{{ vault_root_ca_pem }}"
+  - path: "{{ vault_certs_dir }}/vault-key.pem"
+    content: "{{ vault_key_pem }}"
+  - path: "{{ vault_certs_dir }}/vault.pem"
+    content: "{{ vault_pem }}"
+
+- name: produce and deploy service config
+  template:
+    src: "vault_config.hcl.j2"
+    dest: "{{ vault_config_file }}"
+    owner: "{{vault_service}}"
+    group: "{{vault_service}}"
+    mode: 0400
+  notify:
+  - restart vault
+
+- name: set service file
+  template:
+    src: "vault.service.j2"
+    dest: "{{ vault_service_unit }}"
+    owner: "{{vault_service}}"
+    group: "{{vault_service}}"
+    mode: 0600
+  notify:
+  - restart vault
+
+- name: enable service to start on boot
+  systemd:
+    name: "{{vault_service}}.service"
+    enabled: yes
+    daemon_reload: yes

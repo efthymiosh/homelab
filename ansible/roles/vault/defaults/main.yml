@@ -1,0 +1,19 @@
+---
+vault_service: vault
+vault_version: 1.15.2
+vault_service_unit: "/etc/systemd/system/{{vault_service}}.service"
+
+vault_encryption_key: "invalid"
+
+vault_install_path: "/opt/{{vault_service}}"
+vault_link_path: "/usr/local/bin/{{vault_service}}"
+vault_data_dir: "/var/lib/vault"
+vault_storage_data_dir: "{{ vault_data_dir }}/storage"
+
+vault_config_dir: "/etc/vault/"
+vault_config_file: "{{vault_config_dir}}/config.hcl"
+vault_certs_dir: "{{vault_config_dir}}/tls/"
+vault_temp_dir: "/tmp/"
+vault_temp_download_name: "{{vault_service}}_{{vault_version}}.zip"
+
+vault_nodes: [] # list of peer servers
