@@ -19,7 +19,8 @@
           "signing",
           "digital signing",
           "key encipherment",
-          "server auth"
+          "server auth",
+          "client auth"
         ]
       }
     }

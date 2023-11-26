@@ -62,6 +62,7 @@
     mode: 0600
     owner: "{{vault_service}}"
     group: "{{vault_service}}"
+  no_log: true
   loop:
   - path: "{{ vault_certs_dir }}/root-ca.pem"
     content: "{{ vault_root_ca_pem }}"
@@ -69,6 +70,8 @@
     content: "{{ vault_key_pem }}"
   - path: "{{ vault_certs_dir }}/vault.pem"
     content: "{{ vault_pem }}"
+  notify:
+  - restart vault
 
 - name: produce and deploy service config
   template:

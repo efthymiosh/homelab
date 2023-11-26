@@ -4,10 +4,10 @@ Wants=network-online.target
 After=network.target network-online.target
 
 [Service]
-Type=simple
+Type=notify
 User={{vault_service}}
 Group={{vault_service}}
-ExecStart={{vault_install_path}} agent -config {{ vault_config_file }}
+ExecStart={{vault_install_path}} server -config {{ vault_config_file }}
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 KillSignal=SIGINT
