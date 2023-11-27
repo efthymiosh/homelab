@@ -12,9 +12,9 @@ scrape_configs:
   - labels:
       service: 'consul'
     targets:
-    - 'snu1.int.efth.eu:8500'
-    - 'snu2.int.efth.eu:8500'
-    - 'snu3.int.efth.eu:8500'
+    - 'snu1.int.efhd.dev:8500'
+    - 'snu2.int.efhd.dev:8500'
+    - 'snu3.int.efhd.dev:8500'
 
 - job_name: nomad_servers
   metrics_path: '/v1/metrics'
@@ -24,14 +24,16 @@ scrape_configs:
   - labels:
       service: 'nomad'
     targets:
-    - 'snu1.int.efth.eu:4646'
-    - 'snu2.int.efth.eu:4646'
-    - 'snu3.int.efth.eu:4646'
+    - 'snu1.int.efhd.dev:4646'
+    - 'snu2.int.efhd.dev:4646'
+    - 'snu3.int.efhd.dev:4646'
 
 
 - job_name: consul
   consul_sd_configs:
   - server: '{{ with $list := service "cnsl~_agent" }}{{ with index $list 0 }}{{ .Address }}:{{ .Port }}{{ end }}{{ end }}'
+  tls_config:
+    ca_file: '{{ env `NOMAD_TASK_DIR` }}/root-ca.pem'
   relabel_configs:
   - source_labels: ['__meta_consul_tags']
     regex: '.*,monitored,.*'
@@ -50,17 +52,12 @@ scrape_configs:
     regex: '.*,prometheus\.label\.([^=]*)=([^,]*),.*'
     replacement: '${2}'
     target_label: '${1}'
+  - source_labels: ['__meta_consul_tags']
+    regex: '.*,https,.*'
+    replacement: 'https'
+    target_label: '__scheme__'
   - source_labels: ['__meta_consul_node']
     target_label: instance
-
-- job_name: consul_pushgateways
-  honor_labels: true
-  consul_sd_configs:
-  - server: '{{ with $list := service "cnsl~_agent" }}{{ with index $list 0 }}{{ .Address }}:{{ .Port }}{{ end }}{{ end }}'
-  relabel_configs:
-  - source_labels: ['__meta_consul_tags']
-    regex: '.*,prometheus\.pushgateway,.*'
-    action: keep
 
 alerting:
   alertmanagers: []

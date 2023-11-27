@@ -30,6 +30,7 @@
     owner: root
     group: root
     mode: 0755
+  notify: restart consul
 
 - name: link binary to user binary folder
   file:
@@ -63,11 +64,13 @@
     owner: root
     group: root
     mode: 0644
+  notify: restart consul
 
 - name: set service file
   template:
     src: "{{consul_template_service_unit}}"
     dest: "{{consul_service_unit}}"
+  notify: restart consul
 
 - name: enable service to start on boot
   systemd:
@@ -82,6 +85,7 @@
     owner: "{{ consul_service }}"
     group: "{{ consul_service }}"
   when: consul_register is defined
+  notify: reload consul
 
 - name:  ensure the resolved.conf.d directory exists
   file:

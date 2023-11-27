@@ -18,8 +18,10 @@ consul_register:
     name: "vault"
     port: 8200
     tags: 
-    - "http"
+    - "https"
     - "routed"
+    - "monitored"
+    - "prometheus.path=/v1/sys/metrics"
     - "traefik.http.routers.vault.tls=true"
     - "traefik.http.services.vault.loadbalancer.server.scheme=https"
   - id: "minio"

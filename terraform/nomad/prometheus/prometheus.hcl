@@ -55,6 +55,10 @@ job "prometheus" {
         data = var.conf
         destination = "${NOMAD_TASK_DIR}/prometheus.yml"
       }
+      template {
+        data = "{{ key `ssl/root_ca_cert` }}"
+        destination = "${NOMAD_TASK_DIR}/root-ca.pem"
+      }
     }
   }
 }

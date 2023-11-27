@@ -4,9 +4,6 @@ variable "traefik_conf" {
 variable "traefik_fileprovider" {
   description = "The traefik fileprovider dynamic configuration"
 }
-variable "root_ca_cert_pem" {
-  description = "The Root CA cert in pem format for authenticating with backend servers"
-}
 
 job "traefik" {
   datacenters = ["homelab"]
@@ -96,7 +93,7 @@ job "traefik" {
         destination = "${NOMAD_SECRETS_DIR}/efhd_dev.key"
       }
       template {
-        data = var.root_ca_cert_pem
+        data = "{{ key `ssl/root_ca_cert` }}"
         destination = "${NOMAD_TASK_DIR}/root-ca.pem"
       }
     }
