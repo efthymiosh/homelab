@@ -71,7 +71,7 @@
   - path: "{{ vault_certs_dir }}/vault.pem"
     content: "{{ vault_pem }}"
   notify:
-  - restart vault
+  - reload vault
 
 - name: produce and deploy service config
   template:

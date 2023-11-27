@@ -3,3 +3,8 @@
     name: "{{vault_service}}.service"
     state: restarted
     daemon_reload: yes
+
+- name: reload vault
+  systemd:
+    name: "{{vault_service}}.service"
+    state: reloaded
