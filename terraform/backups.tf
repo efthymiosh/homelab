@@ -1,3 +1,11 @@
+locals {
+  backup_targets = [
+    "consul",
+    "grafana",
+    "immich",
+    "ory",
+  ]
+}
 resource "b2_bucket" "backups" {
   bucket_name = "efthymiosh-db-backups"
   bucket_type = "allPrivate"
@@ -8,7 +16,7 @@ resource "b2_bucket" "backups" {
   }
 
   dynamic "lifecycle_rules" {
-    for_each = toset(["consul", "grafana", "immich"])
+    for_each = toset(local.backup_targets)
     content {
       file_name_prefix              = "${lifecycle_rules.key}/"
       days_from_uploading_to_hiding = 30
@@ -64,6 +72,15 @@ resource "nomad_job" "immich_backup" {
   hcl2 {
     vars = {
       backup_script = file("./nomad/immich/backup.sh")
+    }
+  }
+}
+
+resource "nomad_job" "ory_backup" {
+  jobspec = file("./nomad/ory/backup.hcl")
+  hcl2 {
+    vars = {
+      backup_script = file("./nomad/ory/resources/backup.sh")
     }
   }
 }
