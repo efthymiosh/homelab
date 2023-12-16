@@ -25,6 +25,8 @@
     owner: root
     group: root
     mode: 0755
+  notify:
+  - restart nomad
 
 - name: create config directory
   file:
@@ -56,11 +58,15 @@
     owner: "{{ nomad_user }}"
     group: "{{ nomad_user }}"
     mode: 0644
+  notify:
+  - reload nomad
 
 - name: set service file
   template:
     src: "{{ nomad_template_service_unit }}"
     dest: "/etc/systemd/system/{{ nomad_service }}.service"
+  notify:
+  - restart nomad
 
 - name: enable service to start on boot
   systemd:
