@@ -8,6 +8,13 @@ job "node_exporter" {
 
   group "node" {
 
+    restart {
+      attempts = 3
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "http"  {
         static = 9100

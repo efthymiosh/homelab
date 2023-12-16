@@ -14,7 +14,6 @@ job "vector" {
   }
 
   group "vector" {
-    count = 1
 
     restart {
       attempts = 3
