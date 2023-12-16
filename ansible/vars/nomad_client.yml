@@ -18,7 +18,7 @@ nomad_config:
     enabled: false
   client:
     enabled: true
-    node_class: "mule"
+    node_class: "{{ nomad_node_class }}"
     host_volume:
       docker-sock-ro:
         path: "/var/run/docker.sock"

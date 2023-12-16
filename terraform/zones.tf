@@ -48,7 +48,8 @@ module "efhd_dev" {
     { name = "snu1.int.efhd.dev", type = "A", value = "192.168.1.240", ttl = 86400 },
     { name = "snu2.int.efhd.dev", type = "A", value = "192.168.1.241", ttl = 86400 },
     { name = "snu3.int.efhd.dev", type = "A", value = "192.168.1.242", ttl = 86400 },
-    { name = "mule.int.efhd.dev", type = "A", value = "192.168.1.82", ttl = 300 },
+    { name = "mule.int.efhd.dev", type = "A", value = "192.168.1.82", ttl = 86400 },
+    { name = "aero1.int.efhd.dev", type = "A", value = "192.168.1.81", ttl = 86400 },
 
 
     # migadu.com verification, e-mail servers
