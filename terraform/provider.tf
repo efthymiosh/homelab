@@ -13,6 +13,10 @@ terraform {
       source  = "hashicorp/nomad"
       version = "~> 2.0"
     }
+    vault = {
+      source  = "hashicorp/vault"
+      version = "~> 3.23"
+    }
     b2 = {
       source  = "Backblaze/b2"
       version = "~> 0.8"
