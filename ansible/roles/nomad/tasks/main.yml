@@ -5,8 +5,8 @@
 
 - name: retrieve binary
   get_url:
-    url: "https://releases.hashicorp.com/nomad/{{nomad_version}}/nomad_{{nomad_version}}_linux_amd64.zip"
-    dest: "{{nomad_temp_dir}}/{{nomad_temp_download_name}}"
+    url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_linux_amd64.zip"
+    dest: "{{ nomad_temp_dir }}/{{ nomad_temp_download_name }}"
     mode: 0755
     owner: root
     group: root
@@ -14,14 +14,14 @@
 - name: extract binary
   unarchive:
     remote_src: yes
-    src: "{{nomad_temp_dir}}/{{nomad_temp_download_name}}"
-    dest: "{{nomad_temp_dir}}"
+    src: "{{ nomad_temp_dir }}/{{ nomad_temp_download_name }}"
+    dest: "{{ nomad_temp_dir }}"
 
 - name: copy binary to install path
   copy:
     remote_src: True
-    src: "{{nomad_temp_dir}}/{{nomad_service}}"
-    dest: "{{nomad_install_path}}"
+    src: "{{ nomad_temp_dir }}/{{ nomad_service }}"
+    dest: "{{ nomad_install_path }}"
     owner: root
     group: root
     mode: 0755
@@ -30,14 +30,14 @@
 
 - name: create config directory
   file:
-    path: "{{nomad_config_dir}}"
+    path: "{{ nomad_config_dir }}"
     state: directory
     mode: 0755
 
 - name: link binary to user binary folder
   file:
-    src: "{{nomad_install_path}}"
-    dest: "{{nomad_link_path}}"
+    src: "{{ nomad_install_path }}"
+    dest: "{{ nomad_link_path }}"
     owner: root
     group: root
     mode: 0755
@@ -45,7 +45,7 @@
 
 - name: create data directory
   file:
-    path: "{{nomad_data_dir}}"
+    path: "{{ nomad_data_dir }}"
     state: directory
     mode: 0755
     owner: "{{ nomad_user }}"

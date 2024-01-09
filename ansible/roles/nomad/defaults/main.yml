@@ -5,17 +5,17 @@ nomad_user_groups: docker
 
 nomad_version: "1.2.3"
 
-nomad_service_unit: "/etc/systemd/system/{{nomad_service}}.service"
-nomad_install_path: "/opt/{{nomad_service}}"
-nomad_link_path: "/usr/local/bin/{{nomad_service}}"
+nomad_service_unit: "/etc/systemd/system/{{ nomad_service }}.service"
+nomad_install_path: "/opt/{{ nomad_service }}"
+nomad_link_path: "/usr/local/bin/{{ nomad_service }}"
 
 nomad_config_dir: /etc/nomad.d
-nomad_config_file: "{{nomad_config_dir}}/config.json"
+nomad_config_file: "{{ nomad_config_dir }}/config.json"
 
 nomad_data_dir: /var/lib/nomad
 
 nomad_temp_dir: /tmp/
-nomad_temp_download_name: "{{nomad_service}}_{{nomad_version}}.zip"
+nomad_temp_download_name: "{{ nomad_service }}_{{ nomad_version }}.zip"
 
 nomad_template_service_unit: nomad.service.j2
 nomad_template_config_file: nomad_config.json.j2

@@ -5,13 +5,13 @@
 
 - name: config user
   user:
-    name: "{{consul_service}}"
+    name: "{{ consul_service }}"
     system: yes
 
 - name: retrieve binary
   get_url:
-    url: "https://releases.hashicorp.com/consul/{{consul_version}}/consul_{{consul_version}}_linux_amd64.zip"
-    dest: "{{consul_temp_dir}}/{{consul_temp_download_name}}"
+    url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
+    dest: "{{ consul_temp_dir }}/{{ consul_temp_download_name }}"
     mode: 0755
     owner: root
     group: root
@@ -19,14 +19,14 @@
 - name: extract binary
   unarchive:
     remote_src: yes
-    src: "{{consul_temp_dir}}/{{consul_temp_download_name}}"
-    dest: "{{consul_temp_dir}}"
+    src: "{{ consul_temp_dir }}/{{ consul_temp_download_name }}"
+    dest: "{{ consul_temp_dir }}"
 
 - name: copy binary to install path
   copy:
     remote_src: True
-    src: "{{consul_temp_dir}}/{{consul_service}}"
-    dest: "{{consul_install_path}}"
+    src: "{{ consul_temp_dir }}/{{ consul_service }}"
+    dest: "{{ consul_install_path }}"
     owner: root
     group: root
     mode: 0755
@@ -34,8 +34,8 @@
 
 - name: link binary to user binary folder
   file:
-    src: "{{consul_install_path}}"
-    dest: "{{consul_link_path}}"
+    src: "{{ consul_install_path }}"
+    dest: "{{ consul_link_path }}"
     owner: root
     group: root
     mode: 0755
@@ -43,24 +43,24 @@
 
 - name: create config directory
   file:
-    path: "{{consul_config_dir}}"
+    path: "{{ consul_config_dir }}"
     state: directory
     mode: 0755
-    owner: "{{consul_service}}"
-    group: "{{consul_service}}"
+    owner: "{{ consul_service }}"
+    group: "{{ consul_service }}"
 
 - name: create data directory
   file:
-    path: "{{consul_data_dir}}"
+    path: "{{ consul_data_dir }}"
     state: directory
     mode: 0755
-    owner: "{{consul_service}}"
-    group: "{{consul_service}}"
+    owner: "{{ consul_service }}"
+    group: "{{ consul_service }}"
 
 - name: produce and deploy service config
   template:
-    src: "{{consul_template_config_file}}"
-    dest: "{{consul_config_file}}"
+    src: "{{ consul_template_config_file }}"
+    dest: "{{ consul_config_file }}"
     owner: root
     group: root
     mode: 0644
@@ -68,13 +68,13 @@
 
 - name: set service file
   template:
-    src: "{{consul_template_service_unit}}"
-    dest: "{{consul_service_unit}}"
+    src: "{{ consul_template_service_unit }}"
+    dest: "{{ consul_service_unit }}"
   notify: restart consul
 
 - name: enable service to start on boot
   systemd:
-    name: "{{consul_service}}.service"
+    name: "{{ consul_service }}.service"
     enabled: yes
     daemon_reload: yes
 

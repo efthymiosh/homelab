@@ -7,7 +7,7 @@ After=network.target network-online.target
 Type=simple
 User={{ nomad_user }}
 Group={{ nomad_user }}
-ExecStart={{nomad_install_path}} agent -config={{nomad_config_dir}}
+ExecStart={{ nomad_install_path }} agent -config={{ nomad_config_dir }}
 KillSignal=SIGINT
 Restart=always
 

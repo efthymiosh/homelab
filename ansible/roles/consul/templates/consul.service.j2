@@ -5,9 +5,9 @@ After=network.target network-online.target
 
 [Service]
 Type=simple
-User={{consul_service}}
-Group={{consul_service}}
-ExecStart={{consul_install_path}} agent -config-dir {{consul_config_dir}}
+User={{ consul_service }}
+Group={{ consul_service }}
+ExecStart={{ consul_install_path }} agent -config-dir {{ consul_config_dir }}
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 KillSignal=SIGINT
