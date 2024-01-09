@@ -1,0 +1,36 @@
+vault {
+  address = "https://{{ inventory_hostname }}:8200"
+  ca_cert = "{{ vault_agent_config_dir }}/ca.pem"
+}
+
+auto_auth {
+  method {
+    type = "approle"
+
+    config = {
+      role_id_file_path = "{{ vault_agent_config_dir }}/role_id"
+    }
+  }
+
+  sink {
+    type = "file"
+    config = {
+      path = "{{ vault_agent_config_dir }}/token"
+    }
+  }
+}
+
+{% for item in vault_agent_keygen_list %}
+template {
+  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.certificate }}{{ end }}" }}"
+  destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.common_name }}.crt"
+}
+template {
+  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.private_key }}{{ end }}" }}"
+  destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.common_name }}.key"
+}
+template {
+  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.issuing_ca }}{{ end }}" }}"
+  destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/ca.crt"
+}
+{% endfor %}

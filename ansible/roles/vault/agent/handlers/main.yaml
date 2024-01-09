@@ -1,0 +1,5 @@
+- name: restart vault agent
+  systemd:
+    name: "{{ vault_agent_service }}.service"
+    state: restarted
+    daemon_reload: yes

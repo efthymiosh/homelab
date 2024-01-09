@@ -1,20 +1,19 @@
 [Unit]
-Description=Service Discovery
+Description=Secrets Agent
 Wants=network-online.target
 After=network.target network-online.target
 
 [Service]
 Type=notify
-User={{ vault_service }}
-Group={{ vault_service }}
-ExecStart={{ vault_install_path }} server -config {{ vault_config_file }}
+User={{ vault_agent_service }}
+Group={{ vault_agent_service }}
+ExecStart={{ vault_install_path }} agent -config {{ vault_agent_config_dir }}/config.hcl
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 KillSignal=SIGINT
 LimitNOFILE=8192
 LimitCORE=0
 
-ProtectSystem=full
 PrivateTmp=yes
 CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
 AmbientCapabilities=CAP_IPC_LOCK

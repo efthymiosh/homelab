@@ -9,6 +9,7 @@
   - "vars/nomad_aio.yml"
   - "vars/minio.yml"
   - "vars/vault.yml"
+  - "vars/vault_agent.yml"
   roles:
   - role: docker
     tags: docker
@@ -22,3 +23,5 @@
     tags: tailscale
   - role: vault
     tags: vault
+  - role: vault/agent
+    tags: vault-agent

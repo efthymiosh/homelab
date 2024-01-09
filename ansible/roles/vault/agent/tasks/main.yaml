@@ -1,0 +1,73 @@
+- name: config user
+  user:
+    name: "{{ vault_agent_service }}"
+    system: yes
+
+- name: create configuration directory
+  file:
+    path: "{{ vault_agent_config_dir }}"
+    state: directory
+    mode: 0700
+    owner: "{{ vault_agent_service }}"
+    group: "{{ vault_agent_service }}"
+
+- name: create templates directory
+  file:
+    path: "{{ vault_agent_shared_dir }}"
+    state: directory
+    mode: 0755
+    owner: "{{ vault_agent_service }}"
+    group: "{{ vault_agent_service }}"
+
+- name: create shared directories
+  file:
+    path: "{{ vault_agent_shared_dir }}/{{ item }}"
+    state: directory
+    mode: 0750
+    owner: "{{ vault_agent_service }}"
+    group: "{{ item }}"
+  loop: "{{ vault_agent_shared_directories | list }}"
+
+- name: copy vault ca cert
+  copy:
+    dest: "{{ vault_agent_config_dir }}/ca.pem"
+    content: "{{ vault_root_ca_pem }}"
+    mode: 0600
+    owner: "{{ vault_agent_service }}"
+    group: "{{ vault_agent_service }}"
+  no_log: true
+
+- name: template vault agent config
+  template:
+    src: "config.hcl.j2"
+    dest: "{{ vault_agent_config_dir }}/config.hcl"
+    owner: "{{ vault_agent_service }}"
+    group: "{{ vault_agent_service }}"
+    mode: 0400
+  notify:
+  - restart vault agent
+
+- name: copy role id
+  copy:
+    content: "{{ vault_agent_role_id }}"
+    dest: "{{ vault_agent_config_dir }}/role_id"
+    owner: "{{ vault_agent_service }}"
+    group: "{{ vault_agent_service }}"
+    mode: 0400
+  no_log: true
+
+- name: set service file
+  template:
+    src: "vault_agent.service.j2"
+    dest: "{{ vault_agent_service_unit }}"
+    owner: "{{ vault_agent_service }}"
+    group: "{{ vault_agent_service }}"
+    mode: 0600
+  notify:
+  - restart vault agent
+
+- name: enable service to start on boot
+  systemd:
+    name: "{{ vault_agent_service }}.service"
+    enabled: yes
+    daemon_reload: yes
