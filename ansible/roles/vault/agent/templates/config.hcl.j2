@@ -38,7 +38,7 @@ template {
 template {
   destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.filename }}"
   contents =<<EOF
-  {{ item.contents }}
+{{ item.contents }}
   EOF
 }
 {% endfor %}

@@ -30,3 +30,11 @@ consul_config:
   telemetry:
     disable_hostname: true
     prometheus_retention_time: "60s"
+  tls:
+    defaults:
+      ca_file:   "/etc/vault_agent_shared/consul/ca.pem"
+      verify_incoming: false
+      verify_outgoing: true
+      verify_server_hostname: true
+  auto_encrypt:
+    tls: true

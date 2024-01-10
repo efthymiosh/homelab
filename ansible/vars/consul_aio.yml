@@ -31,3 +31,13 @@ consul_config:
   telemetry:
     disable_hostname: true
     prometheus_retention_time: "60s"
+  tls:
+    defaults:
+      ca_file:   "/etc/vault_agent_shared/consul/ca.crt"
+      key_file:  "/etc/vault_agent_shared/consul/server.homelab.consul.key"
+      cert_file: "/etc/vault_agent_shared/consul/server.homelab.consul.crt"
+      verify_incoming: true
+      verify_outgoing: true
+      verify_server_hostname: true
+  auto_encrypt:
+    allow_tls: true
