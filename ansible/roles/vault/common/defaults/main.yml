@@ -1,0 +1,7 @@
+---
+vault_version: 1.15.2
+
+vault_install_path: "/opt/vault"
+vault_link_path: "/usr/local/bin/vault"
+vault_temp_dir: "/tmp/"
+vault_temp_download_name: "vault_{{ vault_version }}.zip"

@@ -21,7 +21,7 @@
     tags: nomad
   - role: tailscale
     tags: tailscale
-  - role: vault
+  - role: vault/server
     tags: vault
   - role: vault/agent
     tags: vault-agent

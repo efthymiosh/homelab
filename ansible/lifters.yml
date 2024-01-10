@@ -6,6 +6,7 @@
   vars_files:
   - "vars/consul_client.yml"
   - "vars/nomad_client.yml"
+  - "vars/vault_agent_client.yml"
   roles:
   - role: docker
     tags: docker
@@ -13,3 +14,5 @@
     tags: consul
   - role: nomad
     tags: nomad
+  - role: vault/agent
+    tags: vault-agent

@@ -4,8 +4,8 @@ vault_agent_service_unit: "/etc/systemd/system/{{ vault_agent_service }}.service
 vault_agent_config_dir: "/etc/vault_agent"
 vault_agent_shared_dir: "/etc/vault_agent_shared"
 vault_agent_shared_directories: []
-vault_agent_keygen_list: []
-# [ pki_role: , common_name: , group: ]
-
+vault_agent_keygen_list: [] # [{ pki_role: , common_name: , group: }]
+vault_agent_templates: [] # [{ filename: , group: , contents: }]
 # requires vault to generate a approle role id for the service
 vault_agent_role_id: "dummy-role-id"
+vault_agent_vault_host: "{{ inventory_hostname }}"

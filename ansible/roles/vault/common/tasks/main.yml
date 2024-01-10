@@ -1,0 +1,39 @@
+- name: install dependencies
+  package:
+    name: "unzip"
+    state: present
+
+- name: retrieve binary
+  get_url:
+    url: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
+    dest: "{{ vault_temp_dir }}/{{ vault_temp_download_name }}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: extract binary
+  unarchive:
+    remote_src: yes
+    src: "{{ vault_temp_dir }}/{{ vault_temp_download_name }}"
+    dest: "{{ vault_temp_dir }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: copy binary to install path
+  copy:
+    remote_src: True
+    src: "{{ vault_temp_dir }}/vault"
+    dest: "{{ vault_install_path }}"
+    owner: root
+    group: root
+    mode: 0755
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: link binary to user binary folder
+  file:
+    src: "{{ vault_install_path }}"
+    dest: "{{ vault_link_path }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: link
+  ignore_errors: "{{ ansible_check_mode }}"

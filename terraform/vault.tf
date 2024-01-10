@@ -7,3 +7,8 @@ resource "vault_policy" "cert-issuer" {
   name   = "cert-issuer"
   policy = file("resources/vault/policies/cert-issuer.hcl")
 }
+
+resource "vault_policy" "client" {
+  name   = "cli"
+  policy = file("resources/vault/policies/cert-issuer.hcl")
+}

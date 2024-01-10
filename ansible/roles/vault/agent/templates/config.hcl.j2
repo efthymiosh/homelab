@@ -1,5 +1,5 @@
 vault {
-  address = "https://{{ inventory_hostname }}:8200"
+  address = "https://{{ vault_agent_vault_host }}:8200"
   ca_cert = "{{ vault_agent_config_dir }}/ca.pem"
 }
 
@@ -32,5 +32,13 @@ template {
 template {
   contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.issuing_ca }}{{ end }}" }}"
   destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/ca.crt"
+}
+{% endfor %}
+{% for item in vault_agent_templates %}
+template {
+  destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.filename }}"
+  contents =<<EOF
+  {{ item.contents }}
+  EOF
 }
 {% endfor %}
