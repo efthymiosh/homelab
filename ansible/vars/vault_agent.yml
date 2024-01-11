@@ -5,6 +5,7 @@ vault_agent_keygen_list:
 - pki_role: Consul
   common_name: server.homelab.consul
   group: consul
+  exec: ["consul", "reload"]
 
 vault_agent_role_id: !vault |
   $ANSIBLE_VAULT;1.1;AES256

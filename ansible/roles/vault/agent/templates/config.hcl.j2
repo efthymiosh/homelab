@@ -28,6 +28,11 @@ template {
 template {
   contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.private_key }}{{ end }}" }}"
   destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.common_name }}.key"
+{% if item.exec is defined %}
+  exec = {
+    command = {{ item.exec | to_yaml(default_style='"', default_flow_style=true) }}
+  }
+{% endif %}
 }
 template {
   contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.issuing_ca }}{{ end }}" }}"
