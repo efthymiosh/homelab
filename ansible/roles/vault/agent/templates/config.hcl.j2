@@ -22,11 +22,11 @@ auto_auth {
 
 {% for item in vault_agent_keygen_list %}
 template {
-  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.certificate }}{{ end }}" }}"
+contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `alt_names={{ item.alt_names | join(',') }}` `ip_sans={{ item.ip_sans | join(',') }}` `ttl=1d` {{ "}}{{ .Data.certificate }}{{ end }}" }}"
   destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.common_name }}.crt"
 }
 template {
-  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.private_key }}{{ end }}" }}"
+  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `alt_names={{ item.alt_names | join(',') }}` `ip_sans={{ item.ip_sans | join(',') }}` `ttl=1d` {{ "}}{{ .Data.private_key }}{{ end }}" }}"
   destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/{{ item.common_name }}.key"
 {% if item.exec is defined %}
   exec = {
@@ -35,7 +35,7 @@ template {
 {% endif %}
 }
 template {
-  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `ttl=1h` {{ "}}{{ .Data.issuing_ca }}{{ end }}" }}"
+  contents = "{{ "{{" }} with secret `pki/issue/{{ item.pki_role }}` `common_name={{ item.common_name }}` `alt_names={{ item.alt_names | join(',') }}` `ip_sans={{ item.ip_sans | join(',') }}` `ttl=1d` {{ "}}{{ .Data.issuing_ca }}{{ end }}" }}"
   destination = "{{ vault_agent_shared_dir }}/{{ item.group }}/ca.crt"
 }
 {% endfor %}

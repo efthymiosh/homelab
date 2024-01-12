@@ -4,6 +4,16 @@ vault_agent_shared_directories:
 vault_agent_keygen_list:
 - pki_role: Consul
   common_name: server.homelab.consul
+  alt_names:
+  - "snu1.int.efhd.dev"
+  - "snu2.int.efhd.dev"
+  - "snu3.int.efhd.dev"
+  - "localhost"
+  ip_sans:
+  - "192.168.1.240"
+  - "192.168.1.241"
+  - "192.168.1.242"
+  - "127.0.0.1"
   group: consul
   exec: ["consul", "reload"]
 

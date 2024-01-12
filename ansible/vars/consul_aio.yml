@@ -39,5 +39,12 @@ consul_config:
       verify_incoming: true
       verify_outgoing: true
       verify_server_hostname: true
+    https:
+      verify_incoming: false
   auto_encrypt:
     allow_tls: true
+  ports:
+    http: 8500
+    https: 8501
+    grpc: -1
+    grpc_tls: 8503

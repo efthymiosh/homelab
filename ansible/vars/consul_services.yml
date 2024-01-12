@@ -2,11 +2,13 @@ consul_register:
   services:
   - id: "consului"
     name: "cnsl"
-    port: 8500
+    port: 8501
     tags:
     - "http"
     - "routed"
     - "traefik.http.routers.cnsl.rule=Host(`consul.efthymios.net`) || Host(`consul.efhd.dev`)"
+    - "traefik.http.routers.cnsl.tls=true"
+    - "traefik.http.services.cnsl.loadbalancer.server.scheme=https"
   - id: "nomadui"
     name: "nmd"
     port: 4646

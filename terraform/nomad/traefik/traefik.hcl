@@ -96,6 +96,10 @@ job "traefik" {
         data = "{{ key `ssl/root_ca_cert` }}"
         destination = "${NOMAD_TASK_DIR}/root-ca.pem"
       }
+      template {
+        data = "{{ key `ssl/interm_ca_cert` }}"
+        destination = "${NOMAD_TASK_DIR}/interm-ca.pem"
+      }
     }
   }
 }

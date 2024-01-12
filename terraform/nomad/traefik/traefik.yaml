@@ -6,6 +6,7 @@ log:
 serversTransport:
   rootCAs:
   - "{{ env `NOMAD_TASK_DIR` }}/root-ca.pem"
+  - "{{ env `NOMAD_TASK_DIR` }}/interm-ca.pem"
 entryPoints:
   private_web:
     address: "0.0.0.0:80"
