@@ -1,7 +1,0 @@
-https://github.com/alexellis/flash-image-tinkerbell
-https://github.com/openfaas
-https://www.pugetsystems.com/labs/hpc/How-To-Make-Ubuntu-Autoinstall-ISO-with-Cloud-init-2213/
-https://github.com/kubnix/tinkerbell-dashboard
-https://github.com/ory
-https://docs.temporal.io/docs/temporal-explained/introduction
-https://enclave.io/
