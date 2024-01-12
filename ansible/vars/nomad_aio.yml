@@ -28,7 +28,10 @@ nomad_config:
         read_only: true
     network_interface: !unsafe '{{ GetPrivateInterfaces | exclude "name" "docker" | limit 1 | attr "name" }}'
   consul:
-    address: "localhost:8500"
+    address: "127.0.0.1:8501"
+    grpc_address: "127.0.0.1:8503"
+    ssl: true
+    verify_ssl: false
   plugin:
     docker:
       config:
