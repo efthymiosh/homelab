@@ -32,6 +32,9 @@ scrape_configs:
 - job_name: consul
   consul_sd_configs:
   - server: '{{ with $list := service "cnsl~_agent" }}{{ with index $list 0 }}{{ .Address }}:{{ .Port }}{{ end }}{{ end }}'
+    scheme: https
+    tls_config:
+      ca_file: '{{ env `NOMAD_TASK_DIR` }}/interm-ca.pem'
   tls_config:
     ca_file: '{{ env `NOMAD_TASK_DIR` }}/root-ca.pem'
   relabel_configs:

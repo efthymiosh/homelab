@@ -1,7 +1,9 @@
 terraform {
   backend "consul" {
-    address = "consul.efthymios.net:8500"
+    address = "snu.int.efhd.dev:8501"
+    scheme  = "https"
     path    = "terraform/homelab/state"
+    ca_file = "./resources/intermediate-ca.pem"
   }
 
   required_providers {
@@ -38,5 +40,7 @@ provider "nomad" {
 }
 
 provider "consul" {
-  address = "http://consul.efhd.dev:8500"
+  address = "http://snu.int.efhd.dev:8501"
+  scheme  = "https"
+  ca_file = "./resources/intermediate-ca.pem"
 }

@@ -8,6 +8,7 @@ vault_agent_keygen_list:
   - "snu1.int.efhd.dev"
   - "snu2.int.efhd.dev"
   - "snu3.int.efhd.dev"
+  - "snu.int.efhd.dev"
   - "localhost"
   ip_sans:
   - "192.168.1.240"
