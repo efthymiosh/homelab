@@ -54,8 +54,10 @@ nomad_config:
     rpc: true
 
     ca_file:   "/etc/vault_agent_shared/root/ca.crt"
-    key_file:  "/etc/vault_agent_shared/root/server.efth.nomad.key"
-    cert_file: "/etc/vault_agent_shared/root/server.efth.nomad.crt"
+    key_file:  "/etc/vault_agent_shared/root/client.efth.nomad.key"
+    cert_file: "/etc/vault_agent_shared/root/client.efth.nomad.crt"
 
     verify_server_hostname: true
     verify_https_client: false
+  acl:
+    enabled: true
