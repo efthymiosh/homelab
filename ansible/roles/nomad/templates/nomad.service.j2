@@ -8,6 +8,7 @@ Type=simple
 User={{ nomad_user }}
 Group={{ nomad_user }}
 ExecStart={{ nomad_install_path }} agent -config={{ nomad_config_dir }}
+ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 Restart=always
 

@@ -5,21 +5,14 @@ After=network.target network-online.target
 
 [Service]
 Type=notify
-User={{ vault_agent_service }}
-Group={{ vault_agent_service }}
+User=root
+Group=root
 ExecStart={{ vault_install_path }} agent -config {{ vault_agent_config_dir }}/config.hcl
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 KillSignal=SIGINT
 LimitNOFILE=8192
 LimitCORE=0
-
-PrivateTmp=yes
-CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
-AmbientCapabilities=CAP_IPC_LOCK
-ProtectHome=read-only
-PrivateDevices=yes
-NoNewPrivileges=yes
 
 [Install]
 WantedBy=multi-user.target

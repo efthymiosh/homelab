@@ -1,5 +1,6 @@
 vault_agent_shared_directories:
 - consul
+- root
 
 vault_agent_keygen_list:
 - pki_role: Consul
@@ -16,7 +17,25 @@ vault_agent_keygen_list:
   - "192.168.1.242"
   - "127.0.0.1"
   group: consul
-  exec: ["consul", "reload"]
+# exec: ["pkill", "-o", "--signal", "SIGHUP", "consul"]
+  exec: ["systemctl", "reload", "consul"]
+- pki_role: Nomad
+  common_name: server.efth.nomad
+  alt_names:
+  - "server.global.nomad"
+  - "snu1.int.efhd.dev"
+  - "snu2.int.efhd.dev"
+  - "snu3.int.efhd.dev"
+  - "snu.int.efhd.dev"
+  - "localhost"
+  ip_sans:
+  - "192.168.1.240"
+  - "192.168.1.241"
+  - "192.168.1.242"
+  - "127.0.0.1"
+  group: root
+# exec: ["pkill", "-o", "--signal", "SIGHUP", "nomad"]
+  exec: ["systemctl", "reload", "nomad"]
 
 vault_agent_role_id: !vault |
   $ANSIBLE_VAULT;1.1;AES256
