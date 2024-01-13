@@ -29,10 +29,14 @@ job "consul_backup" {
         image = "docker-registry.efthymios.net/backups:latest"
         entrypoint = ["bash", "${NOMAD_ALLOC_DIR}/backup.sh"]
       }
+
+      vault {}
+
       template {
         env = true
         data = <<EOF
         CONSUL_HTTP_ADDR="https://consul.efhd.dev"
+        CONSUL_HTTP_TOKEN={{ with secret `kv/data/nomad/consul_backup` }}{{ .Data.data.token }}{{ end }}
         AWS_ACCESS_KEY_ID={{ key `backblaze/b2_app_key_id` }}
         AWS_SECRET_ACCESS_KEY={{ key `backblaze/b2_app_key` }}
         EOF
