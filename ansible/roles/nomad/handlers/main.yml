@@ -3,3 +3,9 @@
     name: "{{ nomad_service }}.service"
     state: restarted
     daemon_reload: yes
+
+- name: reload nomad
+  systemd:
+    name: "{{ nomad_service }}.service"
+    state: reloaded
+    daemon_reload: yes

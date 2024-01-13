@@ -16,6 +16,8 @@ consul_register:
     - "http"
     - "routed"
     - "traefik.http.routers.nmd.rule=Host(`nomad.efthymios.net`) || Host(`nomad.efhd.dev`)"
+    - "traefik.http.routers.nmd.tls=true"
+    - "traefik.http.services.nmd.loadbalancer.server.scheme=https"
   - id: "vault"
     name: "vault"
     port: 8200
