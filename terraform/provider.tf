@@ -35,7 +35,7 @@ terraform {
 }
 
 provider "nomad" {
-  address = "http://nomad.efhd.dev:4646"
+  address = "https://snu.int.efhd.dev:4646"
   region  = "efth"
 }
 
