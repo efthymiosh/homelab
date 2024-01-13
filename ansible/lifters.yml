@@ -4,6 +4,7 @@
     nomad_version: "1.7.2"
     consul_version: "1.17.1"
   vars_files:
+  - "vars/consul_acl_tokens.yml"
   - "vars/consul_client.yml"
   - "vars/nomad_client.yml"
   - "vars/vault_agent_client.yml"

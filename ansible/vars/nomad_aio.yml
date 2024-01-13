@@ -32,6 +32,7 @@ nomad_config:
     grpc_address: "127.0.0.1:8503"
     ssl: true
     verify_ssl: false
+    token: "{{ consul_acl_nomad_client_token }}"
   plugin:
     docker:
       config:

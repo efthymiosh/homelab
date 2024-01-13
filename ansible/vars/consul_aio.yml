@@ -48,3 +48,7 @@ consul_config:
     https: 8501
     grpc: -1
     grpc_tls: 8503
+  acl:
+    enabled: true
+    default_policy: "deny"
+    enable_token_persistence: true
