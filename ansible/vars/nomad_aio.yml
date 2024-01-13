@@ -31,8 +31,15 @@ nomad_config:
     address: "127.0.0.1:8501"
     grpc_address: "127.0.0.1:8503"
     ssl: true
-    verify_ssl: false
+    ca_file: "/etc/vault_agent_shared/root/ca.crt"
     token: "{{ consul_acl_nomad_client_token }}"
+  vault:
+    enabled: true
+    address: "https://127.0.0.1:8200"
+    ca_file: "/etc/vault_agent_shared/root/root-ca.pem"
+    default_identity:
+      aud: ["vault.io"]
+      ttl: "1h"
   plugin:
     docker:
       config:

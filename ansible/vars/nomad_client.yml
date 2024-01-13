@@ -30,6 +30,10 @@ nomad_config:
     ssl: true
     verify_ssl: false
     token: "{{ consul_acl_nomad_client_token }}"
+  vault:
+    enabled: true
+    address: "https://snu2.int.efhd.dev:8200"
+    ca_file: "/etc/vault_agent_shared/root/root-ca.pem"
   plugin:
     docker:
       config:
