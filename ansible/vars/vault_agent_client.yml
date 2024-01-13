@@ -12,6 +12,10 @@ vault_agent_templates:
   group: consul
   contents: !unsafe |
     {{ with secret `pki/cert/ca` }}{{ .Data.certificate }}{{ end }}
+- filename: root-ca.pem
+  group: root
+  contents: !unsafe |
+    {{ with secret `kv/ssl/root-ca` }}{{ .Data.data.cert }}{{ end }}
 
 vault_agent_keygen_list:
 - pki_role: Nomad

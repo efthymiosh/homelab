@@ -2,6 +2,12 @@ vault_agent_shared_directories:
 - consul
 - root
 
+vault_agent_templates:
+- filename: root-ca.pem
+  group: root
+  contents: !unsafe |
+    {{ with secret `kv/ssl/root-ca` }}{{ .Data.data.cert }}{{ end }}
+
 vault_agent_keygen_list:
 - pki_role: Consul
   common_name: server.homelab.consul
@@ -17,7 +23,6 @@ vault_agent_keygen_list:
   - "192.168.1.242"
   - "127.0.0.1"
   group: consul
-# exec: ["pkill", "-o", "--signal", "SIGHUP", "consul"]
   exec: ["systemctl", "reload", "consul"]
 - pki_role: Nomad
   common_name: server.efth.nomad
@@ -34,7 +39,6 @@ vault_agent_keygen_list:
   - "192.168.1.242"
   - "127.0.0.1"
   group: root
-# exec: ["pkill", "-o", "--signal", "SIGHUP", "nomad"]
   exec: ["systemctl", "reload", "nomad"]
 
 vault_agent_role_id: !vault |
