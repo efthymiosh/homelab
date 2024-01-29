@@ -52,3 +52,5 @@ consul_config:
     enabled: true
     default_policy: "deny"
     enable_token_persistence: true
+    tokens:
+      agent: "{{ consul_acl_consul_agent_token }}"
