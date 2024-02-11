@@ -9,7 +9,7 @@ job "woodpecker" {
   }
 
   constraint {
-    attribute = "${attr.unique.hostname}"
+    attribute = "${node.class}"
     operator  = "="
     value     = "aero"
   }
@@ -22,6 +22,7 @@ job "woodpecker" {
         to = 8000
       }
       port "internal"  {
+        static = 9111
         to = 9000
       }
     }
@@ -32,9 +33,13 @@ job "woodpecker" {
       config {
         image = "woodpeckerci/woodpecker-server:latest"
         ports = [ "http", "internal" ]
-        volumes = [
-          "woodpecker-server-data:/var/lib/woodpecker"
-        ]
+
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad/woodpecker/"
+          target   = "/var/lib/woodpecker/"
+          readonly = false
+        }
       }
       resources {
         cpu = 200
@@ -91,25 +96,11 @@ job "woodpecker" {
       template {
         env = true
         data = <<EOF
-        WOODPECKER_SERVER={{ env `NOMAD_ADDR_internal` }}
+        WOODPECKER_SERVER=woodpecker.service.consul:9111
         WOODPECKER_AGENT_SECRET={{ key `/woodpecker/agent_secret` }}
         WOODPECKER_MAX_WORKFLOWS=8
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
-      }
-      service {
-        name = "woodpecker"
-        tags = [
-          "http",
-          "routed",
-        ]
-        port = "http"
-        check {
-          name = "alive"
-          type = "tcp"
-          interval = "30s"
-          timeout  = "2s"
-        }
       }
     }
   }
