@@ -20,7 +20,7 @@ job "certbot_${domain}" {
         image = "docker-registry.efthymios.net/certbot-dns-cf-consul:latest"
       }
       env {
-        CONSUL_HTTP_ADDR = "https://consul.efthymios.net"
+        CONSUL_HTTP_ADDR = "https://consul.efhd.dev"
         CF_CREDS_PATH    = "$${NOMAD_SECRETS_DIR}/cloudflare.ini"
         SSL_DOMAIN       = "${domain}"
       }
@@ -28,6 +28,7 @@ job "certbot_${domain}" {
         env = true
         data = <<EOF
         CONTACT_EMAIL={{ key `ssl/contact_email` }}
+        CONSUL_HTTP_TOKEN={{ with secret `kv/data/nomad/shared/consul_kv_write_token` }}{{ .Data.data.consul_kv_write_token }}{{ end }}
         EOF
         destination = "$${NOMAD_SECRETS_DIR}/.env"
       }
