@@ -1,6 +1,15 @@
 {
   "CN": "Vault",
-  "hosts": ["snu1.int.efhd.dev", "snu2.int.efhd.dev", "snu3.int.efhd.dev", "192.168.1.240", "192.168.1.241",  "192.168.1.242", "127.0.0.1"],
+  "hosts": [
+    "snu.int.efhd.dev",
+    "snu1.int.efhd.dev",
+    "snu2.int.efhd.dev",
+    "snu3.int.efhd.dev",
+    "192.168.1.240",
+    "192.168.1.241",
+    "192.168.1.242",
+    "127.0.0.1"
+  ],
   "names": [
     {
       "C": "CY",
