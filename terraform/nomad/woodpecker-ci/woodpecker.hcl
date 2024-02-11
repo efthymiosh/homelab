@@ -11,7 +11,7 @@ job "woodpecker" {
   constraint {
     attribute = "${attr.unique.hostname}"
     operator  = "="
-    value     = "snu3"
+    value     = "aero"
   }
 
   group "woodpecker" {
@@ -27,6 +27,7 @@ job "woodpecker" {
     }
 
     task "woodpecker-server" {
+
       driver = "docker"
       config {
         image = "woodpeckerci/woodpecker-server:latest"
@@ -68,6 +69,10 @@ job "woodpecker" {
         }
       }
     }
+  }
+  group "woodpecker-agent" {
+    count = 1
+
     task "woodpecker-agent" {
       driver = "docker"
       config {
@@ -88,6 +93,7 @@ job "woodpecker" {
         data = <<EOF
         WOODPECKER_SERVER={{ env `NOMAD_ADDR_internal` }}
         WOODPECKER_AGENT_SECRET={{ key `/woodpecker/agent_secret` }}
+        WOODPECKER_MAX_WORKFLOWS=8
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
       }
