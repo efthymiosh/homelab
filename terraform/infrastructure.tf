@@ -7,6 +7,11 @@ resource "nomad_job" "docker-registry" {
   }
 }
 
+resource "nomad_job" "cloudflared" {
+  jobspec = file("nomad/cloudflared/cloudflared.hcl")
+}
+
+
 locals {
   dns_domains = toset([
     "efthymios.net",
