@@ -44,3 +44,7 @@ provider "consul" {
   scheme  = "https"
   ca_file = "./resources/intermediate-ca.pem"
 }
+
+provider "vault" {
+  address = "https://snu.int.efhd.dev:8200"
+}
