@@ -7,3 +7,8 @@ certbot certonly --non-interactive --dns-cloudflare --dns-cloudflare-propagation
 for KEY in cert chain fullchain privkey; do
     cat "/etc/letsencrypt/live/$SSL_DOMAIN/$KEY.pem" | consul kv put "ssl/$SSL_DOMAIN/$KEY" -
 done
+
+
+for KEY in cert chain fullchain privkey; do
+    vault kv patch -mount=kv nomad/shared/generated/ssl/$SSL_DOMAIN $KEY="@/etc/letsencrypt/live/$SSL_DOMAIN/$KEY.pem"
+done
