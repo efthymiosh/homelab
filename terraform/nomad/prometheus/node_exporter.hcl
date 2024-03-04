@@ -22,13 +22,10 @@ job "node_exporter" {
     }
 
     task "exporter" {
-      driver = "raw_exec"
+      driver = "docker"
       config {
-        command = "/opt/node_exporter-${var.version}.linux-amd64/node_exporter"
-      }
-      artifact {
-        source = "https://github.com/prometheus/node_exporter/releases/download/v${var.version}/node_exporter-${var.version}.linux-amd64.tar.gz"
-        destination = "/opt/"
+        image = "prom/node-exporter:v1.7.0"
+        ports = ["http"]
       }
       resources {
         cpu = 50
