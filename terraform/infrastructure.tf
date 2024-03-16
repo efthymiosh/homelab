@@ -28,3 +28,8 @@ resource "nomad_job" "certbot" {
     domain = each.key
   })
 }
+
+# general purpose postgresql
+resource "nomad_job" "postgres" {
+  jobspec = file("./nomad/postgres/postgres.hcl")
+}

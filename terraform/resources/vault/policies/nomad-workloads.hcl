@@ -17,3 +17,7 @@ path "kv/data/nomad/shared/generated/*" {
 path "kv/metadata/*" {
   capabilities = ["list"]
 }
+
+path "pki/issue/nomad-workloads*" {
+  capabilities = ["create","update"]
+}
