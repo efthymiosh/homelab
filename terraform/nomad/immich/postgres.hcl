@@ -32,7 +32,7 @@ job "immich_postgres" {
 
       user = "root"
       config {
-        image = "tensorchord/pgvecto-rs:pg14-v0.1.11"
+        image = "tensorchord/pgvecto-rs:pg14-v0.2.1"
         ports = ["db"]
         mount {
           type = "volume"
