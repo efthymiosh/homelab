@@ -1,11 +1,23 @@
 locals {
-  backup_targets = [
+  backup_targets = toset([
     "consul",
+    "postgres",
     "grafana",
     "immich",
-    "ory",
-  ]
+  ])
 }
+
+resource "nomad_job" "backups" {
+  for_each = local.backup_targets
+
+  jobspec = file("./nomad/${each.key}/backup.hcl")
+  hcl2 {
+    vars = {
+      backup_script = file("./nomad/${each.key}/backup.sh")
+    }
+  }
+}
+
 resource "b2_bucket" "backups" {
   bucket_name = "efthymiosh-db-backups"
   bucket_type = "allPrivate"
@@ -16,7 +28,7 @@ resource "b2_bucket" "backups" {
   }
 
   dynamic "lifecycle_rules" {
-    for_each = toset(local.backup_targets)
+    for_each = local.backup_targets
     content {
       file_name_prefix              = "${lifecycle_rules.key}/"
       days_from_uploading_to_hiding = 30
@@ -46,41 +58,5 @@ resource "consul_keys" "name" {
   key {
     path  = "backblaze/b2_app_key"
     value = b2_application_key.backups.application_key
-  }
-}
-
-resource "nomad_job" "consul_backup" {
-  jobspec = file("./nomad/consul-backup/consul_backup.hcl")
-  hcl2 {
-    vars = {
-      backup_script = file("./nomad/consul-backup/backup.sh")
-    }
-  }
-}
-
-resource "nomad_job" "grafana_backup" {
-  jobspec = file("./nomad/grafana/backup.hcl")
-  hcl2 {
-    vars = {
-      backup_script = file("./nomad/grafana/backup.sh")
-    }
-  }
-}
-
-resource "nomad_job" "immich_backup" {
-  jobspec = file("./nomad/immich/backup.hcl")
-  hcl2 {
-    vars = {
-      backup_script = file("./nomad/immich/backup.sh")
-    }
-  }
-}
-
-resource "nomad_job" "ory_backup" {
-  jobspec = file("./nomad/ory/backup.hcl")
-  hcl2 {
-    vars = {
-      backup_script = file("./nomad/ory/resources/backup.sh")
-    }
   }
 }
