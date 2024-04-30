@@ -34,7 +34,7 @@ job "grafana" {
     task "grafana" {
       driver = "docker"
       config {
-        image = "grafana/grafana:10.3.1"
+        image = "grafana/grafana:11.0.0-preview"
         ports = ["http"]
       }
       resources {
@@ -46,7 +46,7 @@ job "grafana" {
         GF_ANALYTICS_REPORTING_ENABLED = "false"
         GF_SERVER_ROUTER_LOGGING = "false"
         GF_SERVER_ENABLE_GZIP = "true"
-        GF_SERVER_ROOT_URL = "http://grafana.efthymios.net"
+        GF_SERVER_ROOT_URL = "http://grafana.efhd.dev"
         GF_SNAPSHOTS_EXTERNAL_ENABLED = "false"
         GF_DASHBOARDS_MIN_REFRESH_INTERVAL = "15s"
         GF_USERS_ALLOW_SIGN_UP = "false"

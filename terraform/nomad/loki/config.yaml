@@ -23,12 +23,22 @@ schema_config:
       index:
         prefix: index_
         period: 24h
+    - from: 2024-05-02
+      store: tsdb
+      object_store: s3
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
 storage_config:
   boltdb_shipper:
     active_index_directory: /loki/index
     cache_location: /loki/index_cache
     cache_ttl: 24h
     shared_store: s3
+  tsdb_shipper:
+    active_index_directory: /data/tsdb-index
+    cache_location: /data/tsdb-cache
   aws:
     s3: 'http://{{ key "loki/minio/access_key_id" }}:{{ key "loki/minio/secret_access_key" }}@minio.service.consul:9000/loki'
     region: ""

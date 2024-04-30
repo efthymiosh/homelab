@@ -6,6 +6,12 @@ job "loki" {
   datacenters = ["homelab"]
   type = "service"
 
+  constraint {
+    attribute = "${node.class}"
+    operator  = "="
+    value     = "aero"
+  }
+
   update {
     max_parallel = 1
     health_check = "checks"
@@ -34,7 +40,7 @@ job "loki" {
       driver = "docker"
       user = "root"
       config {
-        image = "grafana/loki:2.9.4"
+        image = "grafana/loki:2.9.7"
         args = [ "-config.file", "${NOMAD_SECRETS_DIR}/config.yaml" ]
         ports = ["http"]
       }
