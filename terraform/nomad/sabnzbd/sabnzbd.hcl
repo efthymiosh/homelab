@@ -44,7 +44,7 @@ job "sabnzbd" {
       }
       resources {
         cpu = 500
-        memory = 768
+        memory = 2048
       }
       env {
         PUID = "0"
