@@ -1,8 +1,8 @@
 - hosts: lifters
   become: true
   vars:
-    nomad_version: "1.7.5"
-    consul_version: "1.18.0"
+    nomad_version: "1.8.1"
+    consul_version: "1.19.0"
   vars_files:
   - "vars/consul_acl_tokens.yml"
   - "vars/consul_client.yml"
