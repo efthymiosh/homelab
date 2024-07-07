@@ -3,6 +3,7 @@ consul_register:
   - id: "consului"
     name: "cnsl"
     port: 8501
+    token: "{{ consul_acl_service_register_token }}"
     tags:
     - "http"
     - "routed"
@@ -12,6 +13,7 @@ consul_register:
   - id: "nomadui"
     name: "nmd"
     port: 4646
+    token: "{{ consul_acl_service_register_token }}"
     tags: 
     - "http"
     - "routed"
@@ -21,6 +23,7 @@ consul_register:
   - id: "vault"
     name: "vault"
     port: 8200
+    token: "{{ consul_acl_service_register_token }}"
     tags: 
     - "https"
     - "routed"
@@ -31,6 +34,7 @@ consul_register:
   - id: "minio"
     name: "minio"
     port: 9001
+    token: "{{ consul_acl_service_register_token }}"
     tags:
     - "http"
     - "routed"
