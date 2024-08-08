@@ -15,7 +15,6 @@ resource "nomad_job" "cloudflared" {
 locals {
   dns_domains = toset([
     "efthymios.net",
-    "efthymios.me",
     "efhd.dev",
     "efhd.eu",
   ])
