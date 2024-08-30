@@ -19,6 +19,7 @@ job "paperless" {
 
       config {
         image = "ghcr.io/paperless-ngx/paperless-ngx:latest"
+        force_pull = true
         ports = ["http"]
         mount {
           type = "volume"

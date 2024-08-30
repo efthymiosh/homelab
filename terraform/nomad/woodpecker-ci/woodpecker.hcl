@@ -32,6 +32,7 @@ job "woodpecker" {
       driver = "docker"
       config {
         image = "woodpeckerci/woodpecker-server:latest"
+        force_pull = true
         ports = [ "http", "internal" ]
 
         mount {
@@ -82,6 +83,7 @@ job "woodpecker" {
       driver = "docker"
       config {
         image = "woodpeckerci/woodpecker-agent:latest"
+        force_pull = true
         mount {
           type = "bind"
           source = "/var/run/docker.sock"
