@@ -63,9 +63,6 @@ module "efhd_dev" {
       value = "autodiscover.migadu.com",
       ttl   = 3600,
       data = {
-        name     = "efhd.dev",
-        service  = "_autodiscover",
-        proto    = "_tcp",
         port     = 443
         priority = 0,
         weight   = 1,
@@ -77,9 +74,6 @@ module "efhd_dev" {
       ttl   = 3600,
       value = "smtp.migadu.com",
       data = {
-        name     = "efhd.dev",
-        service  = "_submissions",
-        proto    = "_tcp",
         port     = 465
         priority = 0,
         weight   = 1,
@@ -91,9 +85,6 @@ module "efhd_dev" {
       ttl   = 3600,
       value = "imap.migadu.com",
       data = {
-        name     = "efhd.dev",
-        service  = "_imaps",
-        proto    = "_tcp",
         port     = 993
         priority = 0,
         weight   = 1,
@@ -105,9 +96,6 @@ module "efhd_dev" {
       ttl   = 3600,
       value = "pop.migadu.com",
       data = {
-        name     = "efhd.dev",
-        service  = "_pop3s",
-        proto    = "_tcp",
         port     = 995
         priority = 0,
         weight   = 1,

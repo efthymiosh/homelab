@@ -28,9 +28,6 @@ variable "records" {
     ttl      = number
     priority = optional(number)
     data = optional(object({
-      service  = string
-      proto    = string
-      name     = string
       priority = number
       weight   = number
       port     = number
