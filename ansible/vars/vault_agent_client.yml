@@ -1,7 +1,6 @@
 vault_agent_vault_host: snu2.int.efhd.dev # FIXME: single point of failure
 
 vault_root_ca_pem: "{{ lookup('file', 'files/certs/root-ca.pem') }}"
-vault_install_path: "/opt/vault"
 
 vault_agent_shared_directories:
 - consul
