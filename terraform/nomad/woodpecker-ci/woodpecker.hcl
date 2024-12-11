@@ -49,7 +49,7 @@ job "woodpecker" {
       template {
         env = true
         data = <<EOF
-        WOODPECKER_OPEN=true
+        WOODPECKER_OPEN=false
         WOODPECKER_HOST=https://woodpecker.efhd.dev
         WOODPECKER_AGENT_SECRET={{ key `/woodpecker/agent_secret` }}
         WOODPECKER_GITHUB=true
