@@ -32,7 +32,7 @@ job "postgres_backup" {
         PGUSER={{ .Data.data.user }}
         PGPASSWORD={{ .Data.data.password }}
         {{ end }}
-        PGHOST="postgresql-server.service.consul"
+        PGHOST="postgres.service.consul"
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
       }

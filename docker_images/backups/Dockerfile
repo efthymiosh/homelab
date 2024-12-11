@@ -1,6 +1,6 @@
-FROM debian:bookworm
+FROM postgres:16-bookworm
 
-ARG CONSUL_VERSION=1.16.2
+ARG CONSUL_VERSION=1.20.1
 
 RUN apt update && \
     apt install -fyq wget unzip awscli postgresql-client && \
