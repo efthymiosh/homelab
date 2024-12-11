@@ -2,7 +2,7 @@ variable "conf" {
   description = "The vector configuration data"
 }
 variable "version" {
-  default = "0.26.0"
+  default = "0.43.1"
 }
 
 job "vector" {
@@ -34,16 +34,13 @@ job "vector" {
     }
 
     task "vector" {
-      driver = "raw_exec"
+      driver = "docker"
       kill_timeout = "30s"
       config {
-        command = "/opt/vector-x86_64-unknown-linux-gnu/bin/vector"
+        image = "timberio/vector:${var.version}-alpine"
+        volumes = [ "/var/run/docker.sock:/var/run/docker.sock" ]
+        ports = ["http"]
       }
-      artifact {
-        source = "https://github.com/vectordotdev/vector/releases/download/v${var.version}/vector-${var.version}-x86_64-unknown-linux-gnu.tar.gz"
-        destination = "/opt/"
-      }
-
       env {
         VECTOR_CONFIG = "${NOMAD_TASK_DIR}/vector.toml"
       }

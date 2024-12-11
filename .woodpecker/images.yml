@@ -4,7 +4,6 @@ when:
   path:
     include:
     - 'docker_images/**/*'
-    on_empty: false
 matrix:
   IMAGE:
   - backups

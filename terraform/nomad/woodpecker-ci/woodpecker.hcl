@@ -100,6 +100,7 @@ job "woodpecker" {
         data = <<EOF
         WOODPECKER_SERVER=woodpecker.service.consul:9111
         WOODPECKER_AGENT_SECRET={{ key `/woodpecker/agent_secret` }}
+        WOODPECKER_AGENT_CONFIG_FILE={{ env `NOMAD_ALLOC_DIR` }}/agent.conf
         WOODPECKER_MAX_WORKFLOWS=8
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
