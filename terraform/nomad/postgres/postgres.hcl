@@ -97,7 +97,7 @@ job "postgres" {
 
       resources {
         cpu    = 2500
-        memory = 2048
+        memory = 1024
       }
 
       service {

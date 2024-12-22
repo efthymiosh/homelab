@@ -9,9 +9,8 @@ job "woodpecker" {
   }
 
   constraint {
-    attribute = "${node.class}"
-    operator  = "="
-    value     = "aero"
+    attribute = "${attr.unique.hostname}"
+    value     = "aero1"
   }
 
   group "woodpecker" {
