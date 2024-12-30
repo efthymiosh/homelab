@@ -30,9 +30,16 @@ job "certbot_${domain}" {
         data = <<EOF
         CONTACT_EMAIL={{ key `ssl/contact_email` }}
         CONSUL_HTTP_TOKEN={{ with secret `kv/data/nomad/shared/consul_kv` }}{{ .Data.data.write_token }}{{ end }}
+        VAULT_CACERT="{{env `NOMAD_ALLOC_DIR` }}/vault-cacert.pem"
+        VAULT_ADDR=https://snu.int.efhd.dev:8200
         EOF
         destination = "$${NOMAD_SECRETS_DIR}/.env"
       }
+      template {
+        data = "{{- with secret `pki/cert/ca` -}}{{- .Data.certificate }}{{- end -}}"
+        destination = "$${NOMAD_ALLOC_DIR}/vault-cacert.pem"
+      }
+
       template { 
         data = "dns_cloudflare_api_token = {{ key `ssl/cloudflare_api_token` }}"
         destination = "$${NOMAD_SECRETS_DIR}/cloudflare.ini"
