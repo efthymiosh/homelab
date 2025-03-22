@@ -1,4 +1,4 @@
-data_dir = "[[ env "NOMAD_ALLOC_DIR" ]]/data/"
+data_dir = "[[ env `NOMAD_ALLOC_DIR` ]]/data/"
 
 [api]
   enabled = true
@@ -12,8 +12,6 @@ data_dir = "[[ env "NOMAD_ALLOC_DIR" ]]/data/"
   source = """
   .label.\"com.hashicorp.nomad.job_name\", err = replace(.label.\"com.hashicorp.nomad.job_name\", r'/.*$', "")
   """
-[sources.journal]
-  type = "journald"
 [sinks.loki]
   type = "loki"
   inputs = ["remove_parameterized_nomad_jobs_suffix"]
@@ -23,10 +21,13 @@ data_dir = "[[ env "NOMAD_ALLOC_DIR" ]]/data/"
   labels.job = "{{ label.\"com.hashicorp.nomad.job_name\" }}"
   labels.task = "{{ label.\"com.hashicorp.nomad.task_name\" }}"
   labels.group = "{{ label.\"com.hashicorp.nomad.task_group_name\" }}"
-  labels.namespace = "{{ label.\"com.hashicorp.nomad.namespace\" }}"
   labels.node = "{{ label.\"com.hashicorp.nomad.node_name\" }}"
   # remove fields that have been converted to labels to avoid having them twice
   remove_label_fields = true
+[sources.journal]
+  type = "journald"
+  journal_directory = "/var/log/journal"
+  journalctl_path = "/usr/bin/journalctl"
 [sinks.loki_journal]
   type = "loki"
   inputs = ["journal"]

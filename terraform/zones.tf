@@ -21,13 +21,6 @@ module "efthymios_net" {
   ]
 }
 
-module "efhd_eu" {
-  source     = "./modules/cloudflare/zone_with_records"
-  zone       = "efhd.eu"
-  account_id = data.cloudflare_accounts.mine.accounts[0].id
-  records    = []
-}
-
 module "efhd_dev" {
   source     = "./modules/cloudflare/zone_with_records"
   zone       = "efhd.dev"
