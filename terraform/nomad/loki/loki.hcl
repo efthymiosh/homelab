@@ -40,7 +40,7 @@ job "loki" {
       driver = "docker"
       user = "root"
       config {
-        image = "grafana/loki:2.9.7"
+        image = "grafana/loki:3.4.2"
         args = [ "-config.file", "${NOMAD_SECRETS_DIR}/config.yaml" ]
         ports = ["http"]
       }
