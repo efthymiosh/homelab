@@ -39,6 +39,9 @@ module "efhd_dev" {
     { name = "sand.int.efhd.dev", type = "A", value = "192.168.1.36", ttl = 120 },
 
 
+    # bsky verification
+    { name = "_atproto.efhd.dev", type = "TXT", value = "did=did:plc:khrn7ysq6qj4zodp7ouq6o44", ttl = 86400 },
+
     # migadu.com verification, e-mail servers
     { name = "efhd.dev", type = "TXT", value = "hosted-email-verify=fumx1lv8", ttl = 86400 },
     { name = "efhd.dev", type = "MX", value = "aspmx1.migadu.com", ttl = 3600, priority = 10 },
