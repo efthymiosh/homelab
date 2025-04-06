@@ -34,7 +34,7 @@ job "grafana" {
     task "grafana" {
       driver = "docker"
       config {
-        image = "grafana/grafana:11.5.2"
+        image = "grafana/grafana:11.6.0"
         ports = ["http"]
       }
       resources {
