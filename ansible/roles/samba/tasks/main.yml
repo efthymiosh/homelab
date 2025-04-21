@@ -1,0 +1,26 @@
+- name: Ensure samba and wsdd2 are installed
+  package:
+    name:
+    - "samba"
+    - "wsdd2" # service discovery for newer windows versions
+    state: "present"
+
+- name: Set the {{ item }} service enabled={{ samba_enabled }}
+  systemd:
+    name: "{{ item }}"
+    enabled: "{{ samba_enabled == 'true' }}"
+    daemon_reload: true
+  loop:
+  - "smbd.service"
+  - "wsdd2.service"
+  notify: restart samba
+
+- name: Configure samba
+  template:
+    src: "smb.conf.j2"
+    dest: "/etc/samba/smb.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: "{{ samba_enabled == 'true' }}"
+  notify: restart samba

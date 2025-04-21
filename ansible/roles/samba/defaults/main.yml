@@ -1,0 +1,2 @@
+samba_enabled: false
+samba_share: "/mnt/"

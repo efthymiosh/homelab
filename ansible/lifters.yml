@@ -18,3 +18,5 @@
     tags: nomad
   - role: vault/agent
     tags: vault-agent
+  - role: samba
+    tags: samba

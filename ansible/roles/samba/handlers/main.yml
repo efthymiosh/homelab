@@ -1,0 +1,9 @@
+- name: restart samba and wsdd2
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    daemon_reload: yes
+  loop:
+  - "smbd.service"
+  - "wsdd2.service"
+
