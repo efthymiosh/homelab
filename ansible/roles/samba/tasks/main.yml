@@ -13,7 +13,7 @@
   loop:
   - "smbd.service"
   - "wsdd2.service"
-  notify: restart samba
+  notify: restart samba and wsdd2
 
 - name: Configure samba
   template:
@@ -23,4 +23,4 @@
     group: root
     mode: 0644
   when: "{{ samba_enabled == 'true' }}"
-  notify: restart samba
+  notify: restart samba and wsdd2
