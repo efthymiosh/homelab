@@ -1,3 +1,7 @@
+variable "tag" {
+  default = "v3.5"
+}
+
 job "woodpecker" {
   datacenters = ["homelab"]
   type = "service"
@@ -15,6 +19,8 @@ job "woodpecker" {
 
   group "woodpecker" {
     count = 1
+
+    vault {}
 
     restart {
       attempts = 3
@@ -37,7 +43,7 @@ job "woodpecker" {
 
       driver = "docker"
       config {
-        image = "woodpeckerci/woodpecker-server:latest"
+        image = "woodpeckerci/woodpecker-server:${var.tag}"
         force_pull = true
         ports = [ "http", "internal" ]
 
@@ -63,6 +69,10 @@ job "woodpecker" {
         WOODPECKER_GITHUB_SECRET={{ key `/woodpecker/githubapp/client_secret` }}
         WOODPECKER_REPO_OWNERS=efthymiosh
         WOODPECKER_ADMIN=efthymiosh
+        WOODPECKER_DATABASE_DRIVER=postgres
+        {{ with secret `kv/data/nomad/shared/postgresql` }}
+        WOODPECKER_DATABASE_DATASOURCE="postgresql://{{ .Data.data.user }}:{{ .Data.data.password }}@postgres.service.consul:5432/woodpecker?sslmode=require"
+        {{ end }}
         EOF
         destination = "${NOMAD_SECRETS_DIR}/.env"
       }
@@ -95,7 +105,7 @@ job "woodpecker" {
     task "woodpecker-agent" {
       driver = "docker"
       config {
-        image = "woodpeckerci/woodpecker-agent:latest"
+        image = "woodpeckerci/woodpecker-agent:${var.tag}"
         force_pull = true
         mount {
           type = "bind"
