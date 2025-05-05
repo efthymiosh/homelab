@@ -5,6 +5,13 @@ job "redis-immich" {
   group "redis-immich" {
     count = 1
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "redis" {
         static       = 6379

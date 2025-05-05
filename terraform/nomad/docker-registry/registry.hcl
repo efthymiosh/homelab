@@ -15,6 +15,13 @@ job "docker-registry" {
   group "docker-registry" {
     count = 1
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "http"  {
         to = 5000

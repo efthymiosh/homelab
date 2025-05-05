@@ -25,6 +25,13 @@ job "grafana_postgres" {
 
   group "server" {
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "db" {
         static = 5432

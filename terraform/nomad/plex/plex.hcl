@@ -17,6 +17,13 @@ job "plex" {
   group "plex" {
     count = 1
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "http"  {
         static = 32400

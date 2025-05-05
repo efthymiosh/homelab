@@ -17,6 +17,13 @@ job "sabnzbd" {
   group "sabnzbd" {
     count = 1
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "http"  {
         to = 8080

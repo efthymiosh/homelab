@@ -5,6 +5,13 @@ job "cloudflared" {
   group "cloudflared" {
     count = 1
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     task "cloudflared" {
       driver = "docker"
       config {

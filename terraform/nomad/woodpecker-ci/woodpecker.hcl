@@ -16,6 +16,13 @@ job "woodpecker" {
   group "woodpecker" {
     count = 1
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "http"  {
         to = 8000
@@ -77,6 +84,13 @@ job "woodpecker" {
   }
   group "woodpecker-agent" {
     count = 1
+
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
 
     task "woodpecker-agent" {
       driver = "docker"

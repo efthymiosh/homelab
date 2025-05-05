@@ -17,6 +17,13 @@ job "traefik" {
 
   group "traefik" {
 
+    restart {
+      attempts = 3
+      interval = "2m"
+      delay = "25s"
+      mode = "delay"
+    }
+
     network {
       port "http"  {
         static = 80
