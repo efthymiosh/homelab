@@ -19,6 +19,13 @@ nomad_config:
     bootstrap_expect: 3
     encrypt: "{{ nomad_encrypt }}"
     raft_multiplier: 5
+  ui:
+    enabled: true
+    show_cli_hints: false
+    consul:
+      ui_url: "https://consul.efhd.dev/ui"
+    vault:
+      ui_url: "https://vault.efhd.dev/ui"
   client:
     enabled: true
     node_class: "snunmu"
