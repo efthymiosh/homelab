@@ -1,0 +1,26 @@
+- hosts: llm
+  become: true
+  vars:
+    nomad_version: "1.10.4"
+    consul_version: "1.21.4"
+    vault_version: "1.20.2"
+  vars_files:
+  - "vars/consul_acl_tokens.yml"
+  - "vars/consul_client.yml"
+  - "vars/nomad_client.yml"
+  - "vars/vault_agent_client.yml"
+  roles:
+  - role: docker
+    tags: docker
+  - role: consul
+    tags: consul
+  - role: nomad
+    tags: nomad
+  - role: vault/agent
+    tags: vault-agent
+  tasks:
+  - name: Ensure llm packages are installed
+    package:
+      name:
+      - ollama-rocm
+      - amdgpu_top

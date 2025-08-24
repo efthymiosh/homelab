@@ -10,3 +10,6 @@ resource "nomad_job" "joplin" {
   jobspec = file("./nomad/joplin/joplin.hcl")
 }
 
+resource "nomad_job" "ollama" {
+  jobspec = file("./nomad/ollama/ollama.hcl")
+}

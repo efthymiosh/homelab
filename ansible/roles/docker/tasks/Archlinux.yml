@@ -1,0 +1,14 @@
+- name: install the docker packages
+  package:
+    name:
+    - "docker"
+    state: present
+    update_cache: true
+  notify:
+  - docker enable service
+  - docker containerd enable service
+
+- name: ensure docker conf dir exists
+  file:
+    path: /etc/docker
+    state: directory

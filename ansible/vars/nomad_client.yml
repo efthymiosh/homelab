@@ -40,6 +40,7 @@ nomad_config:
         volumes:
           enabled: true
         allow_privileged: true
+        allow_caps: ["sys_ptrace"]
         extra_labels:
         - "job_name"
         - "task_group_name"
