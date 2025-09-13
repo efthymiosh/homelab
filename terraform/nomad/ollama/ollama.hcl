@@ -40,6 +40,7 @@ job "ollama" {
       user = "root"
       config {
         image = "ollama/ollama:rocm"
+        force_pull =  true
         ports = ["http"]
         group_add = [ "video" ]
         privileged = true
@@ -76,6 +77,7 @@ job "ollama" {
       driver = "docker"
       config {
         image = "ghcr.io/open-webui/open-webui:main"
+        force_pull =  true
         ports = ["web"]
         group_add = [ "video" ]
         privileged = true
