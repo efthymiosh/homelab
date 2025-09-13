@@ -19,7 +19,7 @@ job "postgres_backup" {
     task "postgres_backup" {
       driver = "docker"
       config {
-        image = "docker-registry.efthymios.net/backups:latest"
+        image = "docker-registry.efhd.dev/backups:latest"
         entrypoint = ["bash", "${NOMAD_ALLOC_DIR}/backup.sh"]
       }
       vault {}

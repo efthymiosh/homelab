@@ -17,7 +17,7 @@ job "certbot_${domain}" {
     task "certbot" {
       driver = "docker"
       config {
-        image = "docker-registry.efthymios.net/certbot-dns-cf-consul:latest"
+        image = "docker-registry.efhd.dev/certbot-dns-cf-consul:latest"
       }
       vault {}
       env {
