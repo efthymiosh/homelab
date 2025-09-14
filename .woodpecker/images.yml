@@ -11,7 +11,7 @@ steps:
   image: docker:latest
   commands:
   - cd docker_images/$IMAGE
-  - docker build -t docker-registry.efthymios.net/$IMAGE:latest .
-  - docker push docker-registry.efthymios.net/$IMAGE:latest
+  - docker build -t docker-registry.efhd.dev/$IMAGE:latest .
+  - docker push docker-registry.efhd.dev/$IMAGE:latest
   volumes:
   - /var/run/docker.sock:/var/run/docker.sock

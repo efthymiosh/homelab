@@ -1,5 +1,5 @@
 variable "tag" {
-  default = "v3.5"
+  default = "v3.9"
 }
 
 job "woodpecker" {
