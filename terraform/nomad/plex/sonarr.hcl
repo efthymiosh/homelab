@@ -35,6 +35,7 @@ job "sonarr" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/sonarr:latest"
+        privileged = true
         force_pull = true
         ports = ["http"]
         mount {

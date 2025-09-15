@@ -35,6 +35,7 @@ job "jackett" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/jackett:latest"
+        privileged = true
         force_pull = true
         ports = ["http"]
         mount {

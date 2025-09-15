@@ -35,6 +35,7 @@ job "sabnzbd" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/sabnzbd:latest"
+        privileged = true
         ports = ["http"]
         mount {
           type = "bind"

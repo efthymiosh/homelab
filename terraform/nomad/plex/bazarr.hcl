@@ -35,6 +35,7 @@ job "bazarr" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/bazarr:latest"
+        privileged = true
         force_pull = true
         ports = ["http"]
         mount {

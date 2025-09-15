@@ -35,6 +35,7 @@ job "transmission" {
       kill_timeout = "30s"
       config {
         image = "lscr.io/linuxserver/transmission:latest"
+        privileged = true
         network_mode = "host"
         mount {
           type = "bind"
