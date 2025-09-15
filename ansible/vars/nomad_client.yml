@@ -19,6 +19,8 @@ nomad_config:
   client:
     enabled: true
     node_class: "{{ nomad_node_class }}"
+    artifact:
+      disable_filesystem_isolation: "{{ ansible_host == 'jarvis.int.efhd.dev' }}"
     host_volume:
       docker-sock-ro:
         path: "/var/run/docker.sock"
@@ -40,7 +42,7 @@ nomad_config:
         volumes:
           enabled: true
         allow_privileged: true
-        allow_caps: ["sys_ptrace"]
+        allow_caps: ["sys_ptrace", "checkpoint_restore"]
         extra_labels:
         - "job_name"
         - "task_group_name"
