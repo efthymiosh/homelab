@@ -9,6 +9,8 @@ COPY --from=uvbuild uv /bin/uv
 
 ENV PATH="$PATH:/root/.local/bin"
 
+USER root
+
 RUN --mount=type=bind,dst=/tmp/context \
   uv venv && \
   uv python install --no-cache ${PYTHON_VERSION} && \
