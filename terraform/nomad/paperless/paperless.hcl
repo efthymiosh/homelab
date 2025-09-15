@@ -29,6 +29,7 @@ job "paperless" {
         image = "ghcr.io/paperless-ngx/paperless-ngx:latest"
         force_pull = true
         ports = ["http"]
+        privileged = true
         mount {
           type = "volume"
           target = "/usr/local/psql/data"
