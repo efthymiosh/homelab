@@ -30,6 +30,7 @@ job "immich" {
       driver = "docker"
       config {
         image = "ghcr.io/imagegenius/immich:latest"
+        privileged = true
         mount {
           type     = "bind"
           target   = "/config"

@@ -32,6 +32,18 @@ job "marimo" {
       }
     }
 
+    task "ensure_dir_exists" {
+      lifecycle {
+        hook = "prestart"
+        sidecar = false
+      }
+      driver = "raw_exec"
+      config {
+        command = "sh"
+        args = ["-c", "mkdir -p /usr/share/marimo"]
+      }
+    }
+
     task "marimo" {
       driver = "docker"
       user = "root"

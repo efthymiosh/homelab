@@ -27,17 +27,19 @@ job "postgres" {
 
       user = "root"
       config {
-        image = "library/postgres:16"
+        image = "library/postgres:16.8"
         ports = ["db"]
         args = [
           "-c", "ssl_key_file=${NOMAD_SECRETS_DIR}/server.key",
           "-c", "ssl_cert_file=${NOMAD_SECRETS_DIR}/server.pem",
           "-c", "ssl=on",
         ]
+        privileged = true
         mount {
           type = "volume"
           target = "/usr/local/psql/data"
           source = "postgresql_data"
+          readonly = false
         }
       }
 
