@@ -1,2 +1,2 @@
 marimo[recommended]
-ibis-framework[postgres,polars,pandas,duckdb]
+ibis-framework[postgres,polars,duckdb]
