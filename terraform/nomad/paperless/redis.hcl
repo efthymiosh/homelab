@@ -2,6 +2,12 @@ job "redis-paperless" {
   datacenters = ["homelab"]
   type = "service"
 
+  constraint {
+    attribute = "${node.class}"
+    operator  = "="
+    value     = "snunmu"
+  }
+
   group "redis-paperless" {
     count = 1
 

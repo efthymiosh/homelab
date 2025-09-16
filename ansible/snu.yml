@@ -1,7 +1,7 @@
 - hosts: snus
   become: true
   vars:
-    nomad_version: "1.10.4"
+    nomad_version: "1.10.5"
     consul_version: "1.21.4"
     vault_version: "1.20.2"
   vars_files:
