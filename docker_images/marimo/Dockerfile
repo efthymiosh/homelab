@@ -16,4 +16,5 @@ RUN --mount=type=bind,dst=/tmp/context \
   uv python install --no-cache ${PYTHON_VERSION} && \
   uv pip install --no-cache -r /tmp/context/requirements.txt
 
+WORKDIR /root/
 ENTRYPOINT ["uv", "run", "marimo", "edit", "--no-token", "--host", "0.0.0.0", "--port", "8080"]
