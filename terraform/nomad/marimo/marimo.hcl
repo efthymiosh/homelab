@@ -3,9 +3,8 @@ job "marimo" {
   type = "service"
 
   constraint {
-    attribute = "${node.class}"
-    operator  = "="
-    value     = "jarvis"
+    attribute = "${attr.unique.hostname}"
+    value     = "aero1"
   }
 
   update {
