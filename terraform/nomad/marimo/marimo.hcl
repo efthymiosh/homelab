@@ -4,8 +4,8 @@ job "marimo" {
 
   constraint {
     attribute = "${node.class}"
-    operator  = "set_contains_any"
-    value     = "jarvis,aero"
+    operator  = "="
+    value     = "jarvis"
   }
 
   update {
