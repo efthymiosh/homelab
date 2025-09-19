@@ -64,7 +64,7 @@ job "marimo" {
 
       resources {
         cpu = 2048
-        memory = 1024
+        memory = 2048
       }
       service {
         name = "marimo"

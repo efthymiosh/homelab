@@ -4,7 +4,7 @@ job "paperless-ai" {
 
   constraint {
     attribute = "${attr.unique.hostname}"
-    value     = "aero1"
+    value     = "jarvis"
   }
   update {
     max_parallel = 1
