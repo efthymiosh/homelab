@@ -39,7 +39,7 @@ job "immich_postgres" {
 
       user = "root"
       config {
-        image = "tensorchord/pgvecto-rs:pg14-v0.2.1"
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0"
         ports = ["db"]
         mount {
           type = "volume"
@@ -56,8 +56,8 @@ job "immich_postgres" {
       }
 
       resources {
-        cpu    = 500
-        memory = 512
+        cpu    = 1000
+        memory = 1024
       }
 
       service {

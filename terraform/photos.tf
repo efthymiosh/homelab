@@ -19,3 +19,12 @@ resource "nomad_job" "immich-postgres" {
     }
   }
 }
+
+resource "nomad_job" "immich_restore" {
+  jobspec = file("./nomad/immich/restore.hcl")
+  hcl2 {
+    vars = {
+      restore_script = file("./nomad/immich/restore.sh")
+    }
+  }
+}
