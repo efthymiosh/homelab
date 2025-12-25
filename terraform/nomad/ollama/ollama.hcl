@@ -55,7 +55,7 @@ job "ollama" {
         }
       }
       env {
-        HSA_OVERRIDE_GFX_VERSION = "11.0.0"
+        HSA_OVERRIDE_GFX_VERSION = "11.5.1"
         OLLAMA_KEEP_ALIVE = "-1"
       }
 
