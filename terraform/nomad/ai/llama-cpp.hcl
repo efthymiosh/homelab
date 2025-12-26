@@ -1,6 +1,6 @@
 locals {
   # Modify this to one of the keys on the map
-  active_model = "Devstral-2"
+  active_model = "Nemotron-3-Nano"
 
   models = {
     "Devstral-Small-2" = {
@@ -15,6 +15,14 @@ locals {
       extra_args = [
         "--ctx-size", "16384",
         "--temp", "0.15",
+      ]
+    }
+    "Nemotron-3-Nano" = {
+      model = "unsloth/Nemotron-3-Nano-30B-A3B-GGUF:UD-Q4_K_XL"
+      extra_args = [
+        "--ctx-size", "32768",
+        "--temp", "0.6",
+        "--top-p", "0.95",
       ]
     }
   }
