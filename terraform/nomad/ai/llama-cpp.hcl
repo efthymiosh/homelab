@@ -1,12 +1,25 @@
 locals {
-  # suggested setup for each model listed here
+  # Modify this to one of the keys on the map
+  active_model = "Devstral-2"
+
   models = {
-    "unsloth/Devstral-Small-2" = {
+    "Devstral-Small-2" = {
       model = "unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF:UD-Q4_K_XL",
-
+      extra_args = [
+        "--ctx-size", "16384",
+        "--temp", "0.15",
+      ]
     }
-
+    "Devstral-2" = {
+      model = "unsloth/Devstral-2-123B-Instruct-2512-GGUF:UD-Q2_K_XL",
+      extra_args = [
+        "--ctx-size", "16384",
+        "--temp", "0.15",
+      ]
+    }
   }
+  active_model_setup = local.models[local.active_model]
+
 }
 job "llama-cpp" {
   datacenters = ["homelab"]
@@ -48,21 +61,20 @@ job "llama-cpp" {
 
       config {
         command = "llama-server"
-        args = [
-          "-hf", "unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF:UD-Q4_K_XL",
+        args = concat([
+          "-hf", local.active_model_setup.model,
 
           # Model alias (shows in WebUI)
-          "--alias", "unsloth/Devstral-Small-2",
+          "--alias", local.active_model,
 
-          "-ngl", "99",               # All layers to GPU (-1 = auto)
-          "--parallel", "4",          # 4 parallel requests
-          "--kv-unified",             # Unified KV cache (better for local use)
+          "-ngl", "99",
+          "--parallel", "4",
+          "--kv-unified",
           "--threads", "-1",
 
-          "--port", "8033",
+          "--host", "${NOMAD_IP_http}",
+          "--port", "${NOMAD_PORT_http}",
 
-          "--ctx-size", "16384",
-          "--temp", "0.15",
           # Enable jinja for better chat template support
           "--jinja",
 
@@ -72,7 +84,7 @@ job "llama-cpp" {
           # Enable endpoints
           "--metrics",                # Prometheus metrics
           "--props",                  # Property changes via POST
-        ]
+        ], local.active_model_setup.extra_args)
       }
 
       resources {
