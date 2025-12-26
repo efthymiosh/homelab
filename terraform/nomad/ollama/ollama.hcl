@@ -40,13 +40,27 @@ job "ollama" {
       user = "root"
       config {
         image = "ollama/ollama:rocm"
-        force_pull =  true
+        force_pull = true
         ports = ["http"]
-        group_add = [ "video" ]
+        group_add = ["video"]
         privileged = true
         ipc_mode = "host"
-        cap_add = [ "sys_ptrace" ]
-        security_opt = [ "seccomp=unconfined" ] 
+        cap_add = ["sys_ptrace"]
+        security_opt = ["seccomp=unconfined"]
+        shm_size = 16384  # 16GB shared memory
+
+        # Add devices explicitly
+        devices = [
+          {
+            host_path = "/dev/kfd"
+            container_path = "/dev/kfd"
+          },
+          {
+            host_path = "/dev/dri"
+            container_path = "/dev/dri"
+          }
+        ]
+
         mount {
           type = "bind"
           source = "/usr/share/ollama"
@@ -54,15 +68,24 @@ job "ollama" {
           readonly = false
         }
       }
+
       env {
         HSA_OVERRIDE_GFX_VERSION = "11.5.1"
         OLLAMA_KEEP_ALIVE = "-1"
+        # Enable dynamic VRAM allocation
+        GPU_MAX_ALLOC_PERCENT = "100"
+        HSA_ENABLE_SDMA = "0"
+        # Allow ROCm to use host memory
+        HIP_VISIBLE_DEVICES = "0"
+        AMD_DIRECT_RENDERING = "1"
       }
 
       resources {
         cpu = 2048
-        memory = 4096
+        memory = 20480
+        memory_max = 122880
       }
+
       service {
         name = "ollama-api"
         tags = ["http", "routed"]
@@ -74,17 +97,13 @@ job "ollama" {
         }
       }
     }
+
     task "web_ui" {
       driver = "docker"
       config {
         image = "ghcr.io/open-webui/open-webui:main"
-        force_pull =  true
+        force_pull = true
         ports = ["web"]
-        group_add = [ "video" ]
-        privileged = true
-        ipc_mode = "host"
-        cap_add = [ "sys_ptrace" ]
-        security_opt = [ "seccomp=unconfined" ] 
         mount {
           type = "volume"
           source = "open-webui"
@@ -92,6 +111,7 @@ job "ollama" {
           readonly = false
         }
       }
+
       env {
         OLLAMA_BASE_URL = "http://${NOMAD_HOST_ADDR_http}"
       }
@@ -100,6 +120,7 @@ job "ollama" {
         cpu = 2048
         memory = 4096
       }
+
       service {
         name = "ollama"
         tags = ["http", "routed"]

@@ -24,3 +24,5 @@
       name:
       - ollama-rocm
       - amdgpu_top
+
+# TODO: jarvis is set with additional kernel options: ttm.pages_limit=27648000 ttm.page_pool_size=27648000

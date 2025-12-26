@@ -21,3 +21,7 @@ resource "nomad_job" "ollama" {
 resource "nomad_job" "marimo" {
   jobspec = file("./nomad/marimo/marimo.hcl")
 }
+
+resource "nomad_job" "llama-cpp" {
+  jobspec = file("./nomad/ai/llama-cpp.hcl")
+}
