@@ -1,8 +1,6 @@
 locals {
   # Modify this to one of the keys on the map
-# active_model = "gpt-oss-120b"
-  active_model = "Nemotron-3-Nano"
-
+  active_model = "gpt-oss-120b"
 
   models = {
     "Devstral-Small-2" = {
