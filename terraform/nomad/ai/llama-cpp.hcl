@@ -37,6 +37,18 @@ locals {
         "--top-k", "0.0",
       ]
     }
+    "qwen3-vl-32b" = {
+      model  = "unsloth/Qwen3-VL-32B-Instruct-GGUF:BF16"
+      extra_args = [
+        "--ctx-size", "8192",
+        "--n-gpu-layers", "99",
+        "--temp", "0.7",
+        "--min-p", "0.0",
+        "--top-p", "0.8",
+        "--top-k", "20",
+        "--presence-penalty", "1.5",
+      ]
+    }
   }
   active_model_setup = local.models[local.active_model]
 
@@ -55,8 +67,8 @@ job "llama-cpp" {
     max_parallel = 1
     health_check = "checks"
     min_healthy_time = "10s"
-    healthy_deadline = "3m"
-    progress_deadline = "5m"
+    healthy_deadline = "30m"
+    progress_deadline = "35m"
   }
 
   group "llama-server" {
