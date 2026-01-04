@@ -28,8 +28,11 @@ locals {
     "gpt-oss-120b" = {
       model = "unsloth/gpt-oss-120b-GGUF:F16"
       extra_args = [
-        "--ctx-size", "16384",
-        "--chat-template-kwargs", "{\"reasoning_effort\": \"low\"}",
+        "--ctx-size", "262114",
+        "--chat-template-kwargs", <<EOF
+        { "reasoning_effort": "low", "model_identity": "You are Jarvis. You are the smart home's AI Butler.", "developer_instructions": ". You are communicating via voice, so keep it flowing. This is a verbal conversation. Keep your answers short. If you feel the user should know more, ask. You are helpful, kind, and thoughtful in your responses." }
+        EOF
+        ,
         "--n-gpu-layers", "99",
         "--temp", "1.0",
         "--min-p", "0.0",
@@ -116,6 +119,7 @@ job "llama-cpp" {
           # Enable endpoints
           "--metrics",                # Prometheus metrics
           "--props",                  # Property changes via POST
+
         ], local.active_model_setup.extra_args)
       }
 

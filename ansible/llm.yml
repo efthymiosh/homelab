@@ -28,6 +28,7 @@
   - name: Ensure llama.cpp-vulkan is installed
     shell:
       yay -S --noconfirm --needed \
-      llama.cpp-vulkan
+      llama.cpp-vulkan \
+      lemonade-server
 
 # TODO: jarvis is set with additional kernel options: ttm.pages_limit=27648000 ttm.page_pool_size=27648000
