@@ -125,7 +125,7 @@ job "llama-cpp" {
 
       resources {
         cpu = 4096
-        memory = 20480
+        memory = 85536
         memory_max = 122880
       }
 
