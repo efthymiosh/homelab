@@ -10,10 +10,6 @@ resource "nomad_job" "paperless_ai" {
   jobspec = file("./nomad/paperless/paperless_ai.hcl")
 }
 
-resource "nomad_job" "joplin" {
-  jobspec = file("./nomad/joplin/joplin.hcl")
-}
-
 resource "nomad_job" "marimo" {
   jobspec = file("./nomad/marimo/marimo.hcl")
 }
