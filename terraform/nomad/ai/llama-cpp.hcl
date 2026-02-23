@@ -30,7 +30,7 @@ locals {
       extra_args = [
         "--ctx-size", "262114",
         "--chat-template-kwargs", <<EOF
-        { "reasoning_effort": "low", "model_identity": "You are Jarvis. You are the smart home's AI Butler.", "developer_instructions": ". You are communicating via voice, so keep it flowing. This is a verbal conversation. Keep your answers short. If you feel the user should know more, ask. You are helpful, kind, and thoughtful in your responses." }
+        { "reasoning_effort": "low"}
         EOF
         ,
         "--n-gpu-layers", "99",
