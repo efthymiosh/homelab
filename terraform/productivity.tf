@@ -17,3 +17,7 @@ resource "nomad_job" "marimo" {
 resource "nomad_job" "llama-cpp" {
   jobspec = file("./nomad/ai/llama-cpp.hcl")
 }
+
+resource "nomad_job" "voice-agent" {
+  jobspec = file("./nomad/ai/voice-agent.hcl")
+}
