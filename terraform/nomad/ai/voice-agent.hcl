@@ -38,7 +38,7 @@ job "voice-agent" {
         image      = "docker-registry.efhd.dev/homeagent:latest"
         force_pull = false
         ports      = ["http"]
-        
+        privileged = true
 
         devices = [
           {
