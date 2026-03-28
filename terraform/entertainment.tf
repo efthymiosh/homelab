@@ -10,10 +10,6 @@ resource "nomad_job" "radarr" {
   jobspec = file("nomad/plex/radarr.hcl")
 }
 
-resource "nomad_job" "lidarr" {
-  jobspec = file("nomad/plex/lidarr.hcl")
-}
-
 resource "nomad_job" "jackett" {
   jobspec = file("nomad/plex/jackett.hcl")
 }
@@ -28,4 +24,12 @@ resource "nomad_job" "transmission" {
 
 resource "nomad_job" "sabnzbd" {
   jobspec = file("nomad/sabnzbd/sabnzbd.hcl")
+}
+
+resource "nomad_job" "lidarr" {
+  jobspec = file("nomad/navidrome/lidarr.hcl")
+}
+
+resource "nomad_job" "navidrome" {
+  jobspec = file("nomad/navidrome/navidrome.hcl")
 }
