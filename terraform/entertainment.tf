@@ -10,6 +10,10 @@ resource "nomad_job" "radarr" {
   jobspec = file("nomad/plex/radarr.hcl")
 }
 
+resource "nomad_job" "lidarr" {
+  jobspec = file("nomad/plex/lidarr.hcl")
+}
+
 resource "nomad_job" "jackett" {
   jobspec = file("nomad/plex/jackett.hcl")
 }
