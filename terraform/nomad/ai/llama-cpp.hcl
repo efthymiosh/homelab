@@ -58,7 +58,7 @@ locals {
         "--temp", "1.0",
         "--top-p", "0.95",
         "--top-k", "64",
-        "--reasoning", "on",
+        "--reasoning", "off",
       ]
     }
     "gemma4-31b" = {
@@ -67,7 +67,7 @@ locals {
         "--temp", "1.0",
         "--top-p", "0.95",
         "--top-k", "64",
-        "--reasoning", "on",
+        "--reasoning", "off",
       ]
     }
   }
