@@ -1,6 +1,6 @@
 locals {
   # Modify this to one of the keys on the map
-  active_model = "gpt-oss-120b"
+  active_model = "gemma4-26b"
 
   models = {
     "Devstral-Small-2" = {
@@ -25,7 +25,7 @@ locals {
         "--top-p", "0.95",
       ]
     }
-    "gpt-oss-120b" = {
+    "gpt-oss-120b" = { # MoE 5.5B
       model = "unsloth/gpt-oss-120b-GGUF:F16"
       extra_args = [
         "--ctx-size", "262114",
@@ -52,10 +52,28 @@ locals {
         "--presence-penalty", "1.5",
       ]
     }
+    "gemma4-26b" = { # MoE 4B
+      model = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL"
+      extra_args = [
+        "--temp", "1.0",
+        "--top-p", "0.95",
+        "--top-k", "64",
+        "--reasoning", "on",
+      ]
+    }
+    "gemma4-31b" = {
+      model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
+      extra_args = [
+        "--temp", "1.0",
+        "--top-p", "0.95",
+        "--top-k", "64",
+        "--reasoning", "on",
+      ]
+    }
   }
   active_model_setup = local.models[local.active_model]
-
 }
+
 job "llama-cpp" {
   datacenters = ["homelab"]
   type = "service"
