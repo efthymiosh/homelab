@@ -1,7 +1,7 @@
 locals {
   # Deployed models. Must match the `models` map
   active_model = "gemma4-26b"
-  additional_active_models = ["gemma4-31b"]
+  additional_active_models = ["gemma4-31b", "gemma4-e4b"]
 
   models = {
     "Devstral-Small-2" = {
@@ -56,7 +56,19 @@ locals {
     "gemma4-26b" = { # MoE 4B
       model = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL"
       extra_args = [
-        "--ctx-size", "262114",
+        "--ctx-size", "262144",
+        "--temp", "0.3",
+        "--top-p", "0.95",
+        "--top-k", "64",
+        "--reasoning", "off",
+      ]
+      memory = 16000
+      memory_max = 22000
+    }
+    "gemma4-31b" = {
+      model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
+      extra_args = [
+        "--ctx-size", "262144",
         "--temp", "0.3",
         "--top-p", "0.95",
         "--top-k", "64",
@@ -65,17 +77,17 @@ locals {
       memory = 22000
       memory_max = 34000
     }
-    "gemma4-31b" = {
-      model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
+    "gemma4-e4b" = {
+      model = "unsloth/gemma-4-E4B-it-GGUF:Q8_0"
       extra_args = [
-        "--ctx-size", "262114",
-        "--temp", "0.3",
+        "--ctx-size", "131072",
+        "--temp", "1.0",
         "--top-p", "0.95",
         "--top-k", "64",
         "--reasoning", "off",
       ]
-      memory = 22000
-      memory_max = 34000
+      memory = 9000
+      memory_max = 14000
     }
   }
   base_llama_server_args = [
