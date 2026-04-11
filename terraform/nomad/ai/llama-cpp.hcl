@@ -63,7 +63,7 @@ locals {
         "--reasoning", "off",
       ]
       memory = 16000
-      memory_max = 22000
+      memory_max = 32000
     }
     "gemma4-31b" = {
       model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
@@ -75,7 +75,7 @@ locals {
         "--reasoning", "off",
       ]
       memory = 22000
-      memory_max = 34000
+      memory_max = 44000
     }
     "gemma4-e4b" = {
       model = "unsloth/gemma-4-E4B-it-GGUF:UD-Q4_K_XL"
@@ -105,7 +105,7 @@ locals {
   base_llama_server_args = [
 
     "-ngl", "99",
-    "--parallel", "4",
+    "--parallel", "3",
     "--kv-unified",
     "--threads", "-1",
 
