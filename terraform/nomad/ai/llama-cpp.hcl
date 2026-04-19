@@ -56,7 +56,9 @@ locals {
     "gemma4-26b" = { # MoE 4B
       model = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL"
       extra_args = [
-        "--ctx-size", "262144",
+        "--ctx-size", "131072",
+        "--no-mmap", # bug ?
+        "-fa", "off", # bug ?
         "--temp", "0.3",
         "--top-p", "0.95",
         "--top-k", "64",
@@ -68,7 +70,9 @@ locals {
     "gemma4-31b" = {
       model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
       extra_args = [
-        "--ctx-size", "262144",
+        "--ctx-size", "131072",
+        "--no-mmap", # bug ?
+        "-fa", "off", # bug ?
         "--temp", "0.3",
         "--top-p", "0.95",
         "--top-k", "64",
@@ -105,7 +109,7 @@ locals {
   base_llama_server_args = [
 
     "-ngl", "99",
-    "--parallel", "3",
+    "--parallel", "2",
     "--kv-unified",
     "--threads", "-1",
 
