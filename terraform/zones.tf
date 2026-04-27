@@ -15,9 +15,9 @@ module "efthymios_net" {
   account_id = data.cloudflare_accounts.mine.accounts[0].id
 
   records = [
-    { name = "*.efthymios.net", type = "A", value = "192.168.1.240", ttl = 86400 },
-    { name = "*.efthymios.net", type = "A", value = "192.168.1.241", ttl = 86400 },
-    { name = "*.efthymios.net", type = "A", value = "192.168.1.242", ttl = 86400 },
+    { name = "*.efthymios.net", type = "A", value = "192.168.1.240", ttl = 120 },
+    { name = "*.efthymios.net", type = "A", value = "192.168.1.241", ttl = 120 },
+    { name = "*.efthymios.net", type = "A", value = "192.168.1.242", ttl = 120 },
   ]
 }
 
@@ -27,24 +27,24 @@ module "efhd_dev" {
   account_id = data.cloudflare_accounts.mine.accounts[0].id
 
   records = [
-    { name = "*.efhd.dev", type = "A", value = "192.168.1.240", ttl = 86400 },
-    { name = "*.efhd.dev", type = "A", value = "192.168.1.241", ttl = 86400 },
-    { name = "*.efhd.dev", type = "A", value = "192.168.1.242", ttl = 86400 },
+    { name = "*.efhd.dev", type = "A", value = "192.168.1.240", ttl = 120 },
+    { name = "*.efhd.dev", type = "A", value = "192.168.1.241", ttl = 120 },
+    { name = "*.efhd.dev", type = "A", value = "192.168.1.242", ttl = 120 },
 
-    { name = "snu1.int.efhd.dev", type = "A", value = "192.168.1.240", ttl = 86400 },
-    { name = "snu2.int.efhd.dev", type = "A", value = "192.168.1.241", ttl = 86400 },
-    { name = "snu3.int.efhd.dev", type = "A", value = "192.168.1.242", ttl = 86400 },
-    { name = "mule.int.efhd.dev", type = "A", value = "192.168.1.82", ttl = 86400 },
-    { name = "aero1.int.efhd.dev", type = "A", value = "192.168.1.81", ttl = 86400 },
+    { name = "snu1.int.efhd.dev", type = "A", value = "192.168.1.240", ttl = 120 },
+    { name = "snu2.int.efhd.dev", type = "A", value = "192.168.1.241", ttl = 120 },
+    { name = "snu3.int.efhd.dev", type = "A", value = "192.168.1.242", ttl = 120 },
+    { name = "mule.int.efhd.dev", type = "A", value = "192.168.1.82", ttl = 120 },
+    { name = "aero1.int.efhd.dev", type = "A", value = "192.168.1.81", ttl = 120 },
     { name = "sand.int.efhd.dev", type = "A", value = "192.168.1.36", ttl = 120 },
     { name = "jarvis.int.efhd.dev", type = "A", value = "192.168.1.75", ttl = 120 },
 
 
     # bsky verification
-    { name = "_atproto.efhd.dev", type = "TXT", value = "did=did:plc:khrn7ysq6qj4zodp7ouq6o44", ttl = 86400 },
+    { name = "_atproto.efhd.dev", type = "TXT", value = "did=did:plc:khrn7ysq6qj4zodp7ouq6o44", ttl = 120 },
 
     # migadu.com verification, e-mail servers
-    { name = "efhd.dev", type = "TXT", value = "hosted-email-verify=fumx1lv8", ttl = 86400 },
+    { name = "efhd.dev", type = "TXT", value = "hosted-email-verify=fumx1lv8", ttl = 120 },
     { name = "efhd.dev", type = "MX", value = "aspmx1.migadu.com", ttl = 3600, priority = 10 },
     { name = "efhd.dev", type = "MX", value = "aspmx2.migadu.com", ttl = 3600, priority = 20 },
     # migadu.com DKIM+ARC, SPF, DMARC
