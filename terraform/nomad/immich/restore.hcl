@@ -24,6 +24,8 @@ job "immich_restore" {
       mode = "fail"
     }
 
+    vault {}
+
     task "immich_restore" {
       driver = "docker"
       config {
