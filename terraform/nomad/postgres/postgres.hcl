@@ -4,7 +4,7 @@ job "postgres" {
 
   constraint {
     attribute = "${attr.unique.hostname}"
-    value     = "aero1"
+    value     = "jarvis"
   }
 
   group "server" {

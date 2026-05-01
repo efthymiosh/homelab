@@ -6,7 +6,7 @@ job "immich_restore" {
   type = "batch"
 
   parameterized {
-    payload = "required"
+    payload = "forbidden"
     meta_required = ["date"]
   }
 
@@ -28,7 +28,7 @@ job "immich_restore" {
       driver = "docker"
       config {
         image = "docker-registry.efhd.dev/backups:latest"
-        entrypoint = ["bash", "${NOMAD_ALLOC_DIR}/restore.sh"]
+        entrypoint = ["bash", "${NOMAD_ALLOC_DIR}/restore.sh", "${NOMAD_META_date}"]
       }
       template {
         env = true
