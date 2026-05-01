@@ -9,7 +9,7 @@ job "loki" {
   constraint {
     attribute = "${node.class}"
     operator  = "="
-    value     = "aero"
+    value     = "snunmu"
   }
 
   update {
@@ -40,7 +40,7 @@ job "loki" {
       driver = "docker"
       user = "root"
       config {
-        image = "grafana/loki:3.4.2"
+        image = "grafana/loki:3.7.1"
         args = [ "-config.file", "${NOMAD_SECRETS_DIR}/config.yaml" ]
         ports = ["http"]
       }

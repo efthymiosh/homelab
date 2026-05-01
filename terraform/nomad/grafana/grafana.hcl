@@ -34,12 +34,12 @@ job "grafana" {
     task "grafana" {
       driver = "docker"
       config {
-        image = "grafana/grafana:11.6.0"
+        image = "grafana/grafana:13.0.1"
         ports = ["http"]
       }
       resources {
         cpu = 100
-        memory = 256
+        memory = 768
       }
       env {
         GF_ANALYTICS_CHECK_FOR_UPDATES = "false"
