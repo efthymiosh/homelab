@@ -1,5 +1,5 @@
 variable "tag" {
-  default = "v3.13"
+  default = "v3.14"
 }
 
 job "woodpecker" {
@@ -14,7 +14,7 @@ job "woodpecker" {
 
   constraint {
     attribute = "${attr.unique.hostname}"
-    value     = "aero1"
+    value     = "jarvis"
   }
 
   group "woodpecker" {
