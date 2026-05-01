@@ -1,7 +1,7 @@
 locals {
   # Deployed models. Must match the `models` map
   active_model = "gemma4-26b"
-  additional_active_models = ["gemma4-e2b", "qwen-36-27b"]
+  additional_active_models = ["gemma4-e2b", "gemma4-31b"]
 
   models = {
     "Nemotron-3-Nano" = {
@@ -56,7 +56,7 @@ locals {
       memory_max = 44000
     }
     "gemma4-31b" = {
-      model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
+      model = "unsloth/gemma-4-31B-it-GGUF:UD-Q6_K_XL"
       extra_args = [
         "--ctx-size", "131072",
         "--no-mmap", # bug ?
