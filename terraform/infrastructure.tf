@@ -32,3 +32,12 @@ resource "nomad_job" "certbot" {
 resource "nomad_job" "postgres" {
   jobspec = file("./nomad/postgres/postgres.hcl")
 }
+
+resource "nomad_job" "postgres_restore" {
+  jobspec = file("./nomad/postgres/restore.hcl")
+  hcl2 {
+    vars = {
+      restore_script = file("./nomad/postgres/restore.sh")
+    }
+  }
+}
