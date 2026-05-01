@@ -1,23 +1,9 @@
 locals {
   # Deployed models. Must match the `models` map
   active_model = "gemma4-26b"
-  additional_active_models = ["gemma4-31b", "gemma4-e2b"]
+  additional_active_models = ["gemma4-e2b", "qwen-36-27b"]
 
   models = {
-    "Devstral-Small-2" = {
-      model = "unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF:UD-Q4_K_XL",
-      extra_args = [
-        "--ctx-size", "16384",
-        "--temp", "0.15",
-      ]
-    }
-    "Devstral-2" = {
-      model = "unsloth/Devstral-2-123B-Instruct-2512-GGUF:UD-Q2_K_XL",
-      extra_args = [
-        "--ctx-size", "16384",
-        "--temp", "0.15",
-      ]
-    }
     "Nemotron-3-Nano" = {
       model = "unsloth/Nemotron-3-Nano-30B-A3B-GGUF:UD-Q4_K_XL"
       extra_args = [
@@ -41,20 +27,22 @@ locals {
         "--top-k", "0.0",
       ]
     }
-    "qwen3-vl-32b" = {
-      model  = "unsloth/Qwen3-VL-32B-Instruct-GGUF:UD-Q4_K_XL"
+    "qwen-36-27b" = {
+      model = "unsloth/Qwen3.6-27B-GGUF:UD-Q6_K_XL"
       extra_args = [
-        "--ctx-size", "8192",
-        "--n-gpu-layers", "99",
-        "--temp", "0.7",
-        "--min-p", "0.0",
-        "--top-p", "0.8",
+        "--ctx-size", "262144",
+        "--temp", "0.6",
+        "--top-p", "0.95",
         "--top-k", "20",
-        "--presence-penalty", "1.5",
+        "--min-p", "0.00",
+        "--presence-penalty", "0.00",
+        "--repeat-penalty", "1.0",
       ]
+      memory = 26000
+      memory_max = 44000
     }
     "gemma4-26b" = { # MoE 4B
-      model = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL"
+      model = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q8_K_XL"
       extra_args = [
         "--ctx-size", "131072",
         "--no-mmap", # bug ?
@@ -64,8 +52,8 @@ locals {
         "--top-k", "64",
         "--reasoning", "off",
       ]
-      memory = 16000
-      memory_max = 32000
+      memory = 26000
+      memory_max = 44000
     }
     "gemma4-31b" = {
       model = "unsloth/gemma-4-31B-it-GGUF:UD-Q4_K_XL"
