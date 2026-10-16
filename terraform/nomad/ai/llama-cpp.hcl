@@ -45,7 +45,7 @@ locals {
       model = "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q8_K_XL"
       extra_args = [
         "--ctx-size", "131072",
-        "--no-mmap", # bug ?
+        "--load-mode", "none",
         "-fa", "off", # bug ?
         "--temp", "0.3",
         "--top-p", "0.95",
@@ -59,7 +59,7 @@ locals {
       model = "unsloth/gemma-4-31B-it-GGUF:UD-Q6_K_XL"
       extra_args = [
         "--ctx-size", "131072",
-        "--no-mmap", # bug ?
+        "--load-mode", "none",
         "-fa", "off", # bug ?
         "--temp", "0.3",
         "--top-p", "0.95",
