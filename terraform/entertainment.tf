@@ -33,3 +33,7 @@ resource "nomad_job" "lidarr" {
 resource "nomad_job" "navidrome" {
   jobspec = file("nomad/navidrome/navidrome.hcl")
 }
+
+resource "nomad_job" "enshrouded" {
+  jobspec = file("nomad/enshrouded/enshrouded.hcl")
+}

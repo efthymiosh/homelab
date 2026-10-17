@@ -9,18 +9,6 @@ data "cloudflare_accounts" "mine" {
   }
 }
 
-module "efthymios_net" {
-  source     = "./modules/cloudflare/zone_with_records"
-  zone       = "efthymios.net"
-  account_id = data.cloudflare_accounts.mine.accounts[0].id
-
-  records = [
-    { name = "*.efthymios.net", type = "A", value = "192.168.1.240", ttl = 120 },
-    { name = "*.efthymios.net", type = "A", value = "192.168.1.241", ttl = 120 },
-    { name = "*.efthymios.net", type = "A", value = "192.168.1.242", ttl = 120 },
-  ]
-}
-
 module "efhd_dev" {
   source     = "./modules/cloudflare/zone_with_records"
   zone       = "efhd.dev"
