@@ -27,7 +27,7 @@ storage:
     accesskey: '{{ key "loki/minio/access_key_id" }}'
     secretkey: '{{ key "loki/minio/secret_access_key" }}'
     region: "us-east-1"
-    regionendpoint: "http://minio.efthymios.net:9000" # needs to be accessible client-side
+    regionendpoint: "http://minio.efhd.dev:9000" # needs to be accessible client-side
     bucket: "docker-registry"
     encrypt: false
     secure: true
