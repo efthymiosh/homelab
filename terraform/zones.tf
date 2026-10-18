@@ -24,7 +24,7 @@ module "efhd_dev" {
     { name = "snu3.int.efhd.dev", type = "A", value = "192.168.1.242", ttl = 120 },
     { name = "mule.int.efhd.dev", type = "A", value = "192.168.1.82", ttl = 120 },
     { name = "sand.int.efhd.dev", type = "A", value = "192.168.1.36", ttl = 120 },
-    { name = "jarvis.int.efhd.dev", type = "A", value = "192.168.1.75", ttl = 120 },
+    { name = "jarvis.int.efhd.dev", type = "A", value = "192.168.1.76", ttl = 120 },
 
 
     # bsky verification
