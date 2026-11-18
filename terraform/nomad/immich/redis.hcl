@@ -2,6 +2,11 @@ job "redis-immich" {
   datacenters = ["homelab"]
   type = "service"
 
+  constraint {
+    attribute = "${attr.unique.hostname}"
+    value     = "jarvis"
+  }
+
   group "redis-immich" {
     count = 1
 
@@ -25,6 +30,11 @@ job "redis-immich" {
         entrypoint = ["redis-server"]
         args       = ["${NOMAD_ALLOC_DIR}/redis.conf", "--loglevel", "warning"]
         ports      = ["redis"]
+        mount {
+          type = "volume"
+          target = "/data"
+          source = "immich_redis_data"
+        }
       }
       resources {
         cpu = 10
