@@ -1,7 +1,7 @@
 locals {
   # Deployed models. Must match the `models` map
-  active_model = "gemma4-26b"
-  additional_active_models = ["gemma4-e2b", "gemma4-31b"]
+  active_model = "qwen-38-flash-next"
+  additional_active_models = []
 
   models = {
     "Nemotron-3-Nano" = {
@@ -92,6 +92,20 @@ locals {
       ]
       memory = 3000
       memory_max = 7000
+    }
+    "qwen-38-flash-next" = {
+      model = "unsloth/Qwen3.8-Flash-Next-GGUF:UD-IQ4_XS"
+      extra_args = [
+        "--ctx-size", "131072",
+        "--temp", "1.0",
+        "--top-p", "0.95",
+        "--top-k", "20",
+        "--min-p", "0.00",
+        "--presence-penalty", "0.00",
+        "--repeat-penalty", "1.0",
+      ]
+      memory = 96000
+      memory_max = 104000
     }
   }
   base_llama_server_args = [
