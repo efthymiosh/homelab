@@ -21,9 +21,10 @@ job "redis-immich" {
     task "redis-immich-master" {
       driver = "docker"
       config {
-        image = "library/redis:7.2.1"
-        args =  ["redis-server", "${NOMAD_ALLOC_DIR}/redis.conf", "--loglevel", "warning"]
-        ports = [ "redis" ]
+        image      = "library/redis:7.2.1"
+        entrypoint = ["redis-server"]
+        args       = ["${NOMAD_ALLOC_DIR}/redis.conf", "--loglevel", "warning"]
+        ports      = ["redis"]
       }
       resources {
         cpu = 10
